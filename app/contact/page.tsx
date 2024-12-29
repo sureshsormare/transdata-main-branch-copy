@@ -132,7 +132,7 @@ export default function Contact() {
           </p>
           <Button
             size='lg'
-            className='bg-violet-500 hover:bg-violet-600 py-6 rounded-xl'
+            className='bg-violet-500 hover:bg-violet-600 py-6 rounded-xl text-white'
           >
             Schedule a Demo <ArrowRight className='ml-2 h-5 w-5' />
           </Button>

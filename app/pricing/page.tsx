@@ -151,7 +151,7 @@ export default function Pricing() {
               <p className='text-sm text-gray-500'>/Annually</p>
             </CardHeader>
             <CardContent className='text-center space-y-4 pt-6'>
-              <Button className='w-full bg-violet-600 hover:bg-violet-700'>
+              <Button className='w-full bg-violet-600 hover:bg-violet-700 text-white'>
                 Sign Up
               </Button>
               <div className='space-y-2'>

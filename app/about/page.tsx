@@ -69,7 +69,7 @@ export default function About() {
               stay ahead of the competition in the ever-evolving pharma
               landscape.
             </p>
-            <Button className='bg-violet-500 hover:bg-violet-600 rounded-xl py-6'>
+            <Button className='bg-violet-500 hover:bg-violet-600 rounded-xl py-6 text-white'>
               <Link href='/services'>Learn More About Our Services</Link>
             </Button>
           </div>
@@ -137,7 +137,7 @@ export default function About() {
             Join the growing number of businesses that trust TradeDataNexus for
             their international trade insights.
           </p>
-          <Button size='lg' className='bg-violet-600 hover:bg-violet-700'>
+          <Button size='lg' className='bg-violet-500 hover:bg-violet-600 rounded-xl text-white'>
             Get Started Today
           </Button>
         </div>

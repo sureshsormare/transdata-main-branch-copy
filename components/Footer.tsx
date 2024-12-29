@@ -17,7 +17,7 @@ const Footer = () => {
                 className='bg-white'
               />
             </Link>
-            <p className='text-sm'>
+            <p className='text-sm pointer-events-none'>
               Providing insights into international trade data for pharma
               products.
             </p>
@@ -26,22 +26,22 @@ const Footer = () => {
             <h4 className='text-lg font-semibold mb-4'>Quick Links</h4>
             <ul className='space-y-2'>
               <li>
-                <Link href='/' className='hover:text-violet-400'>
+                <Link href='/' className='hover:text-violet-400 text-sm xl:text-md'>
                   Home
                 </Link>
               </li>
               <li>
-                <Link href='/about' className='hover:text-violet-400'>
+                <Link href='/about' className='hover:text-violet-400 text-sm xl:text-md'>
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href='/services' className='hover:text-violet-400'>
+                <Link href='/services' className='hover:text-violet-400 text-sm xl:text-md'>
                   Services
                 </Link>
               </li>
               <li>
-                <Link href='/pricing' className='hover:text-violet-400'>
+                <Link href='/pricing' className='hover:text-violet-400 text-sm xl:text-md'>
                   Pricing
                 </Link>
               </li>
@@ -51,14 +51,14 @@ const Footer = () => {
             <h4 className='text-lg font-semibold mb-4'>Legal</h4>
             <ul className='space-y-2'>
               <li>
-                <Link href='/privacy-policy' className='hover:text-violet-400'>
+                <Link href='/privacy-policy' className='hover:text-violet-400 text-sm xl:text-md'>
                   Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link
                   href='/terms-and-conditions'
-                  className='hover:text-violet-400'
+                  className='hover:text-violet-400 text-sm xl:text-md'
                 >
                   Terms and Conditions
                 </Link>
@@ -71,7 +71,7 @@ const Footer = () => {
             <p className='text-sm'>Phone: +1 (020) 23142-4232</p>
           </div>
         </div>
-        <div className='mt-8 text-center text-sm'>
+        <div className='mt-8 text-center text-sm pointer-events-none'>
           © {date} TradeDataNexus. All rights reserved.
         </div>
       </div>

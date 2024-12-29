@@ -4,8 +4,8 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div>
-      <div className='bg-gradient-to-br from-sky-500 to-sky-600 min-h-screen'>
-        <div className='container mx-auto px-4 py-16'>
+      <div className='bg-gradient-to-br from-sky-500 to-sky-600 min-h-[100svh]'>
+        <div className='container mx-auto px-4 lg:px-8 py-14'>
           <div className='flex flex-col md:flex-row items-center justify-between'>
             <div className='md:w-1/2 text-white'>
               <h1 className='text-4xl md:text-6xl font-bold mb-6'>
@@ -20,7 +20,7 @@ export default function Home() {
                 Get Started
               </Button> */}
             </div>
-            <div className='md:w-1/2 mt-8 md:mt-0'>
+            <div className='md:w-1/2 mt-10 md:mt-0'>
               <Image
                 src='/visual-img.png'
                 alt='Trade Data Visualization'
@@ -70,7 +70,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className='bg-gray-100 py-16'>
+      <div className='bg-white py-16'>
         <div className='container mx-auto px-4'>
           <h2 className='text-3xl font-bold text-center mb-12 text-gray-800'>
             Explore TradeDataNexus
@@ -78,7 +78,7 @@ export default function Home() {
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
             <Link
               href='/about'
-              className='bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
+              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
             >
               <h3 className='text-xl font-semibold mb-4 text-violet-700'>
                 About Us
@@ -90,7 +90,7 @@ export default function Home() {
             </Link>
             <Link
               href='/services'
-              className='bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
+              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
             >
               <h3 className='text-xl font-semibold mb-4 text-violet-700'>
                 Our Services
@@ -102,7 +102,7 @@ export default function Home() {
             </Link>
             <Link
               href='/pricing'
-              className='bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
+              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
             >
               <h3 className='text-xl font-semibold mb-4 text-violet-700'>
                 Pricing Plans
@@ -113,7 +113,7 @@ export default function Home() {
             </Link>
             <Link
               href='/contact'
-              className='bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
+              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
             >
               <h3 className='text-xl font-semibold mb-4 text-violet-700'>
                 Contact Us
@@ -125,7 +125,7 @@ export default function Home() {
             </Link>
             <Link
               href='/privacy-policy'
-              className='bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
+              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
             >
               <h3 className='text-xl font-semibold mb-4 text-violet-700'>
                 Privacy Policy
@@ -136,7 +136,7 @@ export default function Home() {
             </Link>
             <Link
               href='/terms-and-conditions'
-              className='bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
+              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
             >
               <h3 className='text-xl font-semibold mb-4 text-violet-700'>
                 Terms and Conditions

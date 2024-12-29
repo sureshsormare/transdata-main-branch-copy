@@ -88,7 +88,7 @@ export default function Services() {
           </p>
           <Button
             size='lg'
-            className='bg-violet-500 hover:bg-violet-700 rounded-xl'
+            className='bg-violet-500 hover:bg-violet-700 rounded-xl text-white'
           >
             <Link href='/contact'>Get Started</Link>
           </Button>
