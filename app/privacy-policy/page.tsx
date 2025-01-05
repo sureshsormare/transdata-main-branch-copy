@@ -8,9 +8,9 @@ export default function PrivacyPolicy() {
       <div className='prose max-w-none'>
         <p>Last updated: {date.toLocaleDateString()}</p>
         <p>
-          TradeDataNexus is committed to protecting your privacy. This Privacy
+          TransDataNexus is committed to protecting your privacy. This Privacy
           Policy explains how we collect, use, disclose, and safeguard your
-          information when you visit our website tradedatanexus.com or use our
+          information when you visit our website TransDataNexus.com or use our
           services.
         </p>
         <h2 className='text-2xl font-semibold mt-8 mb-4 text-violet-600'>
@@ -99,9 +99,9 @@ export default function PrivacyPolicy() {
           at:
         </p>
         <p>
-          TradeDataNexus
+          TransDataNexus
           <br />
-          Email: privacy@tradedatanexus.com
+          Email: privacy@TransDataNexus.com
           <br />
           Phone: [Your Phone Number]
         </p> */}

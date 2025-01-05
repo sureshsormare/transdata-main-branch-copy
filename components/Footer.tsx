@@ -26,22 +26,34 @@ const Footer = () => {
             <h4 className='text-lg font-semibold mb-4'>Quick Links</h4>
             <ul className='space-y-2'>
               <li>
-                <Link href='/' className='hover:text-violet-400 text-sm xl:text-md'>
+                <Link
+                  href='/'
+                  className='hover:text-violet-400 text-sm xl:text-md'
+                >
                   Home
                 </Link>
               </li>
               <li>
-                <Link href='/about' className='hover:text-violet-400 text-sm xl:text-md'>
+                <Link
+                  href='/about'
+                  className='hover:text-violet-400 text-sm xl:text-md'
+                >
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href='/services' className='hover:text-violet-400 text-sm xl:text-md'>
+                <Link
+                  href='/services'
+                  className='hover:text-violet-400 text-sm xl:text-md'
+                >
                   Services
                 </Link>
               </li>
               <li>
-                <Link href='/pricing' className='hover:text-violet-400 text-sm xl:text-md'>
+                <Link
+                  href='/pricing'
+                  className='hover:text-violet-400 text-sm xl:text-md'
+                >
                   Pricing
                 </Link>
               </li>
@@ -51,7 +63,10 @@ const Footer = () => {
             <h4 className='text-lg font-semibold mb-4'>Legal</h4>
             <ul className='space-y-2'>
               <li>
-                <Link href='/privacy-policy' className='hover:text-violet-400 text-sm xl:text-md'>
+                <Link
+                  href='/privacy-policy'
+                  className='hover:text-violet-400 text-sm xl:text-md'
+                >
                   Privacy Policy
                 </Link>
               </li>
@@ -67,12 +82,12 @@ const Footer = () => {
           </div>
           <div className='space-y-3'>
             <h4 className='text-lg font-semibold mb-4'>Contact Us</h4>
-            <p className='text-sm'>Email: info@tradedatanexus.com</p>
+            <p className='text-sm'>Email: info@TransDataNexus.com</p>
             <p className='text-sm'>Phone: +1 (020) 23142-4232</p>
           </div>
         </div>
         <div className='mt-8 text-center text-sm pointer-events-none'>
-          © {date} TradeDataNexus. All rights reserved.
+          © {date} TransDataNexus. All rights reserved.
         </div>
       </div>
     </footer>

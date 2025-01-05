@@ -87,7 +87,7 @@ export default function Pricing() {
             <CardContent className='pt-6'>
               <div className='text-center space-y-3'>
                 <p className='text-lg font-medium text-gray-700 italic'>
-                  TradeDataNexuss Solution gives you 100x return in Six Months!
+                  TransDataNexuss Solution gives you 100x return in Six Months!
                 </p>
               </div>
             </CardContent>

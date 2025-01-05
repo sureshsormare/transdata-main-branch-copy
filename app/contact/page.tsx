@@ -96,7 +96,7 @@ export default function Contact() {
                   </li>
                 </ul>
                 <p className='text-sm text-gray-600 italic'>
-                  Source: TradeDataNexus Analysis, 2023
+                  Source: TransDataNexus Analysis, 2023
                 </p>
               </CardContent>
             </Card>
@@ -116,7 +116,7 @@ export default function Contact() {
               </div>
               <div className='flex items-center space-x-4'>
                 <Mail className='w-6 h-6 text-violet-600' />
-                <p className='text-gray-600'>info@tradedatanexus.com</p>
+                <p className='text-gray-600'>info@transdatanexus.com</p>
               </div>
             </div>
           </div>
@@ -127,7 +127,7 @@ export default function Contact() {
             Ready to unlock the power of global pharma trade data?
           </h2>
           <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
-            Schedule a demo today and see how TradeDataNexus can transform your
+            Schedule a demo today and see how TransDataNexus can transform your
             business decisions.
           </p>
           <Button

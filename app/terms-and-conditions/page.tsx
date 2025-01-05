@@ -9,7 +9,7 @@ export default function TermsAndConditions() {
         <p>Last updated: {date.toLocaleDateString()}</p>
         <p>
           Please read these <b>Terms and Conditions</b> carefully before using
-          the tradedatanexus.com website Services operated by TradeDataNexus.
+          the TransDataNexus.com website Services operated by TransDataNexus.
         </p>
         <p>
           Your access to and use of the Service is conditioned on your
@@ -48,11 +48,11 @@ export default function TermsAndConditions() {
         </h2>
         <p>
           The Service and its original content, features, and functionality are
-          and will remain the exclusive property of TradeDataNexus and its
+          and will remain the exclusive property of TransDataNexus and its
           licensors. The Service is protected by copyright, trademark, and other
           laws of both the United States and foreign countries. Our trademarks
           and trade dress may not be used in connection with any product or
-          service without the prior written consent of TradeDataNexus.
+          service without the prior written consent of TransDataNexus.
         </p>
 
         <h2 className='text-2xl font-semibold mt-8 mb-4 text-violet-600'>
@@ -60,13 +60,13 @@ export default function TermsAndConditions() {
         </h2>
         <p>
           Our Service may contain links to third-party websites or services that
-          are not owned or controlled by TradeDataNexus.
+          are not owned or controlled by TransDataNexus.
         </p>
         <p>
-          TradeDataNexus has no control over and assumes no responsibility for
+          TransDataNexus has no control over and assumes no responsibility for
           the content, privacy policies, or practices of any third-party
           websites or services. You further acknowledge and agree that
-          TradeDataNexus shall not be responsible or liable, directly or
+          TransDataNexus shall not be responsible or liable, directly or
           indirectly, for any damage or loss caused or alleged to be caused by
           or in connection with the use of or reliance on any such content,
           goods, or services available on or through any such websites or
@@ -95,7 +95,7 @@ export default function TermsAndConditions() {
           5. Limitation Of Liability
         </h2>
         <p>
-          In no event shall TradeDataNexus, nor its directors, employees,
+          In no event shall TransDataNexus, nor its directors, employees,
           partners, agents, suppliers, or affiliates, be liable for any
           indirect, incidental, special, consequential or punitive damages,
           including without limitation, loss of profits, data, use, goodwill, or
@@ -160,9 +160,9 @@ export default function TermsAndConditions() {
         </h2>
         <p>If you have any questions about these Terms, please contact us:</p> */}
         {/* <p>
-          TradeDataNexus
+          TransDataNexus
           <br />
-          Email: legal@tradedatanexus.com
+          Email: legal@TransDataNexus.com
           <br />
           Phone: [Your Phone Number]
         </p> */}

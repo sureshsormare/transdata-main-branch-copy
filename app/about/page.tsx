@@ -43,7 +43,7 @@ export default function About() {
       <div className='container mx-auto px-4 max-w-7xl'>
         <div className='text-center space-y-4 mb-20'>
           <h1 className='text-4xl md:text-5xl font-bold text-violet-700 leading-tight'>
-            About TradeDataNexus
+            About TransDataNexus
           </h1>
           <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
             Empowering businesses with comprehensive insights into global pharma
@@ -57,7 +57,7 @@ export default function About() {
               Our Mission
             </h2>
             <p className='text-gray-600 mb-6'>
-              At TradeDataNexus, our mission is to provide businesses in the
+              At TransDataNexus, our mission is to provide businesses in the
               pharmaceutical industry with unparalleled access to international
               trade data. We believe that accurate, timely, and comprehensive
               data is the key to making informed decisions in todays global
@@ -76,7 +76,7 @@ export default function About() {
           <div className='relative h-[400px] rounded-lg overflow-hidden shadow-xl'>
             <Image
               src='/team-img.svg'
-              alt='TradeDataNexus Team'
+              alt='TransDataNexus Team'
               layout='fill'
               objectFit='cover'
               className='rounded-lg'
@@ -114,7 +114,7 @@ export default function About() {
 
         <div className='text-center space-y-6 mb-20'>
           <h2 className='text-3xl font-bold text-gray-800'>
-            Why Choose TradeDataNexus?
+            Why Choose TransDataNexus?
           </h2>
           <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
             We offer a unique combination of comprehensive data, expert
@@ -123,7 +123,7 @@ export default function About() {
             always have the most current information at your fingertips.
           </p>
           <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
-            With TradeDataNexus, youre not just getting data – youre gaining a
+            With TransDataNexus, youre not just getting data – youre gaining a
             partner committed to your success in the global pharmaceutical
             market.
           </p>
@@ -134,10 +134,13 @@ export default function About() {
             Ready to unlock the power of global pharma trade data?
           </h2>
           <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
-            Join the growing number of businesses that trust TradeDataNexus for
+            Join the growing number of businesses that trust TransDataNexus for
             their international trade insights.
           </p>
-          <Button size='lg' className='bg-violet-500 hover:bg-violet-600 rounded-xl text-white'>
+          <Button
+            size='lg'
+            className='bg-violet-500 hover:bg-violet-600 rounded-xl text-white'
+          >
             Get Started Today
           </Button>
         </div>

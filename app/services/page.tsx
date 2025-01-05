@@ -83,7 +83,7 @@ export default function Services() {
             Ready to elevate your business with our services?
           </h2>
           <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
-            Contact us today to discuss how TradeDataNexus can help you unlock
+            Contact us today to discuss how TransDataNexus can help you unlock
             the full potential of global pharma trade data.
           </p>
           <Button
