@@ -9,101 +9,124 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { HoverEffect } from "@/components/ui/card-hover-effect";
 
 export default function About() {
   const values = [
     {
-      title: "Global Perspective",
-      description:
-        "We provide insights into international trade data from over 75 countries, giving you a truly global view of the pharma market.",
-      icon: Globe,
-    },
-    {
-      title: "Customer-Centric",
-      description:
-        "Our team is dedicated to supporting your business needs with personalized consultation and extensive support.",
-      icon: Users,
-    },
-    {
       title: "Data-Driven Insights",
       description:
-        "We transform raw data into actionable insights, helping you make informed decisions and stay ahead of market trends.",
-      icon: TrendingUp,
+        "We convert complex raw data into precise, actionable intelligence tailored to the pharmaceutical industry. Our insights empower businesses to anticipate market trends, optimize sourcing strategies, and make evidence-based decisions, ensuring sustained growth and a competitive edge in an evolving global market.",
+      icon: Globe,
     },
     {
       title: "Reliability & Security",
       description:
-        "We prioritize the accuracy of our data and the security of your information, ensuring you can trust our services completely.",
+        "We uphold the highest standards of accuracy and data integrity, delivering reliable information you can count on. With robust security measures, we ensure the confidentiality and protection of your data, building trust through every interaction. ",
+      icon: Users,
+    },
+    {
+      title: "Global Data Access",
+      description:
+        "Tap into an expansive database of over 10 million worldwide shipment records, delivering unparalleled insights into pharmaceutical trade dynamics. Our platform provides real-time, actionable intelligence, enabling you to uncover emerging opportunities, monitor global trends, and outpace competitors with data-backed strategies that redefine market leadership.",
+      icon: TrendingUp,
+    },
+    {
+      title: "Team Excellence & Support",
+      description:
+        "Our dedicated team of industry experts combines deep pharmaceutical knowledge with data analytics expertise to deliver exceptional support. We provide personalized guidance and insights, ensuring you maximize the value of our platform for your strategic objectives.",
       icon: Shield,
     },
   ];
 
+  const whyChoose = [
+    {
+      title: "Global Coverage",
+      description:
+        "Our comprehensive database captures every essential detail of the pharmaceutical trade, from APIs to finished products, worldwide.",
+        link: "/about"
+    },
+    {
+      title: "Actionable Insights",
+      description:
+        "Transform complex trade data into meaningful, actionable insights with our easy-to-use SaaS platform, built for the pharmaceutical industry.",
+        link: "/about"
+    },
+    {
+      title: "Dedicated Expertise",
+      description:
+        "Work with our industry experts who understand your unique challenges and help you unlock new market opportunities.",
+        link: "/about"
+    },
+  ];
+
   return (
-    <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white py-20'>
-      <div className='container mx-auto px-4 max-w-7xl'>
-        <div className='text-center space-y-4 mb-20'>
-          <h1 className='text-4xl md:text-5xl font-bold text-violet-700 leading-tight'>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-20">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="text-center space-y-4 mb-20">
+          <h1 className="text-4xl md:text-5xl font-bold text-violet-700 leading-tight">
             About TransDataNexus
           </h1>
-          <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
-            Empowering businesses with comprehensive insights into global pharma
-            trade data
+          <p className="text-md lg:text-xl text-gray-600 max-w-3xl mx-auto">
+            Empowering businesses with comprehensive intelligence on global
+            pharmaceutical trade.
           </p>
         </div>
 
-        <div className='grid md:grid-cols-2 gap-12 items-center mb-20'>
+        <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
           <div>
-            <h2 className='text-3xl font-bold text-gray-800 mb-6'>
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">
               Our Mission
             </h2>
-            <p className='text-gray-600 mb-6'>
-              At TransDataNexus, our mission is to provide businesses in the
-              pharmaceutical industry with unparalleled access to international
-              trade data. We believe that accurate, timely, and comprehensive
-              data is the key to making informed decisions in todays global
-              market.
+            <p className="text-gray-600 mb-6">
+              At TransData Nexus, we are committed to simplifying access to
+              global pharmaceutical trade. Our mission is to provide actionable
+              data and insights that help businesses make smarter decisions,
+              reduce risks, and find best deals in the market. Learn more about
+              our team and our vision for transforming your pharmaceutical
+              growth.
             </p>
-            <p className='text-gray-600 mb-6'>
+            <p className="text-gray-600 mb-6">
               We strive to empower our clients with actionable insights,
-              enabling them to identify new opportunities, mitigate risks, and
-              stay ahead of the competition in the ever-evolving pharma
-              landscape.
+              enabling them to uncover new opportunities, manage risks
+              effectively, and maintain a competitive edge in the dynamic
+              pharmaceutical industry.
             </p>
-            <Button className='bg-violet-500 hover:bg-violet-600 rounded-xl py-6 text-white'>
-              <Link href='/services'>Learn More About Our Services</Link>
+            <Button className="bg-violet-500 hover:bg-violet-600 rounded-xl py-6 text-white">
+              <Link href="/services">Learn More About Our Services</Link>
             </Button>
           </div>
-          <div className='relative h-[400px] rounded-lg overflow-hidden shadow-xl'>
+          <div className="relative h-[400px] rounded-lg overflow-hidden shadow-xl">
             <Image
-              src='/team-img.svg'
-              alt='TransDataNexus Team'
-              layout='fill'
-              objectFit='cover'
-              className='rounded-lg'
+              src="/team-img.svg"
+              alt="TransDataNexus Team"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg"
             />
           </div>
         </div>
 
-        <div className='mb-20'>
-          <h2 className='text-3xl font-bold text-gray-800 mb-10 text-center'>
+        <div className="mb-20">
+          <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">
             Our Core Values
           </h2>
-          <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-8'>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => (
               <Card
                 key={index}
-                className='transition-all duration-300 hover:shadow-lg'
+                className="transition-all duration-300 hover:shadow-lg"
               >
                 <CardHeader>
-                  <div className='w-12 h-12 bg-violet-100 rounded-full flex items-center justify-center mb-4'>
-                    <value.icon className='w-6 h-6 text-violet-600' />
+                  <div className="w-12 h-12 bg-violet-100 rounded-full flex items-center justify-center mb-4">
+                    <value.icon className="w-6 h-6 text-violet-600" />
                   </div>
-                  <CardTitle className='text-xl font-bold text-violet-700'>
+                  <CardTitle className="text-xl font-bold text-violet-700">
                     {value.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className='text-gray-600'>
+                  <CardDescription className="text-gray-600">
                     {value.description}
                   </CardDescription>
                 </CardContent>
@@ -112,37 +135,47 @@ export default function About() {
           </div>
         </div>
 
-        <div className='text-center space-y-6 mb-20'>
-          <h2 className='text-3xl font-bold text-gray-800'>
+        <div className="text-center space-y-6 mb-20">
+          <h2 className="text-3xl font-bold text-gray-800">
             Why Choose TransDataNexus?
           </h2>
-          <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
-            We offer a unique combination of comprehensive data, expert
-            analysis, and dedicated support. Our platform provides access to
-            trade data from over 75 countries, updated regularly to ensure you
-            always have the most current information at your fingertips.
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Elevate your pharmaceutical business with our powerful intelligence
+            platform. Gain access to over 10 million global shipment records,
+            enhanced by real-time updates and advanced analytics, to drive
+            smarter, strategic decisions.
           </p>
-          <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
-            With TransDataNexus, youre not just getting data – youre gaining a
-            partner committed to your success in the global pharmaceutical
-            market.
-          </p>
-        </div>
+          <div className="text-xl text-gray-600 w-full mx-auto">
+            {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-gray-100 p-6 rounded-xl">
+                <h3 className="text-xl font-semibold mb-3 text-violet-700 tracking-tight">
+                  Global Coverage
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Our comprehensive database captures every essential detail of
+                  the pharmaceutical trade, from APIs to finished products,
+                  worldwide.
+                </p>
+              </div>
+            </div> */}
+          <HoverEffect items={whyChoose} />
+          </div>
 
-        <div className='text-center space-y-6'>
-          <h2 className='text-3xl font-bold text-gray-800'>
-            Ready to unlock the power of global pharma trade data?
-          </h2>
-          <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
-            Join the growing number of businesses that trust TransDataNexus for
-            their international trade insights.
-          </p>
-          <Button
-            size='lg'
-            className='bg-violet-500 hover:bg-violet-600 rounded-xl text-white'
-          >
-            Get Started Today
-          </Button>
+          <div className="text-center space-y-6">
+            <h2 className="text-3xl font-bold text-gray-800">
+              Ready to Redefine Your Global Trade Strategy?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Join the leaders in the pharmaceutical industry who trust
+              TransDataNexus to stay ahead of the curve.
+            </p>
+            <Button
+              size="lg"
+              className="bg-violet-500 hover:bg-violet-600 rounded-xl text-white"
+            >
+              Get Started Today
+            </Button>
+          </div>
         </div>
       </div>
     </div>

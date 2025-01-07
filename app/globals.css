@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'poppins';
+  src: url('../public/fonts/Poppins/Poppins-Light.ttf');
+}
+@font-face {
+  font-family: 'poppins-b';
+  src: url('../public/fonts/Poppins/Poppins-SemiBold.ttf');
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -17,4 +26,3 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
-

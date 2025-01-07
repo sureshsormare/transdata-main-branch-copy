@@ -1,152 +1,151 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { HoverEffect } from "../components/ui/card-hover-effect";
+import { motion } from "framer-motion";
+
+const MotionImage = motion(Image);
 
 export default function Home() {
+  const exploreSection = [
+    {
+      title: "About Us",
+      description:
+        "Learn about our mission, vision, and the team behind TransDataNexus.",
+      link: "/about",
+    },
+    {
+      title: "Our Services",
+      description:
+        "Discover our comprehensive range of trade data services and solutions.",
+      link: "/services",
+    },
+    {
+      title: "Pricing Plans",
+      description:
+        "Find the perfect plan to suit your business needs and budget.",
+      link: "/pricing",
+    },
+    {
+      title: "Contact Us",
+      description:
+        "Get in touch with our team for inquiries, support, or partnerships.",
+      link: "/contact",
+    },
+    {
+      title: "Privacy Policy",
+      description:
+        "Read about our commitment to protecting your privacy and data.",
+      link: "/privacy-policy",
+    },
+    {
+      title: "Terms and Conditions",
+      description:
+        "Understand the terms governing the use of our services and website.",
+      link: "/terms-and-conditions",
+    },
+  ];
+  const whyChooseSection = [
+    {
+      title: "Extensive Pharmaceutical Data",
+      description:
+        "Access an extensive, up-to-date database of global pharmaceutical trade transactions. Our platform provides detailed reports on import and export activities for APIs, intermediates, and finished formulations, helping you identify trends, opportunities, and market shifts.",
+      link: "/",
+    },
+    {
+      title: "Supplier and Buyer Insights",
+      description:
+        "Easily connect with a global network of trusted pharmaceutical suppliers and buyers. Leverage valuable supplier profiles and buyer data to streamline your sourcing process and ensure you're getting the authentic deals.",
+      link: "/",
+    },
+    {
+      title: "Pricing and Market Insights",
+      description:
+        "Stay ahead of the curve with real-time pricing information, market trends, and historical pricing data. Make strategic decisions to ensure competitive pricing and cost optimization for your procurement activities.",
+      link: "/",
+    },
+  ];
+
   return (
     <div>
-      <div className='bg-gradient-to-br from-sky-500 to-sky-600 min-h-[100svh]'>
-        <div className='container mx-auto px-4 lg:px-8 py-14'>
-          <div className='flex flex-col md:flex-row items-center justify-between'>
-            <div className='md:w-1/2 text-white'>
-              <h1 className='text-4xl md:text-6xl font-bold mb-6'>
-                Unlock Global Pharma Trade Insights
-              </h1>
-              <p className='text-xl mb-8'>
-                Gain valuable insights into international trade data for
-                pharmaceutical products. Make informed decisions and stay ahead
-                of the competition.
-              </p>
+      <div className="min-h-[100svh]">
+        <div className="container mx-auto px-4 lg:px-8 py-14">
+          <div className="flex flex-col md:flex-row items-center justify-between text-black">
+            <div className="md:w-1/2">
+              <motion.h1
+                className="text-4xl md:text-6xl mb-6 overflow-hidden py-3 font-['poppins-b']"
+              >
+                {["Unlock ", "Global ", "Pharma ", "Trade ", "Insights"].map(
+                  (word, idx) => (
+                    <motion.span
+                      key={idx}
+                      initial={{ y: "250%" }}
+                      animate={{ y: 0 }}
+                      transition={{ duration: .35, delay: 0.055 * idx, ease: "easeInOut" }}
+                      className="inline-block px-1"
+                    >
+                      {word} {" "}
+                    </motion.span>
+                  )
+                )}
+              </motion.h1>
+
+              <motion.p initial={{opacity: 0 }} animate={{opacity: 1}} transition={{ease: "easeInOut", duration: .7}} className="text-md lg:text-xl mb-8">
+                Unlock the comprehensive, real-time trade data insights and
+                analytics to optimize your sourcing, procurement, and
+                decision-making for growth in a global market. With TransData
+                Nexus, gain instant access to critical information on APIs,
+                intermediates, and finished pharmaceutical formulations.
+              </motion.p>
               {/* <Button className='bg-white text-violet-700 hover:bg-gray-100 text-lg px-8 py-3'>
                 Get Started
               </Button> */}
             </div>
-            <div className='md:w-1/2 mt-10 md:mt-0'>
-              <Image
-                src='/visual-img.png'
-                alt='Trade Data Visualization'
+            <div className="md:w-1/2 mt-10 md:mt-0">
+              <MotionImage
+              initial={{opacity: 0 }} animate={{opacity: 1}} transition={{ease: "easeInOut", duration: .7}}
+                src="/visual-img.png"
+                alt="Trade Data Visualization"
                 width={600}
                 height={400}
-                className='rounded-lg'
+                className="rounded-xl"
               />
             </div>
           </div>
         </div>
       </div>
 
-      <div className='bg-white py-16'>
-        <div className='container mx-auto px-4'>
-          <h2 className='text-3xl font-bold text-center mb-12 text-gray-800'>
+      {/* Why Choose TransDataNexus? */}
+      <div className="bg-white py-8">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-gray-800">
             Why Choose TransDataNexus?
           </h2>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
-            <div className='bg-gray-100 p-6 rounded-lg'>
-              <h3 className='text-xl font-semibold mb-4 text-violet-700'>
-                Comprehensive Data
+          <HoverEffect items={whyChooseSection} />
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-gray-100 p-6 rounded-xl">
+              <h3 className="text-xl font-semibold mb-4 text-violet-700">
+                Extensive Pharmaceutical Data
               </h3>
-              <p className='text-gray-600'>
-                Access a vast database of international pharma trade data,
-                updated in real-time.
+              <p className="text-gray-600">
+                Access an extensive, up-to-date database of global
+                pharmaceutical trade transactions. Our platform provides
+                detailed reports on import and export activities for APIs,
+                intermediates, and finished formulations, helping you identify
+                trends, opportunities, and market shifts.
               </p>
             </div>
-            <div className='bg-gray-100 p-6 rounded-lg'>
-              <h3 className='text-xl font-semibold mb-4 text-violet-700'>
-                Advanced Analytics
-              </h3>
-              <p className='text-gray-600'>
-                Utilize powerful analytics tools to gain actionable insights
-                from complex trade data.
-              </p>
-            </div>
-            <div className='bg-gray-100 p-6 rounded-lg'>
-              <h3 className='text-xl font-semibold mb-4 text-violet-700'>
-                Expert Support
-              </h3>
-              <p className='text-gray-600'>
-                Get personalized support from our team of trade data experts to
-                help you make informed decisions.
-              </p>
-            </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
-      <div className='bg-white py-16'>
-        <div className='container mx-auto px-4'>
-          <h2 className='text-3xl font-bold text-center mb-12 text-gray-800'>
+      {/* Explore TransDataNexus */}
+      <div className="bg-white py-8">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-gray-800">
             Explore TransDataNexus
           </h2>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-            <Link
-              href='/about'
-              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
-            >
-              <h3 className='text-xl font-semibold mb-4 text-violet-700'>
-                About Us
-              </h3>
-              <p className='text-gray-600'>
-                Learn about our mission, vision, and the team behind
-                TransDataNexus.
-              </p>
-            </Link>
-            <Link
-              href='/services'
-              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
-            >
-              <h3 className='text-xl font-semibold mb-4 text-violet-700'>
-                Our Services
-              </h3>
-              <p className='text-gray-600'>
-                Discover our comprehensive range of trade data services and
-                solutions.
-              </p>
-            </Link>
-            <Link
-              href='/pricing'
-              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
-            >
-              <h3 className='text-xl font-semibold mb-4 text-violet-700'>
-                Pricing Plans
-              </h3>
-              <p className='text-gray-600'>
-                Find the perfect plan to suit your business needs and budget.
-              </p>
-            </Link>
-            <Link
-              href='/contact'
-              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
-            >
-              <h3 className='text-xl font-semibold mb-4 text-violet-700'>
-                Contact Us
-              </h3>
-              <p className='text-gray-600'>
-                Get in touch with our team for inquiries, support, or
-                partnerships.
-              </p>
-            </Link>
-            <Link
-              href='/privacy-policy'
-              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
-            >
-              <h3 className='text-xl font-semibold mb-4 text-violet-700'>
-                Privacy Policy
-              </h3>
-              <p className='text-gray-600'>
-                Read about our commitment to protecting your privacy and data.
-              </p>
-            </Link>
-            <Link
-              href='/terms-and-conditions'
-              className='bg-zinc-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow'
-            >
-              <h3 className='text-xl font-semibold mb-4 text-violet-700'>
-                Terms and Conditions
-              </h3>
-              <p className='text-gray-600'>
-                Understand the terms governing the use of our services and
-                website.
-              </p>
-            </Link>
-          </div>
+          <HoverEffect items={exploreSection} />
         </div>
       </div>
     </div>
