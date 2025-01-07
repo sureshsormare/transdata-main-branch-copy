@@ -59,7 +59,7 @@ const Header = () => {
         animate={{ y: isHidden ? -100 : 0 }}
         transition={{ ease: "linear", duration: 0.3 }}
       >
-        <nav className="container mx-auto px-4 py-2 flex justify-between items-center">
+        <nav className="container mx-auto px-4 flex justify-between items-center font-['poppins'] font-light">
           {/* Logo */}
           <Link href="/" className="text-2xl font-bold text-violet-700">
             <Image

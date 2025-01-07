@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Trade Data Nexus",
+  title: "TransData Nexus",
   description: "Insights into international trade data for pharma products",
 };
 

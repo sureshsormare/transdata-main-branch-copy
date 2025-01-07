@@ -12,27 +12,27 @@ import Link from "next/link";
 export default function Services() {
   const services = [
     {
-      title: "Insightful Data",
+      title: "Data Analytics Platform",
       description:
-        "Gain access to comprehensive and actionable insights derived from our extensive trade database. Our advanced analytics tools help you uncover trends, identify opportunities, and make data-driven decisions to stay ahead in the global pharma market.",
+        "Our advanced analytics platform transforms complex pharmaceutical trade data into actionable insights. Access real-time monitoring of global shipments, analyze price trends, and map comprehensive supplier-buyer networks. Through intuitive dashboards, track market movements and generate custom reports tailored to your business objectives. The platform integrates powerful visualization tools that simplify data interpretation and strategic decision-making.",
       icon: LineChart,
     },
     {
-      title: "Expert Consultation",
+      title: "Global Trade Repository",
       description:
-        "Benefit from our team of industry experts who provide personalized guidance and strategic advice. Our consultants help you interpret complex trade data, navigate market challenges, and develop effective strategies to maximize your business potential.",
+        "Leverage our extensive database of over 10 million worldwide pharmaceutical shipment records. This comprehensive repository provides granular insights into transaction details, including origins, destinations, product specifications, and pricing. Track historical trade patterns, analyze market dynamics, and identify emerging trends across global markets. Our repository serves as your centralized source for authentic, validated trade intelligence.",
       icon: Users,
     },
     {
-      title: "Extensive Support for Business Needs",
+      title: "Analytics Solutions",
       description:
-        "Receive dedicated support tailored to your specific business requirements. From data interpretation to custom report generation, our support team is committed to ensuring you get the most value from our services and can effectively apply insights to your operations.",
+        "Transform raw data into strategic advantage through our sophisticated analytics tools. Identify untapped market opportunities, analyze competitive landscapes, and optimize supply chain decisions with AI-powered insights. Our platform enables you to assess market penetration strategies, track competitor movements, and forecast industry trends. Get customized analysis that aligns with your specific business goals and challenges. ",
       icon: LifeBuoy,
     },
     {
-      title: "Access to Vast Trade Database",
+      title: "Expert Support",
       description:
-        "Explore our comprehensive database covering international pharma trade data from over 75 countries. Updated regularly, our database provides you with the most current and reliable information to inform your business decisions and strategies.",
+        "Access dedicated assistance from industry specialists who understand the nuances of pharmaceutical trade. Our experts provide guidance in data interpretation, helping you maximize the value of our platform. Receive strategic recommendations based on market analysis, ensuring you make informed decisions. Count on timely support for custom reports and specialized market insights tailored to your needs.",
       icon: Database,
     },
   ];
@@ -80,11 +80,10 @@ export default function Services() {
 
         <div className='text-center space-y-6'>
           <h2 className='text-3xl font-bold text-gray-800'>
-            Ready to elevate your business with our services?
+          Ready to Transform Your Trade Strategy?
           </h2>
           <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
-            Contact us today to discuss how TransDataNexus can help you unlock
-            the full potential of global pharma trade data.
+          Discover how TransDataNexus can elevate your pharmaceutical business with comprehensive trade intelligence. 
           </p>
           <Button
             size='lg'
