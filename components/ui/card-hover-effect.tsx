@@ -16,12 +16,13 @@ export const HoverEffect = ({
   }[];
   className?: string;
 }) => {
+  // eslint-disable-next-line prefer-const
   let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <div
       className={cn(
-        "grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3  py-10",
+        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-10",
         className
       )}
     >
@@ -29,14 +30,14 @@ export const HoverEffect = ({
         <Link
           href={item?.link}
           key={item?.link}
-          className="relative group  block p-2 h-full w-full"
+          className="relative group block p-2 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
-                className="absolute inset-0 h-full w-full bg-zinc-500/20 dark:bg-slate-800/[0.8] block  rounded-3xl"
+                className="absolute inset-0 h-full w-full bg-zinc-500/20 dark:bg-slate-800/[0.8] block rounded-3xl"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
                 animate={{
@@ -80,6 +81,7 @@ export const Card = ({
     </div>
   );
 };
+
 export const CardTitle = ({
   className,
   children,
@@ -93,6 +95,7 @@ export const CardTitle = ({
     </h4>
   );
 };
+
 export const CardDescription = ({
   className,
   children,
