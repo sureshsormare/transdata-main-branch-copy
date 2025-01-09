@@ -1,13 +1,19 @@
 "use client";
+
 import Image from "next/image";
-import Link from "next/link";
-import { HoverEffect } from "../components/ui/card-hover-effect";
 import { motion } from "framer-motion";
+import { HoverEffect } from "../components/ui/card-hover-effect";
 
 const MotionImage = motion(Image);
 
+interface Section {
+  title: string;
+  description: string;
+  link: string;
+}
+
 export default function Home() {
-  const exploreSection = [
+  const exploreSection: Section[] = [
     {
       title: "About Us",
       description:
@@ -45,7 +51,8 @@ export default function Home() {
       link: "/terms-and-conditions",
     },
   ];
-  const whyChooseSection = [
+
+  const whyChooseSection: Section[] = [
     {
       title: "Extensive Pharmaceutical Data",
       description:
@@ -68,6 +75,7 @@ export default function Home() {
 
   return (
     <div>
+      {/* Hero Section */}
       <div className="min-h-[100svh]">
         <div className="container mx-auto px-4 lg:px-8 py-14">
           <div className="flex flex-col md:flex-row items-center justify-between text-black">
@@ -81,29 +89,37 @@ export default function Home() {
                       key={idx}
                       initial={{ y: "250%" }}
                       animate={{ y: 0 }}
-                      transition={{ duration: .35, delay: 0.055 * idx, ease: "easeInOut" }}
+                      transition={{
+                        duration: 0.35,
+                        delay: 0.055 * idx,
+                        ease: "easeInOut",
+                      }}
                       className="inline-block px-1"
                     >
-                      {word} {" "}
+                      {word}{" "}
                     </motion.span>
                   )
                 )}
               </motion.h1>
 
-              <motion.p initial={{opacity: 0 }} animate={{opacity: 1}} transition={{ease: "easeInOut", duration: .7}} className="text-md lg:text-xl mb-8">
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ ease: "easeInOut", duration: 0.7 }}
+                className="text-md lg:text-xl mb-8"
+              >
                 Unlock the comprehensive, real-time trade data insights and
                 analytics to optimize your sourcing, procurement, and
                 decision-making for growth in a global market. With TransData
                 Nexus, gain instant access to critical information on APIs,
                 intermediates, and finished pharmaceutical formulations.
               </motion.p>
-              {/* <Button className='bg-white text-violet-700 hover:bg-gray-100 text-lg px-8 py-3'>
-                Get Started
-              </Button> */}
             </div>
             <div className="md:w-1/2 mt-10 md:mt-0">
               <MotionImage
-              initial={{opacity: 0 }} animate={{opacity: 1}} transition={{ease: "easeInOut", duration: .7}}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ ease: "easeInOut", duration: 0.7 }}
                 src="/visual-img.png"
                 alt="Trade Data Visualization"
                 width={600}
@@ -115,27 +131,13 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Why Choose TransDataNexus? */}
+      {/* Why Choose TransDataNexus */}
       <div className="bg-white py-8">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-800">
             Why Choose TransDataNexus?
           </h2>
           <HoverEffect items={whyChooseSection} />
-          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gray-100 p-6 rounded-xl">
-              <h3 className="text-xl font-semibold mb-4 text-violet-700">
-                Extensive Pharmaceutical Data
-              </h3>
-              <p className="text-gray-600">
-                Access an extensive, up-to-date database of global
-                pharmaceutical trade transactions. Our platform provides
-                detailed reports on import and export activities for APIs,
-                intermediates, and finished formulations, helping you identify
-                trends, opportunities, and market shifts.
-              </p>
-            </div>
-          </div> */}
         </div>
       </div>
 

@@ -22,7 +22,7 @@ export default function About() {
     {
       title: "Reliability & Security",
       description:
-        "We uphold the highest standards of accuracy and data integrity, delivering reliable information you can count on. With robust security measures, we ensure the confidentiality and protection of your data, building trust through every interaction. ",
+        "We uphold the highest standards of accuracy and data integrity, delivering reliable information you can count on. With robust security measures, we ensure the confidentiality and protection of your data, building trust through every interaction.",
       icon: Users,
     },
     {
@@ -44,19 +44,19 @@ export default function About() {
       title: "Global Coverage",
       description:
         "Our comprehensive database captures every essential detail of the pharmaceutical trade, from APIs to finished products, worldwide.",
-        link: "/about"
+      link: "/about",
     },
     {
       title: "Actionable Insights",
       description:
         "Transform complex trade data into meaningful, actionable insights with our easy-to-use SaaS platform, built for the pharmaceutical industry.",
-        link: "/about"
+      link: "/about",
     },
     {
       title: "Dedicated Expertise",
       description:
         "Work with our industry experts who understand your unique challenges and help you unlock new market opportunities.",
-        link: "/about"
+      link: "/about",
     },
   ];
 
@@ -100,8 +100,8 @@ export default function About() {
             <Image
               src="/team-img.svg"
               alt="TransDataNexus Team"
-              layout="fill"
-              objectFit="cover"
+              fill
+              style={{ objectFit: "cover" }}
               className="rounded-lg"
             />
           </div>
@@ -145,21 +145,7 @@ export default function About() {
             enhanced by real-time updates and advanced analytics, to drive
             smarter, strategic decisions.
           </p>
-          <div className="text-xl text-gray-600 w-full mx-auto">
-            {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-gray-100 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold mb-3 text-violet-700 tracking-tight">
-                  Global Coverage
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Our comprehensive database captures every essential detail of
-                  the pharmaceutical trade, from APIs to finished products,
-                  worldwide.
-                </p>
-              </div>
-            </div> */}
           <HoverEffect items={whyChoose} />
-          </div>
 
           <div className="text-center space-y-6">
             <h2 className="text-3xl font-bold text-gray-800">
@@ -169,12 +155,14 @@ export default function About() {
               Join the leaders in the pharmaceutical industry who trust
               TransDataNexus to stay ahead of the curve.
             </p>
-            <Button
-              size="lg"
-              className="bg-violet-500 hover:bg-violet-600 rounded-xl text-white"
-            >
-              Get Started Today
-            </Button>
+            <Link href={"/contact"}>
+              <Button
+                size="lg"
+                className="bg-violet-500 hover:bg-violet-600 rounded-xl text-white"
+              >
+                Get Started Today
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
