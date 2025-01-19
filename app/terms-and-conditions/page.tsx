@@ -1,12 +1,19 @@
 export default function TermsAndConditions() {
-  const date = new Date();
+  const date = new Date("2025-01-19");
   return (
     <div className='container mx-auto px-4 py-16'>
       <h1 className='text-4xl font-bold mb-8 text-violet-700'>
         Terms and Conditions
       </h1>
       <div className='prose max-w-none'>
-        <p>Last updated: {date.toLocaleDateString()}</p>
+        <p>
+          Last updated:{" "}
+          {date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </p>
         <p>
           Please read these <b>Terms and Conditions</b> carefully before using
           the TransDataNexus.com website Services operated by TransDataNexus.
@@ -155,17 +162,17 @@ export default function TermsAndConditions() {
           do not agree to the new terms, please stop using the Service.
         </p>
 
-        {/* <h2 className='text-2xl font-semibold mt-8 mb-4 text-violet-600'>
+        <h2 className='text-2xl font-semibold mt-8 mb-4 text-violet-600'>
           9. Contact Us
         </h2>
-        <p>If you have any questions about these Terms, please contact us:</p> */}
-        {/* <p>
+        <p>If you have any questions about these Terms, please contact us:</p>
+        <p>
           TransDataNexus
           <br />
-          Email: legal@TransDataNexus.com
+          Email: legel@transdatanexus.com
           <br />
-          Phone: [Your Phone Number]
-        </p> */}
+          Phone: +91 95950 78788
+        </p>
       </div>
     </div>
   );

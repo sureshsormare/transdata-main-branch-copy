@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className='bg-gray-800 text-white py-8'>
       <div className='container mx-auto px-4'>
         <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
-          <div className='space-y-3'>
+          <div className='space-y-4'>
             <Link href='/' className='text-2xl font-bold text-violet-700'>
               <Image
                 src={"/logo.webp"}
@@ -21,6 +21,13 @@ const Footer = () => {
               Providing insights into international trade data for pharma
               products.
             </p>
+            <div>
+              <h2 className='font-semibold'>Office Address:</h2>
+              <address className='text-sm font-normal'>
+                3VG6+R3G, Kolivery Village, Mathuradas Colony, Kalina, Vakola,
+                Santacruz East, Mumbai, Maharashtra 400098
+              </address>
+            </div>
           </div>
           <div>
             <h4 className='text-lg font-semibold mb-4'>Quick Links</h4>
@@ -82,8 +89,8 @@ const Footer = () => {
           </div>
           <div className='space-y-3'>
             <h4 className='text-lg font-semibold mb-4'>Contact Us</h4>
-            <p className='text-sm'>Email: info@TransDataNexus.com</p>
-            <p className='text-sm'>Phone: +1 (020) 23142-4232</p>
+            <p className='text-sm'>Email: info@transdatanexus.com</p>
+            <p className='text-sm'>Phone: +91 95950 78788</p>
           </div>
         </div>
         <div className='mt-8 text-center text-sm pointer-events-none'>

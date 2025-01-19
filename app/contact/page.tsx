@@ -40,11 +40,11 @@ export default function Contact() {
         </div>
 
         <div className='grid md:grid-cols-2 gap-12 items-start mb-20'>
-          <div>
+          <div className='justify-items-center'>
             <h2 className='text-3xl font-bold text-gray-800 mb-6'>
               Get in Touch
             </h2>
-            <form onSubmit={handleSubmit} className='space-y-6'>
+            <form onSubmit={handleSubmit} className='space-y-6 w-1/2'>
               <div className='space-y-2'>
                 <Label htmlFor='name'>Name</Label>
                 <Input id='name' name='name' required />
@@ -61,7 +61,11 @@ export default function Contact() {
                 <Checkbox id='demo' name='demo' />
                 <Label htmlFor='demo'>I am interested in a demo</Label>
               </div>
-              <Button type='submit' className='w-full' disabled={isSubmitting}>
+              <Button
+                type='submit'
+                className='w-1/2 hover:bg-violet-600 rounded-xl'
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? "Submitting..." : "Submit"}
               </Button>
             </form>
@@ -80,19 +84,22 @@ export default function Contact() {
                 <p className='text-lg font-semibold'>Did you know?</p>
                 <ul className='list-disc pl-5 space-y-2'>
                   <li>
-                    The global pharmaceutical market was valued at $1.27
-                    trillion in 2020.
+                    The global pharmaceutical market was valued at approximately
+                    $1.6 trillion in 2023.
                   </li>
                   <li>
-                    North America accounts for 49% of the global pharma market.
+                    North America accounted for 52.3% of world pharmaceutical
+                    sales in 2022.
                   </li>
                   <li>
-                    The top 10 pharma companies control over 30% of the global
-                    market share.
+                    The top 10 pharmaceutical companies control a significant
+                    portion of the global market share, with Johnson & Johnson
+                    leading with revenues of $94.9 billion in 2023.
                   </li>
                   <li>
-                    Oncology drugs represent the largest therapeutic class by
-                    revenue.
+                    Oncology drugs continue to represent the largest therapeutic
+                    class by revenue, with Merck & Co. Keytruda generating $25
+                    billion in sales in 2023.
                   </li>
                 </ul>
                 <p className='text-sm text-gray-600 italic'>
@@ -100,24 +107,28 @@ export default function Contact() {
                 </p>
               </CardContent>
             </Card>
-            <div className='space-y-4'>
-              <h3 className='text-2xl font-bold text-gray-800'>Our Office</h3>
-              <div className='flex items-start space-x-4'>
-                <MapPin className='w-6 h-6 text-violet-600 flex-shrink-0 mt-1' />
-                <p className='text-gray-600'>
-                  Baner High Street Pune, 411045
-                  <br />
-                  Maharashtra, India
-                </p>
-              </div>
-              <div className='flex items-center space-x-4'>
-                <Phone className='w-6 h-6 text-violet-600' />
-                <p className='text-gray-600'>+1 (020) 23142-4232</p>
-              </div>
-              <div className='flex items-center space-x-4'>
-                <Mail className='w-6 h-6 text-violet-600' />
-                <p className='text-gray-600'>info@transdatanexus.com</p>
-              </div>
+          </div>
+        </div>
+        <div className='space-y-4 justify-items-center mb-6'>
+          <h3 className='text-2xl font-bold text-gray-800 underline'>
+            Our Office
+          </h3>
+          <div className='flex space-x-4'>
+            <MapPin className='w-6 h-6 text-violet-600 flex-shrink-0 mt-1' />
+            <p className='text-gray-600'>
+              3VG6+R3G, Kolivery Village, Mathuradas Colony,
+              <br /> Kalina, Vakola, Santacruz East, Mumbai, <br />
+              Maharashtra 400098
+            </p>
+          </div>
+          <div className='flex items-center space-x-4'>
+            <div className='flex items-center space-x-2'>
+              <Phone className='w-6 h-6 text-violet-600' />
+              <p className='text-gray-600'>+91 95950 78788</p>
+            </div>
+            <div className='flex items-center space-x-2'>
+              <Mail className='w-6 h-6 text-violet-600' />
+              <p className='text-gray-600'>info@transdatanexus.com</p>
             </div>
           </div>
         </div>

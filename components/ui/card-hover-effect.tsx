@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -29,16 +29,16 @@ export const HoverEffect = ({
       {items.map((item, idx) => (
         <Link
           href={item?.link}
-          key={item?.link}
-          className="relative group block p-2 h-full w-full"
+          key={idx}
+          className='relative group block p-2 h-full w-full'
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
-                className="absolute inset-0 h-full w-full bg-zinc-500/20 dark:bg-slate-800/[0.8] block rounded-3xl"
-                layoutId="hoverBackground"
+                className='absolute inset-0 h-full w-full bg-zinc-500/20 dark:bg-slate-800/[0.8] block rounded-3xl'
+                layoutId='hoverBackground'
                 initial={{ opacity: 0 }}
                 animate={{
                   opacity: 1,
@@ -75,8 +75,8 @@ export const Card = ({
         className
       )}
     >
-      <div className="relative z-50">
-        <div className="p-4">{children}</div>
+      <div className='relative z-50'>
+        <div className='p-4'>{children}</div>
       </div>
     </div>
   );

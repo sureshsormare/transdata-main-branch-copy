@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { HoverEffect } from "../components/ui/card-hover-effect";
 
-const MotionImage = motion(Image);
+const MotionImage = motion.create(Image);
 
 interface Section {
   title: string;
@@ -76,13 +76,11 @@ export default function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <div className="min-h-[100svh]">
-        <div className="container mx-auto px-4 lg:px-8 py-14">
-          <div className="flex flex-col md:flex-row items-center justify-between text-black">
-            <div className="md:w-1/2">
-              <motion.h1
-                className="text-4xl md:text-6xl mb-6 overflow-hidden py-3 font-['poppins-b']"
-              >
+      <div className='min-h-[100svh]'>
+        <div className='container mx-auto px-4 lg:px-8 py-14'>
+          <div className='flex flex-col md:flex-row items-center justify-between text-black'>
+            <div className='md:w-1/2'>
+              <motion.h1 className="text-4xl md:text-6xl mb-6 overflow-hidden py-3 font-['poppins-b']">
                 {["Unlock ", "Global ", "Pharma ", "Trade ", "Insights"].map(
                   (word, idx) => (
                     <motion.span
@@ -94,7 +92,7 @@ export default function Home() {
                         delay: 0.055 * idx,
                         ease: "easeInOut",
                       }}
-                      className="inline-block px-1"
+                      className='inline-block px-1'
                     >
                       {word}{" "}
                     </motion.span>
@@ -106,7 +104,7 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ ease: "easeInOut", duration: 0.7 }}
-                className="text-md lg:text-xl mb-8"
+                className='text-md lg:text-xl mb-8'
               >
                 Unlock the comprehensive, real-time trade data insights and
                 analytics to optimize your sourcing, procurement, and
@@ -115,16 +113,16 @@ export default function Home() {
                 intermediates, and finished pharmaceutical formulations.
               </motion.p>
             </div>
-            <div className="md:w-1/2 mt-10 md:mt-0">
+            <div className='md:w-1/2 mt-10 md:mt-0'>
               <MotionImage
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ ease: "easeInOut", duration: 0.7 }}
-                src="/visual-img.png"
-                alt="Trade Data Visualization"
+                src='/visual-img.png'
+                alt='Trade Data Visualization'
                 width={600}
                 height={400}
-                className="rounded-xl"
+                className='rounded-xl'
               />
             </div>
           </div>
@@ -132,9 +130,9 @@ export default function Home() {
       </div>
 
       {/* Why Choose TransDataNexus */}
-      <div className="bg-white py-8">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-800">
+      <div className='bg-white py-8'>
+        <div className='container mx-auto px-4'>
+          <h2 className='text-3xl font-bold text-center text-gray-800'>
             Why Choose TransDataNexus?
           </h2>
           <HoverEffect items={whyChooseSection} />
@@ -142,9 +140,9 @@ export default function Home() {
       </div>
 
       {/* Explore TransDataNexus */}
-      <div className="bg-white py-8">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-800">
+      <div className='bg-white py-8'>
+        <div className='container mx-auto px-4'>
+          <h2 className='text-3xl font-bold text-center text-gray-800'>
             Explore TransDataNexus
           </h2>
           <HoverEffect items={exploreSection} />

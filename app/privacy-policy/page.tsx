@@ -1,12 +1,19 @@
 export default function PrivacyPolicy() {
-  const date = new Date();
+  const date = new Date("2025-01-19");
   return (
     <div className='container mx-auto px-4 py-16'>
       <h1 className='text-4xl font-bold mb-8 text-violet-700'>
         Privacy Policy
       </h1>
       <div className='prose max-w-none'>
-        <p>Last updated: {date.toLocaleDateString()}</p>
+        <p>
+          Last updated:{" "}
+          {date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </p>
         <p>
           TransDataNexus is committed to protecting your privacy. This Privacy
           Policy explains how we collect, use, disclose, and safeguard your
@@ -91,7 +98,7 @@ export default function PrivacyPolicy() {
           you of any changes by posting the new Privacy Policy on this page and
           updating the Last updated date.
         </p>
-        {/* <h2 className='text-2xl font-semibold mt-8 mb-4 text-violet-600'>
+        <h2 className='text-2xl font-semibold mt-8 mb-4 text-violet-600'>
           Contact Us
         </h2>
         <p>
@@ -101,10 +108,10 @@ export default function PrivacyPolicy() {
         <p>
           TransDataNexus
           <br />
-          Email: privacy@TransDataNexus.com
+          Email: info@transdatanexus.com
           <br />
-          Phone: [Your Phone Number]
-        </p> */}
+          Phone: +91 95950 78788
+        </p>
       </div>
     </div>
   );

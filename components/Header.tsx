@@ -54,27 +54,27 @@ const Header = () => {
   return (
     <>
       <motion.header
-        className="sticky top-0 z-50 bg-white shadow-sm"
+        className='sticky top-0 z-50 bg-white shadow-sm'
         initial={{ y: 0 }}
         animate={{ y: isHidden ? -100 : 0 }}
         transition={{ ease: "linear", duration: 0.3 }}
       >
         <nav className="container mx-auto px-4 flex justify-between items-center font-['poppins'] font-light">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold text-violet-700">
+          <Link href='/' className='text-2xl font-bold text-violet-700'>
             <Image
               src={"/logo.webp"}
-              alt="TradeData Nexus"
+              alt='TradeData Nexus'
               width={150}
               height={60}
             />
           </Link>
 
           {/* Menu Icon */}
-          <div className="md:hidden">
+          <div className='md:hidden'>
             <button
-              aria-label="Toggle menu"
-              className="text-gray-700 text-3xl focus:outline-none"
+              aria-label='Toggle menu'
+              className='text-gray-700 text-3xl focus:outline-none'
               onClick={toggleMenu}
             >
               <FiMenu />
@@ -82,10 +82,10 @@ const Header = () => {
           </div>
 
           {/* Navigation Links for Desktop */}
-          <div className="hidden md:flex space-x-6">
-            {menuItems.map((item) => (
+          <div className='hidden md:flex space-x-6'>
+            {menuItems.map((item, index) => (
               <Link
-                key={item.href}
+                key={index}
                 href={item.href}
                 className={`${isActive(
                   item.href
@@ -97,8 +97,8 @@ const Header = () => {
             ))}
           </div>
           {/* Button for Desktop */}
-          <Button className="hidden md:block bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-md lg:text-[.9vw] rounded-[.4vw]">
-            <Link href="/contact">Get Started</Link>
+          <Button className='hidden md:block bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-md lg:text-[.9vw] rounded-[.4vw]'>
+            <Link href='/contact'>Get Started</Link>
           </Button>
         </nav>
       </motion.header>
@@ -109,26 +109,26 @@ const Header = () => {
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 ease-in-out z-50`}
       >
-        <div className="flex justify-between items-center px-4 py-4">
-          <Link href="/" className="text-xl font-bold text-violet-700">
+        <div className='flex justify-between items-center px-4 py-4'>
+          <Link href='/' className='text-xl font-bold text-violet-700'>
             {/* Logo here if needed */}
           </Link>
 
           {/* Close Button */}
           <button
-            aria-label="Close menu"
-            className="text-gray-700 text-2xl focus:outline-none"
+            aria-label='Close menu'
+            className='text-gray-700 text-2xl focus:outline-none'
             onClick={toggleMenu}
           >
             <FiX />
           </button>
         </div>
         {/* Menu Links */}
-        <div className="px-4 py-6 space-y-7">
-          <div className="flex flex-col items-start space-y-3">
-            {menuItems.map((item) => (
+        <div className='px-4 py-6 space-y-7'>
+          <div className='flex flex-col items-start space-y-3'>
+            {menuItems.map((item, index) => (
               <Link
-                key={item.href}
+                key={index}
                 href={item.href}
                 onClick={toggleMenu}
                 className={`${isActive(
@@ -139,18 +139,18 @@ const Header = () => {
               </Link>
             ))}
           </div>
-          <Button className="bg-blue-600 hover:bg-blue-700 w-full text-white text-sm md:text-md lg:text-[.9vw] rounded-[.9vw]">
-            <Link href="/contact" onClick={toggleMenu}>
+          <Button className='bg-blue-600 hover:bg-blue-700 w-full text-white text-sm md:text-md lg:text-[.9vw] rounded-[.9vw]'>
+            <Link href='/contact' onClick={toggleMenu}>
               Get Started
             </Link>
           </Button>
         </div>
       </div>
-      
+
       {/* Overlay for small screens */}
       {isMenuOpen && (
         <div
-          className="fixed inset-0 bg-black opacity-30 transition-opacity duration-200 z-30 lg:hidden"
+          className='fixed inset-0 bg-black opacity-30 transition-opacity duration-200 z-30 lg:hidden'
           onClick={toggleMenu}
         ></div>
       )}
