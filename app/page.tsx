@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { HoverEffect } from "../components/ui/card-hover-effect";
-
-const MotionImage = motion.create(Image);
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Section {
   title: string;
@@ -13,6 +13,15 @@ interface Section {
 }
 
 export default function Home() {
+  const [query, setQuery] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query?.trim() === "") return;
+    router.push(`/search-results?q=${encodeURIComponent(query?.trim())}`);
+  };
+
   const exploreSection: Section[] = [
     {
       title: "About Us",
@@ -139,10 +148,16 @@ export default function Home() {
               <div className="w-full md:w-auto flex-1 max-w-md rounded-full bg-white/90 backdrop-blur-sm shadow-lg ring-1 ring-gray-300 px-4 py-2 flex items-center space-x-3">
                 <input
                   type="text"
-                  placeholder="Search APIs, intermediates, buyers..."
+                  placeholder="Search by Product name or HSN Code..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
                   className="flex-1 bg-transparent text-black placeholder-gray-500 focus:outline-none text-sm md:text-base"
                 />
-                <button className="px-4 py-1.5 text-sm font-medium bg-[#1b6cae] hover:bg-[#1d94d0] text-white rounded-full transition duration-200">
+                <button
+                  onClick={handleSubmit}
+                  type="submit"
+                  className="px-4 py-1.5 text-sm font-medium bg-[#1b6cae] hover:bg-[#1d94d0] text-white rounded-full transition duration-200"
+                >
                   Search
                 </button>
               </div>
