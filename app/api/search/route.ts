@@ -21,6 +21,7 @@ export async function GET(req: Request) {
           { hs_code: { contains: query, mode: "insensitive" } },
         ],
       },
+
       take: 10,
     });
 
