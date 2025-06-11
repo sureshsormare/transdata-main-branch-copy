@@ -169,20 +169,6 @@ export default function Home() {
               </div>
             </motion.div>
           </div>
-
-          {/* Right: Image */}
-          {/* <div className="md:w-1/2 mt-10 md:mt-0">
-            <MotionImage
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ ease: "easeInOut", duration: 0.7 }}
-              src="/banner.png"
-              alt="Trade Data Visualization"
-              width={600}
-              height={400}
-              className="rounded-xl w-full max-w-[600px] h-auto"
-            />
-          </div> */}
         </div>
       </div>
 
