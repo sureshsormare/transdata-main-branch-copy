@@ -86,12 +86,12 @@ export default function Home() {
       {/* Hero Section */}
       <div
         className='relative w-full h-screen bg-cover bg-center bg-no-repeat '
-        style={{ backgroundImage: "url('/thumbnail.jpg')" }}
+        style={{ backgroundImage: "url('/blue-wave-abstract.avif')" }}
       >
         <div className='relative z-10 h-full md:top-20 top-12 container mx-auto flex flex-col md:flex-row md:justify-center text-center  w-full'>
-          <div className='lg:w-[60%] md:w-[70%] text-black'>
+          <div className='lg:w-[60%] md:w-[70%] text-white'>
             <div className='flex justify-center mb-4'>
-              <div className='relative w-fit py-1 px-4 rounded-2xl text-sm overflow-hidden shadow-md space-x-1 bg-gradient-to-r from-blue-200 via-white to-blue-400 before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/80 before:to-transparent before:animate-[shimmer_1.5s_linear_infinite]'>
+              <div className='relative w-fit py-1 px-4 text-black rounded-2xl text-sm overflow-hidden shadow-md space-x-1 bg-gradient-to-r from-blue-200 via-white to-blue-700 before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/80 before:to-transparent before:animate-[shimmer_1.5s_linear_infinite]'>
                 <span className='relative text-blue-800  font-semibold z-10'>
                   Introducing!
                 </span>
