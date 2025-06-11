@@ -21,8 +21,8 @@ export default function Page() {
             Try checking your spelling or searching something else.
           </p>
           <Link
-            href="/"
-            className="px-5 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition"
+            href='/'
+            className='px-5 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition'
           >
             Back to Home
           </Link>
