@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 interface Blog {
@@ -62,53 +63,53 @@ export default function BlogDetailPage({
   const blog = blogs.find((b) => b.id === Number(id));
 
   if (!blog) {
-    return <div className="p-8 text-center text-gray-500">Blog not found.</div>;
+    return <div className='p-8 text-center text-gray-500'>Blog not found.</div>;
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-0 px-0">
+    <main className='min-h-screen bg-gradient-to-br from-blue-50 to-white py-0 px-0'>
       {/* Banner with image */}
-      <div className="w-full h-56 md:h-64 relative flex items-end">
+      <div className='w-full h-56 md:h-64 relative flex items-end'>
         <Image
-          src="/bannerblog.jpg"
-          alt="Blog Banner"
+          src='/bannerblog.jpg'
+          alt='Blog Banner'
           fill
-          className="object-cover object-center rounded-b-3xl"
+          className='object-cover object-center rounded-b-3xl'
           priority
         />
         {/* Overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-blue-700/30 to-transparent rounded-b-3xl" />
+        <div className='absolute inset-0 bg-gradient-to-t from-blue-900/60 via-blue-700/30 to-transparent rounded-b-3xl' />
         {/* Floating author card */}
-        <div className="absolute left-1/2 -bottom-10 transform -translate-x-1/2 flex items-center gap-4 bg-white rounded-2xl shadow-lg px-10 py-2 border border-blue-100 z-10">
-          <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-2xl font-bold text-blue-700 shadow">
+        <div className='absolute left-1/2 -bottom-10 transform -translate-x-1/2 flex items-center gap-4 bg-white rounded-2xl shadow-lg px-10 py-2 border border-blue-100 z-10'>
+          <div className='w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-2xl font-bold text-blue-700 shadow'>
             {getInitials(blog.author)}
           </div>
           <div>
-            <div className="font-semibold text-blue-900">{blog.author}</div>
-            <div className="text-xs text-gray-500">{blog.date}</div>
+            <div className='font-semibold text-blue-900'>{blog.author}</div>
+            <div className='text-xs text-gray-500'>{blog.date}</div>
           </div>
         </div>
       </div>
       {/* Blog Card */}
-      <div className="max-w-6xl mx-auto pt-20 pb-12 px-4">
-        <article className="bg-white rounded-3xl shadow-2xl p-10 border border-blue-100">
-          <h1 className="text-3xl font-extrabold text-blue-900 mb-6 text-center">
+      <div className='max-w-6xl mx-auto pt-20 pb-12 px-4'>
+        <article className='bg-white rounded-3xl shadow-2xl p-10 border border-blue-100'>
+          <h1 className='text-3xl font-extrabold text-blue-900 mb-6 text-center'>
             {blog.title}
           </h1>
-          <p className="text-gray-800 leading-relaxed mb-8 text-lg">
+          <p className='text-gray-800 leading-relaxed mb-8 text-lg'>
             {blog.content}
           </p>
-          <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded mb-8">
-            <p className="text-blue-900 font-medium mb-2">In-depth Details:</p>
-            <p className="text-gray-700">{blog.details}</p>
+          <div className='bg-blue-50 border-l-4 border-blue-400 p-6 rounded mb-8'>
+            <p className='text-blue-900 font-medium mb-2'>In-depth Details:</p>
+            <p className='text-gray-700'>{blog.details}</p>
           </div>
-          <div className="mt-8 flex justify-end">
-            <a
-              href="/blog"
-              className="inline-block px-5 py-2 bg-blue-600 text-white rounded-full text-sm font-medium shadow hover:bg-blue-700 transition"
+          <div className='mt-8 flex justify-end'>
+            <Link
+              href='/blog'
+              className='inline-block px-5 py-2 bg-blue-600 text-white rounded-full text-sm font-medium shadow hover:bg-blue-700 transition'
             >
               ← Back to Blog List
-            </a>
+            </Link>
           </div>
         </article>
       </div>
