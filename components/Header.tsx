@@ -24,8 +24,10 @@ const Header = () => {
       : "text-gray-800 ";
 
   const menuItems = [
+    { href: "/", label: "Home" },
     { href: "/about", label: "About Us" },
     { href: "/services", label: "Our Services" },
+    { href: "/blog", label: "Blog" },
     { href: "/pricing", label: "Pricing" },
     { href: "/contact", label: "Contact Us" },
   ];
@@ -55,7 +57,9 @@ const Header = () => {
   return (
     <>
       <motion.header
-        className="sticky top-0 z-50 bg-white "
+        className="sticky top-0 z-50 bg-white shadow-md transition-transform duration-300"
+        style={{ transform: isHidden ? "translateY(-100%)" : "translateY(0)" }}
+        // Initial position for the header]"
         initial={{ y: 0 }}
         animate={{ y: isHidden ? -100 : 0 }}
         transition={{ ease: "linear", duration: 0.3 }}
@@ -134,7 +138,7 @@ const Header = () => {
                 onClick={toggleMenu}
                 className={`${isActive(
                   item.href
-                )} text-md hover:text-violet-700 font-semibold w-full text-left`}
+                )} text-md hover:text-blue-700 font-semibold w-full text-left`}
               >
                 {item.label}
               </Link>

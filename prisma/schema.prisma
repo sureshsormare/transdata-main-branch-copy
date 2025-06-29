@@ -25,6 +25,16 @@ enum SubscriptionStatus {
   INACTIVE
 }
 
+model contactForm {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String
+  organization String?
+  contact      String?
+  message      String?
+  createdAt    DateTime @default(now())
+}
+
 model export_india_trades {
   id                     String  @id @default(auto()) @map("_id") @db.ObjectId
   Chapter                String  @map("CHAPTER")
