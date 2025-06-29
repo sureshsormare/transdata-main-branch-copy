@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 interface Blog {
@@ -103,12 +104,12 @@ export default function BlogDetailPage({
             <p className="text-gray-700">{blog.details}</p>
           </div>
           <div className="mt-8 flex justify-end">
-            <a
+            <Link
               href="/blog"
               className="inline-block px-5 py-2 bg-blue-600 text-white rounded-full text-sm font-medium shadow hover:bg-blue-700 transition"
             >
               ← Back to Blog List
-            </a>
+            </Link>
           </div>
         </article>
       </div>

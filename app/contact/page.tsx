@@ -20,7 +20,9 @@ const Contact = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -56,7 +58,7 @@ const Contact = () => {
       } else {
         setError(data.error || "Something went wrong.");
       }
-    } catch (err) {
+    } catch {
       setError("Something went wrong.");
     }
     setLoading(false);
@@ -71,7 +73,7 @@ const Contact = () => {
       {/* Sub-parent with background overlay */}
       <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-md max-w-5xl w-full px-6 pt-10 pb-12 my-12">
         <h1 className="text-4xl text-[#1b6cae] font-extrabold mb-8 text-center">
-          Let's Get In Touch!
+          Let&apos;s Get In Touch!
         </h1>
         {/* Contact Info Card */}
         <div className="flex flex-col md:flex-row justify-between gap-6 bg-white rounded-2xl shadow-md border border-blue-100 p-8 mb-12">
@@ -239,7 +241,13 @@ const Contact = () => {
                 className="flex items-center gap-x-3 px-10 py-3 text-base bg-blue-600 text-white rounded-full font-semibold shadow hover:bg-blue-700 transition"
                 disabled={loading}
               >
-                {loading ? "Sending..." : <>Submit Form <BiRightArrow /></>}
+                {loading ? (
+                  "Sending..."
+                ) : (
+                  <>
+                    Submit Form <BiRightArrow />
+                  </>
+                )}
               </button>
             </div>
           </form>
