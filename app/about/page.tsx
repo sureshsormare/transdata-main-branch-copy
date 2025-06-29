@@ -64,7 +64,7 @@ export default function About() {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-20">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="text-center space-y-4 mb-20">
-          <h1 className="text-4xl md:text-5xl font-bold text-violet-700 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#1b6cae] leading-tight">
             About TransDataNexus
           </h1>
           <p className="text-md lg:text-xl text-gray-600 max-w-3xl mx-auto">
@@ -92,17 +92,17 @@ export default function About() {
               effectively, and maintain a competitive edge in the dynamic
               pharmaceutical industry.
             </p>
-            <Button className="bg-violet-500 hover:bg-violet-600 rounded-xl py-6 text-white">
+            <Button className="bg-[#1b6cae] hover:bg-[#1d94d0] rounded-xl py-6 text-white">
               <Link href="/services">Learn More About Our Services</Link>
             </Button>
           </div>
-          <div className="relative h-[400px] rounded-lg overflow-hidden shadow-xl">
+          <div className="relative h-[400px]  ">
             <Image
-              src="/team-img.svg"
+              src="/image-ebip-2.png"
               alt="TransDataNexus Team"
               fill
-              style={{ objectFit: "cover" }}
-              className="rounded-lg"
+              // style={{ objectFit: "cover" }}
+              // className="rounded-lg"
             />
           </div>
         </div>
@@ -118,10 +118,10 @@ export default function About() {
                 className="transition-all duration-300 hover:shadow-lg"
               >
                 <CardHeader>
-                  <div className="w-12 h-12 bg-violet-100 rounded-full flex items-center justify-center mb-4">
-                    <value.icon className="w-6 h-6 text-violet-600" />
+                  <div className="w-12 h-12  bg-[#cbe5fa] rounded-full flex items-center justify-center mb-4">
+                    <value.icon className="w-6 h-6 text-[#1b6cae]" />
                   </div>
-                  <CardTitle className="text-xl font-bold text-violet-700">
+                  <CardTitle className="text-xl font-bold text-[#1b6cae]">
                     {value.title}
                   </CardTitle>
                 </CardHeader>
@@ -158,7 +158,7 @@ export default function About() {
             <Link href={"/contact"}>
               <Button
                 size="lg"
-                className="bg-violet-500 hover:bg-violet-600 rounded-xl text-white"
+                className="bg-[#1b6cae] hover:bg-[#1d94d0] rounded-xl text-white"
               >
                 Get Started Today
               </Button>

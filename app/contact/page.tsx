@@ -1,154 +1,252 @@
 "use client";
 
-import { useState } from "react";
-import { Phone, Mail, MapPin, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+import React, { useState } from "react";
+import { BiRightArrow } from "react-icons/bi";
+import { FaBuilding, FaEnvelope, FaPhone, FaUser } from "react-icons/fa";
+import { FiMessageSquare } from "react-icons/fi";
+import { IoLocationSharp } from "react-icons/io5";
+import { MdAddIcCall } from "react-icons/md";
+import { RiMailAddFill } from "react-icons/ri";
 
-export default function Contact() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const Contact = () => {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    organization: "",
+    contact: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsSubmitting(true);
-    // Here you would typically send the form data to your server
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulating API call
-    setIsSubmitting(false);
-    alert("Thank you for your interest! We will contact you soon.");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    // Basic validation
+    if (!form.name || !form.email) {
+      setError("Name and Email are required.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSuccess("Thank you! Your message has been sent.");
+        setForm({
+          name: "",
+          email: "",
+          organization: "",
+          contact: "",
+          message: "",
+        });
+      } else {
+        setError(data.error || "Something went wrong.");
+      }
+    } catch (err) {
+      setError("Something went wrong.");
+    }
+    setLoading(false);
   };
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white py-20'>
-      <div className='container mx-auto px-4 max-w-7xl'>
-        <div className='text-center space-y-4 mb-20'>
-          <h1 className='text-4xl md:text-5xl font-bold text-violet-700 leading-tight'>
-            Contact Us
-          </h1>
-          <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
-            Get in touch with our team for inquiries, support, or to schedule a
-            demo of our powerful trade data platform.
-          </p>
-        </div>
-
-        <div className='grid md:grid-cols-2 gap-12 items-start mb-20'>
-          <div className='justify-items-center'>
-            <h2 className='text-3xl font-bold text-gray-800 mb-6'>
-              Get in Touch
-            </h2>
-            <form onSubmit={handleSubmit} className='space-y-6 w-1/2'>
-              <div className='space-y-2'>
-                <Label htmlFor='name'>Name</Label>
-                <Input id='name' name='name' required />
-              </div>
-              <div className='space-y-2'>
-                <Label htmlFor='email'>Business Email</Label>
-                <Input id='email' name='email' type='email' required />
-              </div>
-              <div className='space-y-2'>
-                <Label htmlFor='phone'>Phone</Label>
-                <Input id='phone' name='phone' type='tel' />
-              </div>
-              <div className='flex items-center space-x-2'>
-                <Checkbox id='demo' name='demo' />
-                <Label htmlFor='demo'>I am interested in a demo</Label>
-              </div>
-              <Button
-                type='submit'
-                className='w-1/2 hover:bg-violet-600 rounded-xl'
-                disabled={isSubmitting}
+    // Main parent with background image
+    <div
+      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: "url('/blue-wave-abstract.avif')" }} // Place your image in /public/contact-bg.jpg
+    >
+      {/* Sub-parent with background overlay */}
+      <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-md max-w-5xl w-full px-6 pt-10 pb-12 my-12">
+        <h1 className="text-4xl text-[#1b6cae] font-extrabold mb-8 text-center">
+          Let's Get In Touch!
+        </h1>
+        {/* Contact Info Card */}
+        <div className="flex flex-col md:flex-row justify-between gap-6 bg-white rounded-2xl shadow-md border border-blue-100 p-8 mb-12">
+          {/* Phone */}
+          <div className="flex flex-col items-start gap-4 flex-1">
+            <span className="inline-flex items-center justify-center border p-3 rounded bg-blue-50">
+              <MdAddIcCall className="text-[#1b6cae] text-2xl" />
+            </span>
+            <div className="flex flex-col items-start gap-2">
+              <a
+                href="tel:+919595078788"
+                className="font-semibold text-blue-900 hover:underline"
               >
-                {isSubmitting ? "Submitting..." : "Submit"}
-              </Button>
-            </form>
-          </div>
-          <div className='space-y-8'>
-            <Card>
-              <CardHeader>
-                <CardTitle className='text-2xl font-bold text-violet-700'>
-                  Trade Insights
-                </CardTitle>
-                <CardDescription>
-                  Latest global pharma trade statistics
-                </CardDescription>
-              </CardHeader>
-              <CardContent className='space-y-4'>
-                <p className='text-lg font-semibold'>Did you know?</p>
-                <ul className='list-disc pl-5 space-y-2'>
-                  <li>
-                    The global pharmaceutical market was valued at approximately
-                    $1.6 trillion in 2023.
-                  </li>
-                  <li>
-                    North America accounted for 52.3% of world pharmaceutical
-                    sales in 2022.
-                  </li>
-                  <li>
-                    The top 10 pharmaceutical companies control a significant
-                    portion of the global market share, with Johnson & Johnson
-                    leading with revenues of $94.9 billion in 2023.
-                  </li>
-                  <li>
-                    Oncology drugs continue to represent the largest therapeutic
-                    class by revenue, with Merck & Co. Keytruda generating $25
-                    billion in sales in 2023.
-                  </li>
-                </ul>
-                <p className='text-sm text-gray-600 italic'>
-                  Source: TransDataNexus Analysis, 2023
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-        <div className='space-y-4 justify-items-center mb-6'>
-          <h3 className='text-2xl font-bold text-gray-800 underline'>
-            Our Office
-          </h3>
-          <div className='flex space-x-4'>
-            <MapPin className='w-6 h-6 text-violet-600 flex-shrink-0 mt-1' />
-            <p className='text-gray-600'>
-              3VG6+R3G, Kolivery Village, Mathuradas Colony,
-              <br /> Kalina, Vakola, Santacruz East, Mumbai, <br />
-              Maharashtra 400098
-            </p>
-          </div>
-          <div className='flex items-center space-x-4'>
-            <div className='flex items-center space-x-2'>
-              <Phone className='w-6 h-6 text-violet-600' />
-              <p className='text-gray-600'>+91 95950 78788</p>
-            </div>
-            <div className='flex items-center space-x-2'>
-              <Mail className='w-6 h-6 text-violet-600' />
-              <p className='text-gray-600'>info@transdatanexus.com</p>
+                +91 95950 78788
+              </a>
+              <a
+                href="tel:+917977394846"
+                className="font-semibold text-blue-900 hover:underline"
+              >
+                +91 79773 94846
+              </a>
             </div>
           </div>
+          {/* Email */}
+          <div className="flex flex-col items-start gap-4 flex-1">
+            <span className="inline-flex items-center justify-center border p-3 rounded bg-blue-50">
+              <RiMailAddFill className="text-[#1b6cae] text-2xl" />
+            </span>
+            <div className="flex flex-col items-start gap-2">
+              <a
+                href="mailto:info@transdatanexus.com"
+                className="font-semibold text-blue-900 hover:underline"
+              >
+                info@transdatanexus.com
+              </a>
+              <a
+                href="mailto:komal@transdatanexus.com"
+                className="font-semibold text-blue-900 hover:underline"
+              >
+                komal@transdatanexus.com
+              </a>
+            </div>
+          </div>
+          {/* Address */}
+          <div className="flex flex-col items-start gap-4 flex-1">
+            <span className="inline-flex items-center justify-center border p-3 rounded bg-blue-50">
+              <IoLocationSharp className="text-[#1b6cae] text-2xl" />
+            </span>
+            <a
+              href="https://maps.app.goo.gl/usBhVAq7UDta2fGF6"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-start gap-2 text-blue-900 font-semibold leading-tight hover:underline"
+            >
+              <span className="whitespace-nowrap">Kolivery Village,</span>
+              <span className="whitespace-nowrap">Mathuradas Colony,</span>
+              <span className="whitespace-nowrap">
+                Kalina, Vakola, Santacruz East,
+              </span>
+              <span className="whitespace-nowrap">
+                Mumbai, Maharashtra 400098
+              </span>
+            </a>
+          </div>
         </div>
-
-        <div className='text-center space-y-6'>
-          <h2 className='text-3xl font-bold text-gray-800'>
-            Ready to unlock the power of global pharma trade data?
+        {/* Contact Form */}
+        <div className="flex flex-col justify-center">
+          <h2 className="text-2xl font-semibold text-[#1b6cae] mb-6 text-center">
+            Or fill out the form below
           </h2>
-          <p className='text-xl text-gray-600 max-w-3xl mx-auto'>
-            Schedule a demo today and see how TransDataNexus can transform your
-            business decisions.
-          </p>
-          <Button
-            size='lg'
-            className='bg-violet-500 hover:bg-violet-600 py-6 rounded-xl text-white'
+          <form
+            className="flex flex-col gap-6 bg-white rounded-2xl shadow-lg border border-blue-100 p-8"
+            onSubmit={handleSubmit}
           >
-            Schedule a Demo <ArrowRight className='ml-2 h-5 w-5' />
-          </Button>
+            {/* Row 1 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-[#1b6cae] block text-sm font-medium mb-1">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1b6cae]" />
+                  <input
+                    type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded focus:ring-2 focus:ring-blue-200 outline-none transition"
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-[#1b6cae] block text-sm font-medium mb-1">
+                  Email
+                </label>
+                <div className="relative">
+                  <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1b6cae]" />
+                  <input
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded focus:ring-2 focus:ring-blue-200 outline-none transition"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Row 2 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-[#1b6cae] block text-sm font-medium mb-1">
+                  Organization Name
+                </label>
+                <div className="relative">
+                  <FaBuilding className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1b6cae]" />
+                  <input
+                    type="text"
+                    name="organization"
+                    value={form.organization}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded focus:ring-2 focus:ring-blue-200 outline-none transition"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-[#1b6cae] block text-sm font-medium mb-1">
+                  Contact Number
+                </label>
+                <div className="relative">
+                  <FaPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1b6cae]" />
+                  <input
+                    type="tel"
+                    name="contact"
+                    value={form.contact}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded focus:ring-2 focus:ring-blue-200 outline-none transition"
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Row 3 - Full width Textarea */}
+            <div>
+              <label className="text-[#1b6cae] block text-sm font-medium mb-1">
+                Inquiry Purpose
+              </label>
+              <div className="relative">
+                <FiMessageSquare className="absolute left-3 top-3 text-[#1b6cae]" />
+                <textarea
+                  rows={4}
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded focus:ring-2 focus:ring-blue-200 outline-none transition"
+                ></textarea>
+              </div>
+            </div>
+            {error && <div className="text-red-600">{error}</div>}
+            {success && <div className="text-green-600">{success}</div>}
+            {/* Submit Button */}
+            <div className="text-right flex justify-end">
+              <button
+                type="submit"
+                className="flex items-center gap-x-3 px-10 py-3 text-base bg-blue-600 text-white rounded-full font-semibold shadow hover:bg-blue-700 transition"
+                disabled={loading}
+              >
+                {loading ? "Sending..." : <>Submit Form <BiRightArrow /></>}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Contact;
