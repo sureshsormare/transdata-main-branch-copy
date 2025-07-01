@@ -68,7 +68,7 @@ export default function SearchResultsClient() {
     const fetchResults = async () => {
       setLoading(true);
       const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
-      let data = await res.json();
+      const data = await res.json();
       let resultsArray = Array.isArray(data) ? data : data.results;
 
       if (Array.isArray(resultsArray)) {

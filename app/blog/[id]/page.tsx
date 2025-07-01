@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Link from "next/link";
 import React from "react";
 
 interface Blog {
@@ -68,7 +67,7 @@ export default function BlogDetailPage({
   }
 
   return (
-    <main className='min-h-screen bg-gradient-to-br from-blue-50 to-white py-0 px-0'>
+    <div className='min-h-screen bg-gradient-to-br from-blue-50 to-white py-0 px-0'>
       {/* Banner with image */}
       <div className='w-full h-56 md:h-64 relative flex items-end'>
         <Image
@@ -111,10 +110,9 @@ export default function BlogDetailPage({
             >
               ← Back to Blog List
             </Link>
-            </Link>
           </div>
         </article>
       </div>
-    </main>
+    </div>
   );
 }
