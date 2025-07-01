@@ -20,7 +20,7 @@ export default function Services() {
     {
       title: "Global Trade Repository",
       description:
-        "Leverage our extensive database of over 10 million worldwide pharmaceutical shipment records. This comprehensive repository provides granular insights into transaction details, including origins, destinations, product specifications, and pricing. Track historical trade patterns, analyze market dynamics, and identify emerging trends across global markets. Our repository serves as your centralized source for authentic, validated trade intelligence.",
+        "Leverage our extensive database of over 50 million worldwide pharmaceutical shipment records. This comprehensive repository provides granular insights into transaction details, including origins, destinations, product specifications, and pricing. Track historical trade patterns, analyze market dynamics, and identify emerging trends across global markets. Our repository serves as your centralized source for authentic, validated trade intelligence.",
       icon: Users,
     },
     {
