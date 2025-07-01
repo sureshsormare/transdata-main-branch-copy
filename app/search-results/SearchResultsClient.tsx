@@ -68,17 +68,21 @@ export default function SearchResultsClient() {
     const fetchResults = async () => {
       setLoading(true);
       const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
-      let data = await res.json();
+      const data = await res.json();
+      let resultsArray = Array.isArray(data) ? data : data.results;
 
-      // Sort by year descending (most recent first)
-      data = data.sort((a: ExportData, b: ExportData) => {
-        // If year is missing, treat as 0
-        const yearA = Number(a.year) || 0;
-        const yearB = Number(b.year) || 0;
-        return yearB - yearA;
-      });
+      if (Array.isArray(resultsArray)) {
+        // Sort by year descending (most recent first)
+        resultsArray = resultsArray.sort((a: ExportData, b: ExportData) => {
+          const yearA = Number(a.year) || 0;
+          const yearB = Number(b.year) || 0;
+          return yearB - yearA;
+        });
+        setResults(resultsArray);
+      } else {
+        setResults([]);
+      }
 
-      setResults(data);
       setLoading(false);
     };
 
