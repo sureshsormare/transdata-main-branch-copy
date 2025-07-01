@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import { Globe, Users, TrendingUp, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,8 +11,11 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { HoverEffect } from "@/components/ui/card-hover-effect";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function About() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const values = [
     {
       title: "Data-Driven Insights",
@@ -111,26 +115,47 @@ export default function About() {
           <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">
             Our Core Values
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 ">
             {values.map((value, index) => (
-              <Card
+              <div
                 key={index}
-                className="transition-all duration-300 hover:shadow-lg"
+                className="relative group"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
               >
-                <CardHeader>
-                  <div className="w-12 h-12  bg-[#cbe5fa] rounded-full flex items-center justify-center mb-4">
-                    <value.icon className="w-6 h-6 text-[#1b6cae]" />
-                  </div>
-                  <CardTitle className="text-xl font-bold text-[#1b6cae]">
-                    {value.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-gray-600">
-                    {value.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
+                <AnimatePresence>
+                  {hoveredIndex === index && (
+                    <motion.span
+                      className="absolute inset-0 h-full w-full bg-blue-100/60 block rounded-2xl z-0"
+                      layoutId="hoverBackground"
+                      initial={{ opacity: 0 }}
+                      animate={{
+                        opacity: 1,
+                        transition: { duration: 0.15 },
+                      }}
+                      exit={{
+                        opacity: 0,
+                        transition: { duration: 0.15, delay: 0.2 },
+                      }}
+                    />
+                  )}
+                </AnimatePresence>
+                <Card className="relative z-10 transition-all duration-300 hover:shadow-lg h-full ">
+                  <CardHeader>
+                    <div className="w-12 h-12  bg-[#cbe5fa] rounded-full flex items-center justify-center mb-4">
+                      <value.icon className="w-6 h-6 text-[#1b6cae]" />
+                    </div>
+                    <CardTitle className="text-xl font-bold text-[#1b6cae]">
+                      {value.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-gray-600">
+                      {value.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
           </div>
         </div>

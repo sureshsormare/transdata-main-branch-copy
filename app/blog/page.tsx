@@ -75,6 +75,24 @@ export default function BlogPage() {
             </div>
           </div>
         ))}
+        {/* Subscribe Card */}
+        <div className=" flex justify-center">
+          <div className=" bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center max-w-xl w-full">
+            <h2 className="text-2xl font-bold text-blue-900 mb-2">
+              Stay Updated!
+            </h2>
+            <p className="text-gray-700 mb-6 text-center">
+              Subscribe for pharma trade insights, news, and updates. Want to
+              connect? Reach out to us!
+            </p>
+            <Link
+              href="/contact"
+              className="px-8 py-3 bg-blue-600 text-white rounded-full font-semibold shadow hover:bg-blue-700 transition"
+            >
+              Subscribe / Contact Us
+            </Link>
+          </div>
+        </div>
       </div>
     </main>
   );
