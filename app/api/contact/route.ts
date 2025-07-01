@@ -20,17 +20,19 @@ export async function POST(req: Request) {
 
     // Send email to your team
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtpout.secureserver.net",
+      port: 465,
+      secure: true,
       auth: {
-        user: process.env.NOTIFY_EMAIL,
-        pass: process.env.NOTIFY_EMAIL_PASS,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     await transporter.sendMail({
-      from: `"TransData Website Contact" <${process.env.NOTIFY_EMAIL}>`,
-      to: "info@transdatanexus.com, komal@transdatanexus.com",
-      subject: "New Contact Form Submission",
+      from: `"TransData Site Contact" <${process.env.EMAIL_USER}>`,
+      to: "komal@transdatanexus.com",
+      subject: `New Enquiry from ${name}`,
       html: `
         <div style="max-width:480px;margin:24px auto;padding:24px;background:#f8fafc;border-radius:16px;box-shadow:0 4px 24px rgba(30,64,175,0.08);font-family:Segoe UI,Arial,sans-serif;">
           <div style="text-align:center;margin-bottom:24px;">
@@ -72,7 +74,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("Contact API Error:", error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Internal Server Error!" },
       { status: 500 }
     );
   }
