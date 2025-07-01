@@ -1,13 +1,11 @@
 import {
   Star,
-  StarHalf,
   Users,
   Check,
   Building2,
   Rocket,
   Building,
   UserRound,
-  CircleDollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -20,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { MdAssistant } from "react-icons/md";
 
 export default function Pricing() {
   return (
@@ -50,8 +49,12 @@ export default function Pricing() {
                   <Star className="w-6 h-6 fill-[#1b6cae] text-[#1b6cae]" />
                   <Star className="w-6 h-6 fill-[#1b6cae] text-[#1b6cae]" />
                   <Star className="w-6 h-6 fill-[#1b6cae] text-[#1b6cae]" />
-                  <StarHalf className="w-6 h-6 fill-[#1b6cae] text-[#1b6cae]" />
-                  <span className="ml-2 font-bold text-xl">4.5/5</span>
+                  <Star className="w-6 h-6 fill-[#1b6cae] text-[#1b6cae]" />
+                  <Star className="w-6 h-6 fill-[#1b6cae] text-[#1b6cae]" />
+                  <Star className="w-6 h-6 fill-[#1b6cae] text-[#1b6cae]" />
+                  <Star className="w-6 h-6 fill-[#1b6cae] text-[#1b6cae]" />
+                  {/* <StarHalf className="w-6 h-6 fill-[#1b6cae] text-[#1b6cae]" /> */}
+                  <span className="ml-2 font-bold text-xl">4.8</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="flex space-x-3">
@@ -60,7 +63,7 @@ export default function Pricing() {
                     ))}
                   </div>
                   <p className="text-gray-600 text-sm">
-                    Rated by 20,000+ Satisfied Customers
+                    Rated by 100+ Satisfied Customers
                   </p>
                 </div>
               </div>
@@ -72,10 +75,10 @@ export default function Pricing() {
             <CardContent className="pt-6">
               <div className="text-center space-y-3">
                 <div className="w-20 h-20 mx-auto bg-[#cbe5fa]  rounded-full flex items-center justify-center">
-                  <CircleDollarSign size={40} />
+                  <MdAssistant size={40} />
                 </div>
                 <p className="font-semibold text-gray-900">
-                  100% Money Back Guarantee
+                  Dedicated Support Personalized assistance whenever you need it
                 </p>
               </div>
             </CardContent>
@@ -124,8 +127,10 @@ export default function Pricing() {
               <p className="text-sm text-gray-500">/Annually</p>
             </CardHeader>
             <CardContent className="text-center space-y-4 pt-6">
-              <Button className="w-full hover:bg-[#1d94d0] hover:text-black"
-                variant="outline">
+              <Button
+                className="w-full hover:bg-[#1d94d0] hover:text-black"
+                variant="outline"
+              >
                 Sign Up
               </Button>
               {/* <div className='space-y-2'>
@@ -154,8 +159,10 @@ export default function Pricing() {
               <p className="text-sm text-gray-500">/Annually</p>
             </CardHeader>
             <CardContent className="text-center space-y-4 pt-6">
-              <Button className="w-full hover:bg-[#1d94d0] hover:text-black"
-                variant="outline">
+              <Button
+                className="w-full hover:bg-[#1d94d0] hover:text-black"
+                variant="outline"
+              >
                 Sign Up
               </Button>
               {/* <div className='space-y-2'>
@@ -179,8 +186,10 @@ export default function Pricing() {
               <p className="text-sm text-gray-500">/Annually</p>
             </CardHeader>
             <CardContent className="text-center space-y-4 pt-6">
-              <Button className="w-full hover:bg-[#1d94d0] hover:text-black"
-                variant="outline">
+              <Button
+                className="w-full hover:bg-[#1d94d0] hover:text-black"
+                variant="outline"
+              >
                 Sign Up
               </Button>
               {/* <div className='space-y-2'>
@@ -282,7 +291,7 @@ export default function Pricing() {
                   <TableCell className="font-medium">
                     Number of Shipment Downloads in Excel
                   </TableCell>
-                  <TableCell className="text-center">0</TableCell>
+                  <TableCell className="text-center">500</TableCell>
                   <TableCell className="text-center">400,000</TableCell>
                   <TableCell className="text-center">1,600,000</TableCell>
                   <TableCell className="text-center">4,000,000</TableCell>
