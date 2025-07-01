@@ -67,7 +67,7 @@ export default function BlogDetailPage({
   }
 
   return (
-    <main className='min-h-screen bg-gradient-to-br from-blue-50 to-white py-0 px-0'>
+    <div className='min-h-screen bg-gradient-to-br from-blue-50 to-white py-0 px-0'>
       {/* Banner with image */}
       <div className='w-full h-56 md:h-64 relative flex items-end'>
         <Image
@@ -103,16 +103,16 @@ export default function BlogDetailPage({
             <p className='text-blue-900 font-medium mb-2'>In-depth Details:</p>
             <p className='text-gray-700'>{blog.details}</p>
           </div>
-          <div className='mt-8 flex justify-end'>
+          <div className="mt-8 flex justify-end">
             <Link
-              href='/blog'
-              className='inline-block px-5 py-2 bg-blue-600 text-white rounded-full text-sm font-medium shadow hover:bg-blue-700 transition'
+              href="/blog"
+              className="inline-block px-5 py-2 bg-blue-600 text-white rounded-full text-sm font-medium shadow hover:bg-blue-700 transition"
             >
               ← Back to Blog List
             </Link>
           </div>
         </article>
       </div>
-    </main>
+    </div>
   );
 }
