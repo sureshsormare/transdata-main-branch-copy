@@ -20,8 +20,8 @@ const Header = () => {
 
   const isActive = (href: string) =>
     pathname === href
-      ? "text-[#1b6cae]  border-b border-[#1b6cae] pb-0.5"
-      : "text-gray-800 ";
+      ? "text-white font-bold  border-b border-white pb-0.5"
+      : "text-white  hover:text-[#1d94d0] transition-colors duration-200";
 
   const menuItems = [
     { href: "/", label: "Home" },
@@ -57,53 +57,55 @@ const Header = () => {
   return (
     <>
       <motion.header
-        className="sticky top-0 z-50 bg-white shadow-md transition-transform duration-300"
-        style={{ transform: isHidden ? "translateY(-100%)" : "translateY(0)" }}
-        // Initial position for the header]"
+        className="sticky top-0 z-50  transition-transform duration-300"
+        style={{
+          background: "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)",
+          transform: isHidden ? "translateY(-100%)" : "translateY(0)",
+        }}
         initial={{ y: 0 }}
         animate={{ y: isHidden ? -100 : 0 }}
         transition={{ ease: "linear", duration: 0.3 }}
       >
-        <nav className="container  mx-auto px-4 flex justify-between items-center font-['poppins'] font-light">
+        <nav className="container mx-auto px-4 flex justify-between items-center font-['poppins'] font-light">
           {/* Logo */}
           <Link href="/" className="text-2xl font-bold text-[#1b6cae]">
-            <Image
-              src={"/logo.webp"}
-              alt="TradeData Nexus"
-              width={150}
-              height={60}
-            />
+        <Image
+          src={"/logo.webp"}
+          alt="TradeData Nexus"
+          width={150}
+          height={60}
+        />
           </Link>
 
           {/* Menu Icon */}
           <div className="md:hidden">
-            <button
-              aria-label="Toggle menu"
-              className="text-gray-700 text-3xl focus:outline-none"
-              onClick={toggleMenu}
-            >
-              <FiMenu />
-            </button>
+        <button
+          aria-label="Toggle menu"
+          className="text-gray-700 text-3xl focus:outline-none"
+          onClick={toggleMenu}
+        >
+          <FiMenu />
+        </button>
           </div>
 
           {/* Navigation Links for Desktop */}
           <div className="hidden md:flex space-x-6">
-            {menuItems.map((item, index) => (
-              <Link
-                key={index}
-                href={item.href}
-                className={`${isActive(
-                  item.href
-                )} text-sm md:text-sm lg:text-lg hover:text-[#1d94d0] font-sans`}
-                onClick={() => isActive(item.href)} // Set active on click
-              >
-                {item.label}
-              </Link>
-            ))}
+        {menuItems.map((item, index) => (
+          <Link
+            key={index}
+            href={item.href}
+            className={`${isActive(
+          item.href
+            )} text-sm md:text-sm lg:text-lg hover:text-[#1d94d0] font-sans`}
+            onClick={() => isActive(item.href)}
+          >
+            {item.label}
+          </Link>
+        ))}
           </div>
           {/* Button for Desktop */}
           <Button className="hidden md:block bg-[#1b6cae] hover:bg-[#1d94d0] text-white text-sm md:text-md lg:text-[.9vw] rounded-[.4vw]">
-            <Link href="/contact">Get Started</Link>
+        <Link href="/contact">Get Started</Link>
           </Button>
         </nav>
       </motion.header>

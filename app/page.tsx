@@ -89,65 +89,37 @@ export default function Home() {
         <PlexusBackground nodeCount={100} maxDistance={120}>
           <div className="relative z-10 h-full md:top-20 top-12 container mx-auto flex flex-col md:flex-row md:justify-center text-center w-full ">
             <div className="lg:w-[60%] md:w-[70%] text-white">
-              <div className="flex justify-center mb-4">
-                <div className="relative w-fit py-1 px-4 text-black rounded-2xl text-sm overflow-hidden shadow-md space-x-1 bg-gradient-to-r from-blue-200 via-white to-blue-700 before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/80 before:to-transparent before:animate-[shimmer_1.5s_linear_infinite]">
-                  <span className="relative text-blue-800 font-semibold z-10">
-                    Introducing!
-                  </span>
-                  <span className="relative z-10">
-                    Pharma Supply Chain Analytics 🚀
-                  </span>
-                </div>
-              </div>
+  
 
-              <motion.h1 className="text-4xl md:text-6xl mb-6 overflow-hidden py-3 font-['poppins-b']">
-                {[
-                  "Your ",
-                  "Gateway ",
-                  "to ",
-                  "Global ",
-                  "Pharma ",
-                  "Insights.",
-                ].map((word, idx) => (
-                  <motion.span
-                    key={idx}
-                    initial={{ y: "250%" }}
-                    animate={{ y: 0 }}
-                    transition={{
-                      duration: 0.35,
-                      delay: 0.055 * idx,
-                      ease: "easeInOut",
-                    }}
-                    className="inline-block px-1"
-                  >
-                    {word}
-                  </motion.span>
-                ))}
+              <motion.h1 className="w-full max-w-full p-2  text-4xl md:text-5xl mb-6 overflow-hidden  font-['poppins-b']">
+                <motion.span className=" max-w-full ">
+                  Global Pharma Trade Intelligence
+                </motion.span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ ease: "easeInOut", duration: 0.7 }}
-                className="md:w-[70%] mx-auto text-sm lg:text-md mb-6 text-center"
+                className="md:w-[70%] mx-auto text-base lg:text-md mb-6 text-center"
               >
-                Empower your supply chain with accurate, real-time
-                pharmaceutical trade insights—designed to optimize procurement
-                and fuel global growth.
+                Search and analyze pharmaceutical trade data across 180+
+                countries with real-time insights and comprehensive market
+                intelligence.
               </motion.p>
 
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.7 }}
-                className="w-full flex flex-col items-center gap-5 mt-12"
+                className="w-full flex flex-col items-center gap-5 mt-16"
               >
                 {/* Search and Demo Button Row */}
-                <div className="w-full flex flex-col md:flex-row md:items-center md:justify-center gap-4">
+                <div className="w-full flex flex-col md:flex-row md:items-center md:justify-center ">
                   {/* Search Bar */}
                   <form
                     onSubmit={handleSubmit}
-                    className="w-full md:w-auto flex-1 max-w-md rounded-full bg-blue-200/5 backdrop-blur-sm shadow-lg ring-1 ring-gray-300 px-4 py-2 flex items-center space-x-3"
+                    className="w-full md:w-auto flex-1 max-w-2xl rounded-xl bg-blue-200/5 backdrop-blur-sm shadow-lg ring-1 ring-gray-300 px-12 py-4 flex items-center space-x-3"
                   >
                     <input
                       type="text"
@@ -158,42 +130,11 @@ export default function Home() {
                     />
                     <button
                       type="submit"
-                      className="px-4 py-1.5 text-sm font-medium bg-[#1b6cae] hover:bg-[#1d94d0] text-white rounded-full transition duration-200"
+                      className="px-6 mr-0 py-3 text-sm font-medium bg-[#1b6cae] hover:bg-[#1d94d0] text-white rounded-xl transition duration-200"
                     >
                       Search
                     </button>
                   </form>
-                  {/* Book Demo Button */}
-                  <div className="flex justify-center md:justify-start">
-                    <button className="relative px-7 py-3 text-sm font-medium text-white rounded-full overflow-hidden bg-gradient-to-r from-blue-600 via-blue-400 to-cyan-400 shadow-lg transition duration-200 whitespace-nowrap group">
-                      <span className="relative z-10">Start to Book Demo</span>
-                      <span
-                        className="absolute inset-0 z-0"
-                        style={{
-                          background:
-                            "linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%)",
-                          opacity: 1,
-                          position: "absolute",
-                          top: 0,
-                          left: "-75%",
-                          width: "50%",
-                          height: "100%",
-                          pointerEvents: "none",
-                          animation: "shine 1.5s linear infinite",
-                        }}
-                      />
-                      <style jsx>{`
-                        @keyframes shine {
-                          0% {
-                            left: -75%;
-                          }
-                          100% {
-                            left: 125%;
-                          }
-                        }
-                      `}</style>
-                    </button>
-                  </div>
                 </div>
                 {/* Suggestions Bar */}
                 <div className="flex flex-wrap justify-center gap-2 mt-4">
@@ -289,7 +230,11 @@ export default function Home() {
       </div>
 
       {/* Features & Services */}
-      <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-20 relative overflow-hidden">
+      <div className="bg-gradient-to-br  py-20 relative overflow-hidden"
+          style={{
+          background: "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)",
+          // transform: isHidden ? "translateY(-100%)" : "translateY(0)",
+        }}>
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div
