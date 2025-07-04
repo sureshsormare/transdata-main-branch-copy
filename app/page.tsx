@@ -93,7 +93,7 @@ export default function Home() {
 
               <motion.h1 className="w-full max-w-full p-2  text-4xl md:text-5xl mb-6 overflow-hidden  font-['poppins-b']">
                 <motion.span className=" max-w-full ">
-                  Global Pharma Trade Intelligence
+                  Global Pharma Trade Data
                 </motion.span>
               </motion.h1>
 
