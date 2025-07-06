@@ -91,8 +91,8 @@ export default function Home() {
             <div className="lg:w-[60%] md:w-[70%] text-white">
   
 
-              <motion.h1 className="w-full max-w-full p-2  text-4xl md:text-5xl mb-6 overflow-hidden  font-['poppins-b']">
-                <motion.span className=" max-w-full ">
+              <motion.h1 className="w-full max-w-full p-2 text-4xl md:text-5xl mb-6 overflow-hidden font-['poppins-b'] whitespace-nowrap">
+                <motion.span className="max-w-full">
                   Global Pharma Trade Intelligence
                 </motion.span>
               </motion.h1>
@@ -114,23 +114,22 @@ export default function Home() {
                 transition={{ delay: 0.6, duration: 0.7 }}
                 className="w-full flex flex-col items-center gap-5 mt-16"
               >
-                {/* Search and Demo Button Row */}
-                <div className="w-full flex flex-col md:flex-row md:items-center md:justify-center ">
-                  {/* Search Bar */}
+                {/* Search Bar */}
+                <div className="w-full flex justify-center">
                   <form
                     onSubmit={handleSubmit}
-                    className="w-full md:w-auto flex-1 max-w-2xl rounded-xl bg-blue-200/5 backdrop-blur-sm shadow-lg ring-1 ring-gray-300 px-12 py-4 flex items-center space-x-3"
+                    className="w-full max-w-2xl rounded-2xl bg-blue-200/10 backdrop-blur-sm shadow-xl ring-1 ring-gray-300/30 flex items-center overflow-hidden p-2"
                   >
                     <input
                       type='text'
                       placeholder='Search by Product name or HSN Code...'
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
-                      className='flex-1 bg-transparent text-white placeholder-gray-500 focus:outline-none text-sm md:text-base'
+                      className='flex-1 bg-transparent text-white placeholder-gray-400 focus:outline-none text-sm md:text-base px-6 py-4'
                     />
                     <button
                       type="submit"
-                      className="px-6 mr-0 py-3 text-sm font-medium bg-[#1b6cae] hover:bg-[#1d94d0] text-white rounded-xl transition duration-200"
+                      className="px-8 py-4 mx-1 text-sm font-semibold bg-[#1b6cae] hover:bg-[#1d94d0] text-white transition duration-200 flex-shrink-0 rounded-xl"
                     >
                       Search
                     </button>
