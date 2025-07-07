@@ -27,6 +27,7 @@ const PlexusBackground: React.FC<PlexusBackgroundProps> = ({
   children,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const animationIdRef = useRef<number | undefined>(undefined);
   const nodesRef = useRef<Node[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -210,21 +211,47 @@ const PlexusBackground: React.FC<PlexusBackgroundProps> = ({
 
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    nodesRef.current = createNodes(canvas.width, canvas.height);
+    // Get container dimensions
+    const rect = container.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+
+    // Set canvas size to match container
+    canvas.width = width;
+    canvas.height = height;
+
+    // Recreate nodes with new dimensions
+    nodesRef.current = createNodes(width, height);
   }, [createNodes]);
 
   useEffect(() => {
-    resizeCanvas();
-    animate();
-
-    const handleResize = () => resizeCanvas();
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
+    // Initial setup
+    const initCanvas = () => {
+      resizeCanvas();
+      animate();
     };
+
+    // Use a small delay to ensure container is rendered
+    const timer = setTimeout(initCanvas, 100);
+
+    const handleResize = () => {
+      resizeCanvas();
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = { 
+        x: e.clientX - rect.left, 
+        y: e.clientY - rect.top 
+      };
+    };
+
     const handleScroll = () => {
       scrollOffsetRef.current = window.pageYOffset * 0.1;
     };
@@ -234,6 +261,7 @@ const PlexusBackground: React.FC<PlexusBackgroundProps> = ({
     window.addEventListener("scroll", handleScroll);
 
     return () => {
+      clearTimeout(timer);
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current);
       }
@@ -244,7 +272,7 @@ const PlexusBackground: React.FC<PlexusBackgroundProps> = ({
   }, [resizeCanvas, animate]);
 
   return (
-    <div className={`relative w-full h-full ${className}`}>
+    <div ref={containerRef} className={`relative w-full h-full ${className}`}>
       <canvas
         ref={canvasRef}
         className="absolute top-0 left-0 w-full h-full z-0"

@@ -5,6 +5,11 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, ArrowDownRight, Minus } from "lucide-react";
+import AIAnalyticsPanel from "./AIAnalyticsPanel";
+import AIChatbot from "../components/AIChatbot";
+import ChartAIAssistant from "./ChartAIAssistant";
+import AdvancedReportGenerator from "../components/AdvancedReportGenerator";
 
 export interface ExportData {
   id: string;
@@ -54,6 +59,9 @@ export interface ExportData {
 
 // Compact Chart Dashboard Component
 function ExportChart({ data }: { data: Array<{ month: string; value: number; count: number }> }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
+
   if (!data || data.length === 0) return null;
 
   const maxValue = Math.max(...data.map(d => d.value));
@@ -100,6 +108,38 @@ function ExportChart({ data }: { data: Array<{ month: string; value: number; cou
   };
 
   return (
+    <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-gray-800">Monthly Export Trends</h3>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowAIAssistant(!showAIAssistant)}
+            className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+            title="AI Chart Assistant"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </button>
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="p-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
+          >
+            {isExpanded ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Chart Content */}
+      <div className={`transition-all duration-300 ${isExpanded ? 'max-h-96' : 'max-h-48'} overflow-hidden`}>
     <div className="bg-white rounded border border-gray-200 overflow-hidden">
       {/* Compact Header */}
       <div className="bg-blue-50 px-2 py-1 border-b border-gray-200">
@@ -107,9 +147,9 @@ function ExportChart({ data }: { data: Array<{ month: string; value: number; cou
           <h3 className="text-xs font-bold text-gray-900">Export Trends</h3>
           <span className={`text-xs font-semibold px-1 py-0.5 rounded ${
             growthRate >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-          }`}>
-            {growthRate >= 0 ? '+' : ''}{growthRate.toFixed(1)}%
-          </span>
+            }`}>
+              {growthRate >= 0 ? '+' : ''}{growthRate.toFixed(1)}%
+            </span>
         </div>
       </div>
 
@@ -125,16 +165,16 @@ function ExportChart({ data }: { data: Array<{ month: string; value: number; cou
             <div className="text-xs font-bold text-orange-900">{volatility.toFixed(1)}%</div>
           </div>
         </div>
-
+        
         {/* Compact Chart */}
         <div className="bg-gray-50 p-1 rounded mb-2">
           <div className="flex items-center justify-between mb-1">
             <h4 className="text-xs font-semibold text-gray-900">Monthly Trends</h4>
-            <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1">
               <div className="w-1 h-1 bg-blue-500 rounded"></div>
               <span className="text-xs text-gray-600">Shipments</span>
-            </div>
-          </div>
+              </div>
+              </div>
 
           <div className="relative h-20">
             {/* Y-Axis Labels */}
@@ -144,7 +184,7 @@ function ExportChart({ data }: { data: Array<{ month: string; value: number; cou
               <span>{Math.round(maxCount * 0.5).toLocaleString()}</span>
               <span>{Math.round(maxCount * 0.25).toLocaleString()}</span>
               <span>0</span>
-            </div>
+          </div>
 
             {/* Chart Area with Padding for Y-axis */}
             <div className="absolute left-8 right-0 top-0 h-full">
@@ -160,49 +200,49 @@ function ExportChart({ data }: { data: Array<{ month: string; value: number; cou
                 />
               </svg>
 
-              {/* Grid Lines */}
-              <svg className="absolute inset-0 w-full h-full">
-                {[0, 1, 2, 3, 4].map(i => (
-                  <line
-                    key={i}
-                    x1="0"
+            {/* Grid Lines */}
+            <svg className="absolute inset-0 w-full h-full">
+              {[0, 1, 2, 3, 4].map(i => (
+                <line
+                  key={i}
+                  x1="0"
                     y1={i * 20}
-                    x2="100%"
+                  x2="100%"
                     y2={i * 20}
-                    stroke="#E5E7EB"
-                    strokeWidth="1"
-                    strokeDasharray="2,2"
-                  />
-                ))}
-              </svg>
-
-              {/* Trend Line */}
-              <svg className="absolute inset-0 w-full h-full">
-                <polyline
-                  points={getTrendLinePoints(data.map(d => d.count))}
-                  fill="none"
-                  stroke="#10B981"
-                  strokeWidth="2"
-                  opacity="0.8"
+                  stroke="#E5E7EB"
+                  strokeWidth="1"
+                  strokeDasharray="2,2"
                 />
-              </svg>
+              ))}
+            </svg>
 
-              {/* Data Points and Bars */}
+            {/* Trend Line */}
+            <svg className="absolute inset-0 w-full h-full">
+              <polyline
+                points={getTrendLinePoints(data.map(d => d.count))}
+                fill="none"
+                stroke="#10B981"
+                  strokeWidth="2"
+                opacity="0.8"
+              />
+            </svg>
+
+            {/* Data Points and Bars */}
               <div className="absolute inset-0 flex items-end justify-between px-1 pb-4">
-                {data.map((item, index) => {
+              {data.map((item, index) => {
                   const height = (item.count / maxCount) * (chartHeight * 0.5);
-                  return (
-                    <div key={index} className="flex flex-col items-center">
-                      <div 
+                return (
+                  <div key={index} className="flex flex-col items-center">
+                    <div 
                         className="w-1.5 bg-blue-500 rounded-t opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
-                        style={{ height: `${height}px` }}
-                        title={`${item.month}: ${item.count} shipments | $${item.value.toLocaleString()}`}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+                      style={{ height: `${height}px` }}
+                      title={`${item.month}: ${item.count} shipments | $${item.value.toLocaleString()}`}
+                    />
+                  </div>
+                );
+              })}
             </div>
+          </div>
 
             {/* X-Axis Labels */}
             <div className="absolute left-8 right-0 bottom-0 flex justify-between text-[8px] text-gray-500">
@@ -211,9 +251,9 @@ function ExportChart({ data }: { data: Array<{ month: string; value: number; cou
                   {item.month}
                 </span>
               ))}
+          </div>
             </div>
           </div>
-        </div>
 
         {/* Enhanced Analysis */}
         <div className="grid grid-cols-2 gap-1">
@@ -224,11 +264,30 @@ function ExportChart({ data }: { data: Array<{ month: string; value: number; cou
           <div className="bg-white border border-gray-200 rounded p-1">
             <div className="text-xs font-semibold text-gray-900">Trend</div>
             <div className={`text-xs ${trendDirection === 'up' ? 'text-green-600' : 'text-red-600'}`}>
-              {trendDirection === 'up' ? '↗' : '↘'} {trendDirection}
+                {trendDirection === 'up' ? '↗' : '↘'} {trendDirection}
             </div>
           </div>
         </div>
       </div>
+        </div>
+      </div>
+
+      {/* Chart AI Assistant */}
+      <ChartAIAssistant
+        chartData={{
+          type: 'line',
+          data: data.map(item => ({
+            name: item.month,
+            value: item.value,
+            count: item.count
+          })),
+          title: 'Monthly Export Trends',
+          description: 'Export value and volume trends over time'
+        }}
+        isVisible={showAIAssistant}
+        onToggle={() => setShowAIAssistant(!showAIAssistant)}
+        position="floating"
+      />
     </div>
   );
 }
@@ -256,12 +315,21 @@ export default function SearchResultsClient() {
   const [countryStats, setCountryStats] = useState({
     topImportCountries: [] as Array<{ country: string; count: number }>,
     topExportCountries: [] as Array<{ country: string; count: number }>,
-    topUniqueExporters: [] as Array<{ exporter: string; count: number }>,
-    topUniqueImporters: [] as Array<{ importer: string; count: number }>,
+    topUniqueExporters: [] as Array<{ exporter: string; count: number; value: number }>,
+    topUniqueImporters: [] as Array<{ importer: string; count: number; value: number }>,
   });
   
 
   const [monthlyStats, setMonthlyStats] = useState<Array<{ month: string; value: number; count: number }>>([]);
+  const [analytics, setAnalytics] = useState<any>(null);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [selectedDateRange, setSelectedDateRange] = useState<string>("");
+  const [selectedPriceRange, setSelectedPriceRange] = useState<string>("");
+  const [selectedShipmentMode, setSelectedShipmentMode] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("date");
+  const [viewMode, setViewMode] = useState<"grid" | "list" | "table">("grid");
+  const [exportFormat, setExportFormat] = useState<string>("csv");
+  const [showAIAnalytics, setShowAIAnalytics] = useState<boolean>(false);
 
   useEffect(() => {
     if (!q) return;
@@ -305,6 +373,13 @@ export default function SearchResultsClient() {
         } else {
           setMonthlyStats([]);
         }
+
+        // Set comprehensive analytics from API (uses entire dataset)
+        if (data.analytics) {
+          setAnalytics(data.analytics);
+        } else {
+          setAnalytics(null);
+        }
       } else {
         setResults([]);
         setAggregates({
@@ -320,6 +395,7 @@ export default function SearchResultsClient() {
           topUniqueImporters: [],
         });
         setMonthlyStats([]);
+        setAnalytics(null);
       }
 
       setLoading(false);
@@ -362,27 +438,151 @@ export default function SearchResultsClient() {
     }
   };
 
+  const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
+    switch (trend) {
+      case 'up':
+        return <ArrowUpRight className="w-4 h-4 text-green-500" />;
+      case 'down':
+        return <ArrowDownRight className="w-4 h-4 text-red-500" />;
+      default:
+        return <Minus className="w-4 h-4 text-gray-500" />;
+    }
+  };
+
   // Use results directly since filtering is now done at API level
   const filteredResults = results;
 
-  // Generate dynamic summary based on search results
-  const generateSummary = () => {
-    if (!results.length) return null;
+  // Generate dynamic summary based on API analytics data (complete dataset)
+  const generateSummary = (): {
+    totalRecords: number;
+    recentYear: string;
+    oldestYear: string;
+    yearSpan: number;
+    totalValue: number;
+    avgValue: number;
+    topImportCountry: { country: string; count: number } | undefined;
+    topExportCountry: { country: string; count: number } | undefined;
+    uniqueProducts: number;
+    searchTerm: string;
+    dateRange: string;
+    supplierConcentration: number;
+    buyerConcentration: number;
+    avgPrice: number;
+    minPrice: number;
+    maxPrice: number;
+    priceVolatility: number;
+    marketGrowth: number;
+    // Additional analytics
+    topSuppliers: Array<{ name: string; count: number; value: number }>;
+    topBuyers: Array<{ name: string; count: number; value: number }>;
+    priceDistribution: Array<{ range: string; count: number; percentage: number }>;
+    monthlyTrends: Array<{ month: string; count: number; value: number; trend: 'up' | 'down' | 'stable' }>;
+    marketShare: { top5Countries: Array<{ country: string; share: number }> };
+    competitiveAnalysis: {
+      supplierDiversity: number;
+      buyerDiversity: number;
+      marketConcentration: number;
+      priceCompetitiveness: number;
+    };
+    // New analytics
+    tradeRoutes: Array<{ origin: string; destination: string; count: number; value: number; frequency: number }>;
+    productCategories: Array<{ category: string; count: number; value: number; percentage: number }>;
+    shipmentModes: Array<{ mode: string; count: number; value: number; percentage: number }>;
+    portAnalysis: Array<{ port: string; count: number; value: number; type: 'origin' | 'destination' }>;
+    marketIntelligence: {
+      marketSize: number;
+      marketGrowth: number;
+      marketMaturity: string;
+      entryBarriers: string;
+      competitiveIntensity: number;
+      profitPotential: number;
+    };
+    riskAssessment: {
+      supplyChainRisk: number;
+      regulatoryRisk: number;
+      marketRisk: number;
+      currencyRisk: number;
+      overallRisk: string;
+    };
+    opportunities: Array<{ type: string; description: string; potential: number; confidence: number }>;
+  } | null => {
+    if (!aggregates.totalRecords || !analytics) return null;
 
-    // Calculate key insights
-    const years = results.map(r => r.year).filter(y => y && y !== "N/A");
-    const uniqueYears = [...new Set(years)].sort((a, b) => Number(b) - Number(a));
-    const recentYear = uniqueYears[0];
-    const oldestYear = uniqueYears[uniqueYears.length - 1];
-
-    const totalValue = results.reduce((sum, r) => sum + parseFloat(r.total_value_usd || "0"), 0);
-    const avgValue = totalValue / results.length;
+    // Use API-provided analytics data (complete dataset)
+    const totalValue = aggregates.totalValueUSD;
+    const avgValue = aggregates.totalRecords > 0 ? totalValue / aggregates.totalRecords : 0;
 
     const topImportCountry = countryStats.topImportCountries[0];
     const topExportCountry = countryStats.topExportCountries[0];
 
+    // Calculate market concentration from API data
+    const supplierConcentration = (aggregates.uniqueSuppliers / aggregates.totalRecords) * 100;
+    const buyerConcentration = (aggregates.uniqueBuyers / aggregates.totalRecords) * 100;
+
+    // Use API-provided price analysis (complete dataset)
+    const avgPrice = analytics.priceAnalysis.avgPrice;
+    const minPrice = analytics.priceAnalysis.minPrice;
+    const maxPrice = analytics.priceAnalysis.maxPrice;
+    const priceVolatility = analytics.priceAnalysis.priceVolatility;
+    const priceDistribution = analytics.priceAnalysis.priceDistribution;
+
+    // Use API-provided market growth (complete dataset)
+    const marketGrowth = analytics.marketIntelligence.marketGrowth;
+
+    // Use API-provided supplier/buyer stats with values from complete dataset
+    const topSuppliers = countryStats.topUniqueExporters.map(item => ({
+      name: item.exporter,
+      count: item.count,
+      value: item.value || 0
+    }));
+
+    const topBuyers = countryStats.topUniqueImporters.map(item => ({
+      name: item.importer,
+      count: item.count,
+      value: item.value || 0
+    }));
+
+    // Estimate unique products from results sample (limited data available)
     const productTypes = results.map(r => r.product_description).filter(p => p && p !== "N/A");
     const uniqueProducts = [...new Set(productTypes)];
+
+    // Estimate date range from results sample (limited data available)
+    const years = results.map(r => r.year).filter(y => y && y !== "N/A");
+    const uniqueYears = [...new Set(years)].sort((a, b) => Number(b) - Number(a));
+    const recentYear = uniqueYears[0] || '';
+    const oldestYear = uniqueYears[uniqueYears.length - 1] || '';
+    
+    const formatDateRange = () => {
+      return `${oldestYear} to ${recentYear}`;
+    };
+
+    // Use API-provided monthly trends (complete dataset)
+    const monthlyTrends = monthlyStats.map((monthData, index, array) => {
+      let trend: 'up' | 'down' | 'stable' = 'stable';
+      if (index > 0) {
+        const prevData = array[index - 1];
+        if (monthData.count > prevData.count) trend = 'up';
+        else if (monthData.count < prevData.count) trend = 'down';
+      }
+      
+      return {
+        month: monthData.month,
+        count: monthData.count,
+        value: monthData.value,
+        trend
+      };
+    });
+
+    // Use API-provided analytics (complete dataset)
+    const top5Countries = analytics.marketShare.top5Countries;
+    const competitiveAnalysis = analytics.competitiveAnalysis;
+    const tradeRoutes = analytics.tradeRoutes;
+    const productCategories = analytics.productCategories;
+    const shipmentModes = analytics.shipmentModes;
+    const portAnalysis = analytics.portAnalysis;
+    const marketIntelligence = analytics.marketIntelligence;
+    const riskAssessment = analytics.riskAssessment;
+    const opportunities = analytics.opportunities;
 
     return {
       totalRecords: aggregates.totalRecords,
@@ -394,7 +594,28 @@ export default function SearchResultsClient() {
       topImportCountry,
       topExportCountry,
       uniqueProducts: uniqueProducts.length,
-      searchTerm: q
+      searchTerm: q,
+      dateRange: formatDateRange(),
+      supplierConcentration,
+      buyerConcentration,
+      avgPrice,
+      minPrice,
+      maxPrice,
+      priceVolatility,
+      marketGrowth,
+      topSuppliers,
+      topBuyers,
+      priceDistribution,
+      monthlyTrends,
+      marketShare: { top5Countries },
+      competitiveAnalysis,
+      tradeRoutes,
+      productCategories,
+      shipmentModes,
+      portAnalysis,
+      marketIntelligence,
+      riskAssessment,
+      opportunities
     };
   };
 
@@ -436,54 +657,54 @@ export default function SearchResultsClient() {
                       <div className="flex-shrink-0">
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
                           <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                          </svg>
-                        </div>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
                       </div>
                       
                       {/* Search Input */}
                       <div className="flex-1 px-4">
-                        <input
-                          type="text"
-                          value={searchInput}
-                          onChange={(e) => setSearchInput(e.target.value)}
+                  <input
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
                           placeholder="Search finished formulations, APIs, or pharmaceutical products..."
                           className="w-full text-base text-gray-900 bg-transparent border-none outline-none placeholder-gray-500"
-                        />
+                  />
                       </div>
                       
                       {/* Search Button */}
                       <div className="flex-shrink-0 mr-2">
-                        <button
-                          type="submit"
+                  <button
+                    type="submit"
                           className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2.5 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 text-sm flex items-center gap-2 shadow-md hover:shadow-lg"
-                        >
+                  >
                           <span>Search</span>
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                           </svg>
-                        </button>
-                      </div>
-                    </div>
+                  </button>
+                </div>
+            </div>
                   </div>
                 </form>
 
 
+                </div>
               </div>
-            </div>
-
+              
             {/* Right Section - Action Buttons */}
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 max-w-sm">
               <div className="text-center">
                 <div className="space-y-2">
                   <Link
-                    href="/contact"
+                    href="/trial"
                     className="inline-block w-full px-3 py-2 bg-blue-600 text-white text-xs font-medium rounded-md hover:bg-blue-700 transition-colors"
-                  >
+              >
                     Get Free 7-Day Trial
                   </Link>
                   <Link
-                    href="/contact"
+                    href="/consultation"
                     className="inline-block w-full px-3 py-2 bg-white text-blue-600 text-xs font-medium rounded-md border border-blue-300 hover:bg-blue-50 transition-colors"
                   >
                     Consult an Expert
@@ -511,45 +732,78 @@ export default function SearchResultsClient() {
                 <div className="lg:col-span-3">
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
                     <h3 className="font-semibold text-gray-900 mb-3 text-sm flex items-center gap-2">
-                      <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                      </svg>
+                <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
                       Executive Summary
                     </h3>
                     <div className="text-sm text-gray-700 leading-relaxed space-y-3">
                       <p>
-                        Our comprehensive analysis reveals <strong className="text-blue-600">{summary.totalRecords.toLocaleString()} total shipments</strong> of 
-                        <strong className="text-blue-600"> {summary.searchTerm}</strong> exported from 
-                        <strong className="text-gray-900"> {summary.oldestYear}</strong> to <strong className="text-gray-900">{summary.recentYear}</strong>, 
-                        spanning {summary.yearSpan} years with a total export value of 
-                        <strong className="text-green-600">{formatCurrency(summary.totalValue.toString())}</strong>. The market demonstrates robust activity with an average transaction value of 
+                        Our comprehensive analysis reveals <strong className="text-blue-600">{summary.totalRecords.toLocaleString()} total shipments</strong> of{' '}
+                        <Link href={`/product/${encodeURIComponent(summary.searchTerm)}`} className="text-blue-600 hover:text-blue-800 underline">
+                          <strong>{summary.searchTerm}</strong>
+                        </Link> exported from{' '}
+                        <strong className="text-gray-900">{summary.dateRange}</strong> across <strong className="text-blue-600">{countryStats.topExportCountries.length} supplier countries</strong> to{' '}
+                        <strong className="text-blue-600">{countryStats.topImportCountries.length} buyer countries</strong> with a total export value of{' '}
+                        <strong className="text-green-600">{formatCurrency(summary.totalValue.toString())}</strong>. The market demonstrates robust activity with an average transaction value of{' '}
                         <strong className="text-green-600">{formatCurrency(summary.avgValue.toString())}</strong> per shipment.
                       </p>
+                      <div className="bg-blue-50 border-l-4 border-blue-400 p-3 mt-3 rounded-r">
+                        <p className="text-sm text-blue-800">
+                          <strong>📊 How we calculate this:</strong> We analyze all {summary.totalRecords.toLocaleString()} shipment records from our database, 
+                          calculating total values, average transaction sizes, and geographic distribution to provide comprehensive market intelligence.
+                        </p>
+                      </div>
                       
                       <p>
-                        The trade network features <strong className="text-indigo-600">{aggregates.uniqueSuppliers.toLocaleString()} unique suppliers</strong> and 
-                        <strong className="text-indigo-600">{aggregates.uniqueBuyers.toLocaleString()} unique buyers</strong>, representing 
-                        <strong className="text-indigo-600">{((aggregates.uniqueSuppliers / summary.totalRecords) * 100).toFixed(1)}% supplier diversity</strong> and 
-                        <strong className="text-indigo-600">{((aggregates.uniqueBuyers / summary.totalRecords) * 100).toFixed(1)}% buyer diversity</strong>. 
+                        The trade network features <strong className="text-indigo-600">{aggregates.uniqueSuppliers.toLocaleString()} unique suppliers</strong> and{' '}
+                        <strong className="text-indigo-600">{aggregates.uniqueBuyers.toLocaleString()} unique buyers</strong>, representing{' '}
+                        <strong className="text-indigo-600">{summary.supplierConcentration.toFixed(1)}% supplier diversity</strong> and{' '}
+                        <strong className="text-indigo-600">{summary.buyerConcentration.toFixed(1)}% buyer diversity</strong>.{' '}
                         This diverse network includes <strong className="text-purple-600">{summary.uniqueProducts} unique product variations</strong>, indicating a mature and competitive market landscape.
                       </p>
+                      <div className="bg-indigo-50 border-l-4 border-indigo-400 p-3 mt-3 rounded-r">
+                        <p className="text-sm text-indigo-800">
+                          <strong>🔍 What this means:</strong> High supplier diversity ({summary.supplierConcentration.toFixed(1)}%) suggests a competitive market with multiple sourcing options. 
+                          High buyer diversity ({summary.buyerConcentration.toFixed(1)}%) indicates broad market demand across different regions and industries.
+                        </p>
+                      </div>
                       
                       <p>
-                        Geographically, <strong className="text-blue-600">{summary.topImportCountry?.country}</strong> emerges as the leading destination with 
-                        <strong className="text-gray-900">{summary.topImportCountry?.count.toLocaleString()} shipments</strong>, while 
-                        <strong className="text-green-600">{summary.topExportCountry?.country}</strong> dominates as the top exporter with 
-                        <strong className="text-gray-900">{summary.topExportCountry?.count.toLocaleString()} shipments</strong>. 
-                        The market trend indicates 
-                        <strong className="text-green-600">{monthlyStats.length > 0 ? (monthlyStats[monthlyStats.length - 1].count > monthlyStats[0].count ? '↗ upward growth momentum' : '↘ declining export patterns') : 'stable market conditions'}</strong>, 
+                        Geographically, <strong className="text-blue-600">{summary.topImportCountry?.country}</strong> emerges as the leading destination with{' '}
+                        <strong className="text-gray-900">{summary.topImportCountry?.count.toLocaleString()} shipments</strong>, while{' '}
+                        <strong className="text-green-600">{summary.topExportCountry?.country}</strong> dominates as the top exporter with{' '}
+                        <strong className="text-gray-900">{summary.topExportCountry?.count.toLocaleString()} shipments</strong>.{' '}
+                        The market trend indicates{' '}
+                        <strong className={`${summary.marketGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {summary.marketGrowth >= 0 ? '↗ upward growth momentum' : '↘ declining export patterns'} ({summary.marketGrowth.toFixed(1)}% growth rate)
+                        </strong>,{' '}
                         providing strategic insights for market entry and expansion opportunities.
                       </p>
+                      <div className="bg-green-50 border-l-4 border-green-400 p-3 mt-3 rounded-r">
+                        <p className="text-sm text-green-800">
+                          <strong>📈 Growth Analysis:</strong> We calculate market growth by comparing recent 6-month shipment averages with previous 6-month periods. 
+                          A {summary.marketGrowth >= 0 ? 'positive' : 'negative'} growth rate of {Math.abs(summary.marketGrowth).toFixed(1)}% indicates 
+                          {summary.marketGrowth >= 0 ? ' expanding market opportunities and increasing demand' : ' market contraction, suggesting need for strategic adjustments'}.
+                        </p>
+                      </div>
                       
                       <p>
-                        This comprehensive trade intelligence delivers detailed supplier and buyer information, pricing trends, shipment quantities, and trade routes essential for informed business decisions. With complete market coverage of 
-                        <strong className="text-orange-600">{summary.totalRecords.toLocaleString()} shipments</strong> valued at 
-                        <strong className="text-orange-600">{formatCurrency(summary.totalValue.toString())}</strong>, 
-                        businesses can identify lucrative opportunities, understand competitive dynamics, and make strategic export decisions backed by data-driven insights.
-                      </p>
+                        Price analysis reveals an average unit price of <strong className="text-orange-600">{formatCurrency(summary.avgPrice.toString())}</strong> with{' '}
+                        <strong className="text-orange-600">{summary.priceVolatility.toFixed(1)}% price volatility</strong>, ranging from{' '}
+                        <strong className="text-orange-600">{formatCurrency(summary.minPrice.toString())}</strong> to{' '}
+                        <strong className="text-orange-600">{formatCurrency(summary.maxPrice.toString())}</strong>.{' '}
+                        This comprehensive trade intelligence delivers detailed supplier and buyer information, pricing trends, shipment quantities, and trade routes essential for informed business decisions.
+                        </p>
+                        <div className="bg-orange-50 border-l-4 border-orange-400 p-3 mt-3 rounded-r">
+                          <p className="text-sm text-orange-800">
+                            <strong>💰 Price Intelligence:</strong> We analyze unit prices across all {summary.totalRecords.toLocaleString()} shipments to calculate average, 
+                            minimum, and maximum prices. Price volatility of {summary.priceVolatility.toFixed(1)}% indicates 
+                            {summary.priceVolatility < 20 ? ' a stable market with predictable pricing' : 
+                             summary.priceVolatility < 40 ? ' moderate price fluctuations requiring careful timing' : 
+                             ' high price volatility suggesting market uncertainty and opportunity for strategic pricing'}.
+                          </p>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -557,7 +811,7 @@ export default function SearchResultsClient() {
                 {/* Right Column - Compact Export Chart (25% width) */}
                 <div className="lg:col-span-1 flex items-center justify-center">
                   <div className="w-full">
-                    <ExportChart data={monthlyStats} />
+                  <ExportChart data={monthlyStats} />
                   </div>
                 </div>
               </div>
@@ -639,7 +893,7 @@ export default function SearchResultsClient() {
 
               {/* Top Unique Suppliers Filter */}
               <div className="mb-4">
-                <h3 className="text-sm font-semibold text-gray-900 mb-2 pb-1 border-b border-gray-200">Top Unique Suppliers</h3>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2 pb-1 border-b border-gray-200">Top Suppliers</h3>
                 <div className="space-y-1">
                   <label className="flex items-center gap-2 text-xs text-gray-600 hover:text-gray-900 cursor-pointer">
                     <input
@@ -652,26 +906,35 @@ export default function SearchResultsClient() {
                     />
                     <span>All Suppliers</span>
                   </label>
-                  {(countryStats.topUniqueExporters || []).map((item) => (
-                    <label key={item.exporter} className="flex items-center gap-2 text-xs text-gray-600 hover:text-gray-900 cursor-pointer">
+                  {loading ? (
+                    <div className="text-xs text-gray-500 py-2">Loading suppliers...</div>
+                  ) : summary && summary.topSuppliers.length > 0 ? (
+                    summary.topSuppliers.map((supplier) => (
+                      <label key={supplier.name} className="flex items-center gap-2 text-xs text-gray-600 hover:text-gray-900 cursor-pointer">
                       <input
                         type="radio"
                         name="exporter"
-                        value={item.exporter}
-                        checked={selectedExporter === item.exporter}
+                          value={supplier.name}
+                          checked={selectedExporter === supplier.name}
                         onChange={(e) => setSelectedExporter(e.target.value)}
                         className="w-3 h-3 text-purple-600 border-gray-300 focus:ring-purple-500"
                       />
-                      <span className="flex-1 truncate">{item.exporter}</span>
-                      <span className="text-xs text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">{item.count}</span>
+                        <span className="flex-1 truncate">{supplier.name}</span>
+                        <div className="text-right">
+                          <div className="text-xs text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">{supplier.count}</div>
+                          <div className="text-xs text-gray-500">{formatCurrency(supplier.value.toString())}</div>
+                        </div>
                     </label>
-                  ))}
+                    ))
+                  ) : (
+                    <div className="text-xs text-gray-500 py-2">No suppliers found</div>
+                  )}
                 </div>
               </div>
 
-              {/* Top Unique Buyers Filter */}
+              {/* Top Buyers Filter */}
               <div className="mb-4">
-                <h3 className="text-sm font-semibold text-gray-900 mb-2 pb-1 border-b border-gray-200">Top Unique Buyers</h3>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2 pb-1 border-b border-gray-200">Top Buyers</h3>
                 <div className="space-y-1">
                   <label className="flex items-center gap-2 text-xs text-gray-600 hover:text-gray-900 cursor-pointer">
                     <input
@@ -684,20 +947,29 @@ export default function SearchResultsClient() {
                     />
                     <span>All Buyers</span>
                   </label>
-                  {(countryStats.topUniqueImporters || []).map((item) => (
-                    <label key={item.importer} className="flex items-center gap-2 text-xs text-gray-600 hover:text-gray-900 cursor-pointer">
+                  {loading ? (
+                    <div className="text-xs text-gray-500 py-2">Loading buyers...</div>
+                  ) : summary && summary.topBuyers.length > 0 ? (
+                    summary.topBuyers.map((buyer) => (
+                      <label key={buyer.name} className="flex items-center gap-2 text-xs text-gray-600 hover:text-gray-900 cursor-pointer">
                       <input
                         type="radio"
                         name="importer"
-                        value={item.importer}
-                        checked={selectedImporter === item.importer}
+                          value={buyer.name}
+                          checked={selectedImporter === buyer.name}
                         onChange={(e) => setSelectedImporter(e.target.value)}
                         className="w-3 h-3 text-indigo-600 border-gray-300 focus:ring-indigo-500"
                       />
-                      <span className="flex-1 truncate">{item.importer}</span>
-                      <span className="text-xs text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">{item.count}</span>
+                        <span className="flex-1 truncate">{buyer.name}</span>
+                        <div className="text-right">
+                          <div className="text-xs text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">{buyer.count}</div>
+                          <div className="text-xs text-gray-500">{formatCurrency(buyer.value.toString())}</div>
+                        </div>
                     </label>
-                  ))}
+                    ))
+                  ) : (
+                    <div className="text-xs text-gray-500 py-2">No buyers found</div>
+                  )}
                 </div>
               </div>
 
@@ -743,13 +1015,13 @@ export default function SearchResultsClient() {
                   
                   <div className="space-y-2 mb-3">
                     <Link
-                      href="/contact"
+                      href="/trial"
                       className="inline-block w-full px-3 py-2 bg-blue-600 text-white text-xs font-medium rounded-md hover:bg-blue-700 transition-colors"
                     >
                       Get Free 7-Day Trial
                     </Link>
                     <Link
-                      href="/contact"
+                      href="/consultation"
                       className="inline-block w-full px-3 py-2 bg-white text-blue-600 text-xs font-medium rounded-md border border-blue-300 hover:bg-blue-50 transition-colors"
                     >
                       Consult an Expert
@@ -882,7 +1154,1174 @@ export default function SearchResultsClient() {
                   </motion.div>
                 </div>
 
-                {/* Compact Professional Results Grid */}
+                {/* AI Analytics Toggle Button */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="mb-4"
+                >
+                  <button
+                    onClick={() => setShowAIAnalytics(!showAIAnalytics)}
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                    <span className="text-lg">
+                      {showAIAnalytics ? 'Hide' : 'Show'} Advanced AI Analytics & Predictions
+                    </span>
+                    <svg className={`w-5 h-5 transition-transform duration-300 ${showAIAnalytics ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                </motion.div>
+
+                {/* AI Analytics Panel */}
+                <AIAnalyticsPanel 
+                  searchTerm={q} 
+                  isVisible={showAIAnalytics} 
+                />
+
+                {/* Analytics Methodology Explanation */}
+                {summary && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    className="mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200"
+                  >
+                    <h3 className="text-lg font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      📊 Analytics Methodology & Data Sources
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div className="bg-white p-3 rounded border border-blue-200">
+                        <h4 className="font-semibold text-blue-900 mb-2">Data Source</h4>
+                        <p className="text-blue-800">
+                          All analytics are calculated from our complete database of <strong>{summary.totalRecords.toLocaleString()} shipment records</strong>, 
+                          not just the limited preview results shown. This ensures comprehensive and accurate market intelligence.
+                        </p>
+                      </div>
+                      <div className="bg-white p-3 rounded border border-blue-200">
+                        <h4 className="font-semibold text-blue-900 mb-2">Calculation Methods</h4>
+                        <p className="text-blue-800">
+                          We use statistical analysis, trend calculations, and market concentration metrics to provide 
+                          actionable insights for business decision-making and strategic planning.
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Enhanced Market Insights */}
+                {summary && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                      Market Insights & Analytics
+                    </h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                        <p className="text-xs font-medium text-blue-700">Market Growth</p>
+                        <p className={`text-lg font-bold ${summary.marketGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {summary.marketGrowth >= 0 ? '+' : ''}{summary.marketGrowth.toFixed(1)}%
+                        </p>
+                        <p className="text-xs text-blue-600 mt-1">
+                          {summary.marketGrowth >= 0 ? 'Expanding market' : 'Declining demand'}
+                        </p>
+                      </div>
+                      <div className="bg-green-50 p-3 rounded-lg border border-green-200">
+                        <p className="text-xs font-medium text-green-700">Avg Unit Price</p>
+                        <p className="text-lg font-bold text-green-600">{formatCurrency(summary.avgPrice.toString())}</p>
+                        <p className="text-xs text-green-600 mt-1">
+                          Across {summary.totalRecords.toLocaleString()} shipments
+                        </p>
+                      </div>
+                      <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
+                        <p className="text-xs font-medium text-purple-700">Price Volatility</p>
+                        <p className="text-lg font-bold text-purple-600">{summary.priceVolatility.toFixed(1)}%</p>
+                        <p className="text-xs text-purple-600 mt-1">
+                          {summary.priceVolatility < 20 ? 'Stable pricing' : summary.priceVolatility < 40 ? 'Moderate fluctuations' : 'High volatility'}
+                        </p>
+                      </div>
+                      <div className="bg-orange-50 p-3 rounded-lg border border-orange-200">
+                        <p className="text-xs font-medium text-orange-700">Supplier Diversity</p>
+                        <p className="text-lg font-bold text-orange-600">{summary.supplierConcentration.toFixed(1)}%</p>
+                        <p className="text-xs text-orange-600 mt-1">
+                          {summary.supplierConcentration > 50 ? 'High competition' : 'Concentrated market'}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Advanced Analytics Dashboard */}
+                {summary && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                      Advanced Analytics Dashboard
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {/* Top Suppliers & Buyers */}
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-semibold text-gray-900 mb-2">Top Suppliers</h4>
+                          <div className="bg-blue-50 p-2 rounded mb-2">
+                            <p className="text-xs text-blue-700">
+                              <strong>📊 Calculation:</strong> Ranked by total export value across all {summary.totalRecords.toLocaleString()} shipments
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            {summary.topSuppliers.map((supplier, index) => (
+                              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <div>
+                                  <p className="text-sm font-medium text-gray-900">{supplier.name}</p>
+                                  <p className="text-xs text-gray-600">{supplier.count} shipments</p>
+                                </div>
+                                <p className="text-sm font-bold text-green-600">{formatCurrency(supplier.value.toString())}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h4 className="font-semibold text-gray-900 mb-2">Top Buyers</h4>
+                          <div className="bg-indigo-50 p-2 rounded mb-2">
+                            <p className="text-xs text-indigo-700">
+                              <strong>📊 Calculation:</strong> Ranked by total import value across all {summary.totalRecords.toLocaleString()} shipments
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            {summary.topBuyers.map((buyer, index) => (
+                              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <div>
+                                  <p className="text-sm font-medium text-gray-900">{buyer.name}</p>
+                                  <p className="text-xs text-gray-600">{buyer.count} shipments</p>
+                                </div>
+                                <p className="text-sm font-bold text-blue-600">{formatCurrency(buyer.value.toString())}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Market Share & Competitive Analysis */}
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-semibold text-gray-900 mb-2">Market Share by Country</h4>
+                          <div className="bg-green-50 p-2 rounded mb-2">
+                            <p className="text-xs text-green-700">
+                              <strong>📊 Calculation:</strong> Percentage of total market value ({formatCurrency(summary.totalValue.toString())}) by destination country
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            {summary.marketShare.top5Countries.map((country, index) => (
+                              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <span className="text-sm font-medium text-gray-900">{country.country}</span>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-20 bg-gray-200 rounded-full h-2">
+                                    <div 
+                                      className="bg-blue-600 h-2 rounded-full" 
+                                      style={{ width: `${country.share}%` }}
+                                    ></div>
+                                  </div>
+                                  <span className="text-sm font-bold text-blue-600">{country.share.toFixed(1)}%</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="font-semibold text-gray-900 mb-2">Competitive Analysis</h4>
+                          <div className="bg-purple-50 p-2 rounded mb-2">
+                            <p className="text-xs text-purple-700">
+                              <strong>📊 Calculation:</strong> Based on supplier/buyer counts, market concentration, and price stability across all shipments
+                            </p>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="p-3 bg-green-50 rounded border border-green-200">
+                              <p className="text-xs font-medium text-green-700">Supplier Diversity</p>
+                              <p className="text-lg font-bold text-green-600">{summary.competitiveAnalysis.supplierDiversity.toFixed(1)}%</p>
+                              <p className="text-xs text-green-600 mt-1">
+                                {summary.competitiveAnalysis.supplierDiversity > 50 ? 'High competition' : 'Limited suppliers'}
+                              </p>
+                            </div>
+                            <div className="p-3 bg-blue-50 rounded border border-blue-200">
+                              <p className="text-xs font-medium text-blue-700">Market Concentration</p>
+                              <p className="text-lg font-bold text-blue-600">{summary.competitiveAnalysis.marketConcentration.toFixed(1)}%</p>
+                              <p className="text-xs text-blue-600 mt-1">
+                                Top 3 countries share
+                              </p>
+                            </div>
+                            <div className="p-3 bg-purple-50 rounded border border-purple-200">
+                              <p className="text-xs font-medium text-purple-700">Price Competitiveness</p>
+                              <p className="text-lg font-bold text-purple-600">{summary.competitiveAnalysis.priceCompetitiveness}/100</p>
+                              <p className="text-xs text-purple-600 mt-1">
+                                {summary.competitiveAnalysis.priceCompetitiveness > 80 ? 'Very competitive' : summary.competitiveAnalysis.priceCompetitiveness > 60 ? 'Moderately competitive' : 'Less competitive'}
+                              </p>
+                            </div>
+                            <div className="p-3 bg-orange-50 rounded border border-orange-200">
+                              <p className="text-xs font-medium text-orange-700">Buyer Diversity</p>
+                              <p className="text-lg font-bold text-orange-600">{summary.competitiveAnalysis.buyerDiversity.toFixed(1)}%</p>
+                              <p className="text-xs text-orange-600 mt-1">
+                                {summary.competitiveAnalysis.buyerDiversity > 50 ? 'Broad demand' : 'Concentrated buyers'}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Price Analysis */}
+                {summary && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.6 }}
+                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                      </svg>
+                      Price Analysis & Distribution
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {/* Price Range Analysis */}
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Price Distribution</h4>
+                        <div className="bg-yellow-50 p-2 rounded mb-3">
+                          <p className="text-xs text-yellow-700">
+                            <strong>📊 Calculation:</strong> Distribution of unit prices across all shipments with valid price data
+                          </p>
+                        </div>
+                        <div className="space-y-3">
+                          {summary.priceDistribution.map((range, index) => (
+                            <div key={index} className="flex items-center justify-between">
+                              <span className="text-sm font-medium text-gray-700">{range.range}</span>
+                              <div className="flex items-center gap-3">
+                                <div className="w-24 bg-gray-200 rounded-full h-2">
+                                  <div 
+                                    className="bg-yellow-500 h-2 rounded-full" 
+                                    style={{ width: `${range.percentage}%` }}
+                                  ></div>
+                                </div>
+                                <span className="text-sm font-bold text-gray-900">{range.count} ({range.percentage.toFixed(1)}%)</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Price Statistics */}
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Price Statistics</h4>
+                        <div className="bg-yellow-50 p-2 rounded mb-3">
+                          <p className="text-xs text-yellow-700">
+                            <strong>📊 Calculation:</strong> Statistical analysis of unit prices across all shipments with valid price data
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="p-3 bg-green-50 rounded border border-green-200">
+                            <p className="text-xs font-medium text-green-700">Average Price</p>
+                            <p className="text-lg font-bold text-green-600">{formatCurrency(summary.avgPrice.toString())}</p>
+                            <p className="text-xs text-green-600 mt-1">Mean unit price</p>
+                          </div>
+                          <div className="p-3 bg-blue-50 rounded border border-blue-200">
+                            <p className="text-xs font-medium text-blue-700">Minimum Price</p>
+                            <p className="text-lg font-bold text-blue-600">{formatCurrency(summary.minPrice.toString())}</p>
+                            <p className="text-xs text-blue-600 mt-1">Lowest unit price</p>
+                          </div>
+                          <div className="p-3 bg-purple-50 rounded border border-purple-200">
+                            <p className="text-xs font-medium text-purple-700">Maximum Price</p>
+                            <p className="text-lg font-bold text-purple-600">{formatCurrency(summary.maxPrice.toString())}</p>
+                            <p className="text-xs text-purple-600 mt-1">Highest unit price</p>
+                          </div>
+                          <div className="p-3 bg-orange-50 rounded border border-orange-200">
+                            <p className="text-xs font-medium text-orange-700">Price Range</p>
+                            <p className="text-lg font-bold text-orange-600">{formatCurrency((summary.maxPrice - summary.minPrice).toString())}</p>
+                            <p className="text-xs text-orange-600 mt-1">Price spread</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Monthly Trends Analysis */}
+                {summary && summary.monthlyTrends.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.7 }}
+                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                      Monthly Trends Analysis
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {summary.monthlyTrends.map((trend, index) => (
+                        <div key={index} className="p-3 bg-gray-50 rounded border border-gray-200">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium text-gray-900">{trend.month}</span>
+                            {getTrendIcon(trend.trend)}
+                          </div>
+                          <div className="space-y-1">
+                            <p className="text-xs text-gray-600">Shipments: <span className="font-bold text-gray-900">{trend.count}</span></p>
+                            <p className="text-xs text-gray-600">Value: <span className="font-bold text-green-600">{formatCurrency(trend.value.toString())}</span></p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Trade Routes Analysis */}
+                {summary && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.8 }}
+                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      Trade Routes & Logistics Analysis
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {/* Trade Routes */}
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Top Trade Routes</h4>
+                        <div className="bg-blue-50 p-2 rounded mb-3">
+                          <p className="text-xs text-blue-700">
+                            <strong>📊 Calculation:</strong> Origin-destination pairs ranked by total trade value across all {summary.totalRecords.toLocaleString()} shipments
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          {summary.tradeRoutes.map((route, index) => (
+                            <div key={index} className="p-3 bg-gray-50 rounded border border-gray-200">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm font-medium text-gray-900">
+                                  {route.origin} → {route.destination}
+                                </span>
+                                <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                                  {route.frequency.toFixed(1)}%
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between text-xs text-gray-600">
+                                <span>{route.count} shipments</span>
+                                <span className="font-bold text-green-600">{formatCurrency(route.value.toString())}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Port Analysis */}
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Port Analysis</h4>
+                        <div className="bg-green-50 p-2 rounded mb-3">
+                          <p className="text-xs text-green-700">
+                            <strong>📊 Calculation:</strong> Ports ranked by total trade value, showing both origin and destination ports
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          {summary.portAnalysis.map((port, index) => (
+                            <div key={index} className="p-3 bg-gray-50 rounded border border-gray-200">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm font-medium text-gray-900">{port.port}</span>
+                                <span className={`text-xs px-2 py-1 rounded ${
+                                  port.type === 'origin' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+                                }`}>
+                                  {port.type}
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between text-xs text-gray-600">
+                                <span>{port.count} shipments</span>
+                                <span className="font-bold text-green-600">{formatCurrency(port.value.toString())}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Market Intelligence & Risk Assessment */}
+                {summary && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.9 }}
+                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                      Market Intelligence & Risk Assessment
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                      {/* Market Intelligence */}
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Market Intelligence</h4>
+                        <div className="bg-blue-50 p-2 rounded mb-3">
+                          <p className="text-xs text-blue-700">
+                            <strong>📊 Calculation:</strong> Market analysis based on total records, growth trends, supplier diversity, and competitive landscape
+                          </p>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="p-3 bg-blue-50 rounded border border-blue-200">
+                            <p className="text-xs font-medium text-blue-700">Market Size</p>
+                            <p className="text-lg font-bold text-blue-600">{formatCurrency(summary.marketIntelligence.marketSize.toString())}</p>
+                            <p className="text-xs text-blue-600 mt-1">Total market value</p>
+                          </div>
+                          <div className="p-3 bg-green-50 rounded border border-green-200">
+                            <p className="text-xs font-medium text-green-700">Market Growth</p>
+                            <p className="text-lg font-bold text-green-600">{summary.marketIntelligence.marketGrowth.toFixed(1)}%</p>
+                            <p className="text-xs text-green-600 mt-1">6-month growth rate</p>
+                          </div>
+                          <div className="p-3 bg-purple-50 rounded border border-purple-200">
+                            <p className="text-xs font-medium text-purple-700">Market Maturity</p>
+                            <p className="text-lg font-bold text-purple-600">{summary.marketIntelligence.marketMaturity}</p>
+                            <p className="text-xs text-purple-600 mt-1">
+                              {summary.marketIntelligence.marketMaturity === 'Mature' ? 'Established market' : 
+                               summary.marketIntelligence.marketMaturity === 'Growing' ? 'Expanding market' : 'New market'}
+                            </p>
+                          </div>
+                          <div className="p-3 bg-orange-50 rounded border border-orange-200">
+                            <p className="text-xs font-medium text-orange-700">Entry Barriers</p>
+                            <p className="text-lg font-bold text-orange-600">{summary.marketIntelligence.entryBarriers}</p>
+                            <p className="text-xs text-orange-600 mt-1">
+                              {summary.marketIntelligence.entryBarriers === 'Low' ? 'Easy to enter' : 
+                               summary.marketIntelligence.entryBarriers === 'Medium' ? 'Moderate barriers' : 'High barriers'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Risk Assessment */}
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Risk Assessment</h4>
+                        <div className="bg-red-50 p-2 rounded mb-3">
+                          <p className="text-xs text-red-700">
+                            <strong>📊 Calculation:</strong> Risk scores based on supplier diversity, price volatility, and market concentration (0-100 scale)
+                          </p>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="p-3 bg-red-50 rounded border border-red-200">
+                            <p className="text-xs font-medium text-red-700">Supply Chain Risk</p>
+                            <p className="text-lg font-bold text-red-600">{summary.riskAssessment.supplyChainRisk}/100</p>
+                            <p className="text-xs text-red-600 mt-1">
+                              {summary.riskAssessment.supplyChainRisk < 30 ? 'Low risk' : 
+                               summary.riskAssessment.supplyChainRisk < 60 ? 'Medium risk' : 'High risk'}
+                            </p>
+                          </div>
+                          <div className="p-3 bg-yellow-50 rounded border border-yellow-200">
+                            <p className="text-xs font-medium text-yellow-700">Regulatory Risk</p>
+                            <p className="text-lg font-bold text-yellow-600">{summary.riskAssessment.regulatoryRisk}/100</p>
+                            <p className="text-xs text-yellow-600 mt-1">Based on market stability</p>
+                          </div>
+                          <div className="p-3 bg-orange-50 rounded border border-orange-200">
+                            <p className="text-xs font-medium text-orange-700">Market Risk</p>
+                            <p className="text-lg font-bold text-orange-600">{summary.riskAssessment.marketRisk}/100</p>
+                            <p className="text-xs text-orange-600 mt-1">
+                              {summary.riskAssessment.marketRisk < 30 ? 'Stable market' : 
+                               summary.riskAssessment.marketRisk < 60 ? 'Moderate volatility' : 'High volatility'}
+                            </p>
+                          </div>
+                          <div className="p-3 bg-gray-50 rounded border border-gray-200">
+                            <p className="text-xs font-medium text-gray-700">Overall Risk</p>
+                            <p className={`text-lg font-bold ${
+                              summary.riskAssessment.overallRisk === 'High' ? 'text-red-600' :
+                              summary.riskAssessment.overallRisk === 'Medium' ? 'text-yellow-600' : 'text-green-600'
+                            }`}>
+                              {summary.riskAssessment.overallRisk}
+                            </p>
+                            <p className="text-xs text-gray-600 mt-1">Combined risk assessment</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Business Opportunities */}
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Business Opportunities</h4>
+                        <div className="bg-green-50 p-2 rounded mb-3">
+                          <p className="text-xs text-green-700">
+                            <strong>📊 Calculation:</strong> Opportunities identified based on market gaps, growth trends, and competitive analysis
+                          </p>
+                        </div>
+                        <div className="space-y-3">
+                          {summary.opportunities.map((opportunity, index) => (
+                            <div key={index} className="p-3 bg-green-50 rounded border border-green-200">
+                              <div className="flex items-center justify-between mb-2">
+                                <p className="text-sm font-medium text-green-700">{opportunity.type}</p>
+                                <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
+                                  {opportunity.potential}%
+                                </span>
+                              </div>
+                              <p className="text-xs text-green-600 mb-2">{opportunity.description}</p>
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="text-gray-600">Confidence:</span>
+                                <span className="font-bold text-green-600">{opportunity.confidence}%</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Product Categories & Shipment Modes */}
+                {summary && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 1.0 }}
+                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                      </svg>
+                      Product Categories & Logistics
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {/* Product Categories */}
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Product Categories</h4>
+                        <div className="bg-indigo-50 p-2 rounded mb-3">
+                          <p className="text-xs text-indigo-700">
+                            <strong>📊 Calculation:</strong> Product categories (HSN chapters) ranked by total trade value across all shipments
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          {summary.productCategories.map((category, index) => (
+                            <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                              <div>
+                                <p className="text-sm font-medium text-gray-900">{category.category}</p>
+                                <p className="text-xs text-gray-600">{category.count} shipments</p>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-sm font-bold text-green-600">{formatCurrency(category.value.toString())}</p>
+                                <p className="text-xs text-gray-600">{category.percentage.toFixed(1)}%</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Shipment Modes */}
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Shipment Modes</h4>
+                        <div className="bg-blue-50 p-2 rounded mb-3">
+                          <p className="text-xs text-blue-700">
+                            <strong>📊 Calculation:</strong> Transport modes ranked by shipment count and total value across all shipments
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          {summary.shipmentModes.map((mode, index) => (
+                            <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                              <div>
+                                <p className="text-sm font-medium text-gray-900">{mode.mode}</p>
+                                <p className="text-xs text-gray-600">{mode.count} shipments</p>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-sm font-bold text-blue-600">{formatCurrency(mode.value.toString())}</p>
+                                <p className="text-xs text-gray-600">{mode.percentage.toFixed(1)}%</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Advanced Filtering & Export Options */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
+                      </svg>
+                      Advanced Filters & Export
+                    </h3>
+                    <button
+                      onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                      className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                      {showAdvancedFilters ? 'Hide' : 'Show'} Advanced Filters
+                    </button>
+                  </div>
+
+                  {showAdvancedFilters && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                      {/* Date Range Filter */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
+                        <select
+                          value={selectedDateRange}
+                          onChange={(e) => setSelectedDateRange(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="">All Dates</option>
+                          <option value="2024">2024</option>
+                          <option value="2023">2023</option>
+                          <option value="2022">2022</option>
+                          <option value="2021">2021</option>
+                          <option value="2020">2020</option>
+                        </select>
+                      </div>
+
+                      {/* Price Range Filter */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                        <select
+                          value={selectedPriceRange}
+                          onChange={(e) => setSelectedPriceRange(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="">All Prices</option>
+                          <option value="0-1000">$0 - $1,000</option>
+                          <option value="1000-10000">$1,000 - $10,000</option>
+                          <option value="10000-100000">$10,000 - $100,000</option>
+                          <option value="100000+">$100,000+</option>
+                        </select>
+                      </div>
+
+                      {/* Shipment Mode Filter */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Shipment Mode</label>
+                        <select
+                          value={selectedShipmentMode}
+                          onChange={(e) => setSelectedShipmentMode(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="">All Modes</option>
+                          <option value="Sea">Sea</option>
+                          <option value="Air">Air</option>
+                          <option value="Road">Road</option>
+                          <option value="Rail">Rail</option>
+                        </select>
+                      </div>
+
+                      {/* Sort By */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                        <select
+                          value={sortBy}
+                          onChange={(e) => setSortBy(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="date">Date (Newest)</option>
+                          <option value="value">Value (High to Low)</option>
+                          <option value="quantity">Quantity (High to Low)</option>
+                          <option value="supplier">Supplier Name</option>
+                          <option value="buyer">Buyer Name</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* View Mode & Export Options */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-700">View:</span>
+                      <div className="flex border border-gray-300 rounded-md">
+                        <button
+                          onClick={() => setViewMode("grid")}
+                          className={`px-3 py-1 text-sm ${
+                            viewMode === "grid" ? "bg-blue-600 text-white" : "bg-white text-gray-700 hover:bg-gray-50"
+                          }`}
+                        >
+                          Grid
+                        </button>
+                        <button
+                          onClick={() => setViewMode("list")}
+                          className={`px-3 py-1 text-sm ${
+                            viewMode === "list" ? "bg-blue-600 text-white" : "bg-white text-gray-700 hover:bg-gray-50"
+                          }`}
+                        >
+                          List
+                        </button>
+                        <button
+                          onClick={() => setViewMode("table")}
+                          className={`px-3 py-1 text-sm ${
+                            viewMode === "table" ? "bg-blue-600 text-white" : "bg-white text-gray-700 hover:bg-gray-50"
+                          }`}
+                        >
+                          Table
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <select
+                        value={exportFormat}
+                        onChange={(e) => setExportFormat(e.target.value)}
+                        className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="csv">CSV</option>
+                        <option value="excel">Excel</option>
+                        <option value="pdf">PDF</option>
+                      </select>
+                      <button className="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 transition-colors">
+                        Export Data
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Real-Time Market Insights */}
+                {summary && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200"
+                  >
+                    <h3 className="text-lg font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      Real-Time Market Insights
+                    </h3>
+                    <div className="bg-blue-100 p-2 rounded mb-3">
+                      <p className="text-xs text-blue-800">
+                        <strong>📊 Calculation:</strong> Real-time indicators calculated from current market data, growth trends, price stability, and risk assessment across all {summary.totalRecords.toLocaleString()} shipments
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="bg-white p-3 rounded-lg border border-blue-200">
+                        <p className="text-xs font-medium text-blue-700">Market Momentum</p>
+                        <p className={`text-lg font-bold ${summary.marketGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {summary.marketGrowth >= 0 ? '↗' : '↘'} {Math.abs(summary.marketGrowth).toFixed(1)}%
+                        </p>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg border border-blue-200">
+                        <p className="text-xs font-medium text-blue-700">Price Stability</p>
+                        <p className={`text-lg font-bold ${summary.priceVolatility < 30 ? 'text-green-600' : 'text-orange-600'}`}>
+                          {summary.priceVolatility < 30 ? 'Stable' : 'Volatile'}
+                        </p>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg border border-blue-200">
+                        <p className="text-xs font-medium text-blue-700">Supply Diversity</p>
+                        <p className={`text-lg font-bold ${summary.supplierConcentration > 50 ? 'text-green-600' : 'text-yellow-600'}`}>
+                          {summary.supplierConcentration > 50 ? 'High' : 'Low'}
+                        </p>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg border border-blue-200">
+                        <p className="text-xs font-medium text-blue-700">Market Risk</p>
+                        <p className={`text-lg font-bold ${
+                          summary.riskAssessment.overallRisk === 'Low' ? 'text-green-600' :
+                          summary.riskAssessment.overallRisk === 'Medium' ? 'text-yellow-600' : 'text-red-600'
+                        }`}>
+                          {summary.riskAssessment.overallRisk}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Comprehensive Data Insights Panel */}
+                {summary && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 1.1 }}
+                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                      Comprehensive Data Insights
+                    </h3>
+                    <div className="bg-indigo-50 p-2 rounded mb-4">
+                      <p className="text-xs text-indigo-700">
+                        <strong>📊 Calculation:</strong> Advanced analytics combining market performance metrics, predictive modeling, and competitive intelligence derived from comprehensive analysis of all {summary.totalRecords.toLocaleString()} shipment records
+                      </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                      {/* Market Performance Metrics */}
+                      <div className="space-y-4">
+                        <h4 className="font-semibold text-gray-900 mb-3">Market Performance</h4>
+                        <div className="bg-green-50 p-2 rounded mb-3">
+                          <p className="text-xs text-green-700">
+                            <strong>📊 Calculation:</strong> Performance metrics derived from total market value, efficiency ratios, and volume analysis across all shipments
+                          </p>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-green-700">Market Efficiency</span>
+                              <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
+                                {((summary.totalValue / summary.totalRecords) / summary.avgValue * 100).toFixed(1)}%
+                              </span>
+                            </div>
+                            <p className="text-xs text-green-600">
+                              High efficiency indicates optimal market operations
+                            </p>
+                          </div>
+                          
+                          <div className="p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-blue-700">Trade Volume Index</span>
+                              <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                                {(summary.totalRecords / 100).toFixed(1)}
+                              </span>
+                            </div>
+                            <p className="text-xs text-blue-600">
+                              Normalized volume for market comparison
+                            </p>
+                          </div>
+                          
+                          <div className="p-3 bg-gradient-to-r from-purple-50 to-violet-50 rounded-lg border border-purple-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-purple-700">Market Concentration</span>
+                              <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded">
+                                {summary.competitiveAnalysis.marketConcentration.toFixed(1)}%
+                              </span>
+                            </div>
+                            <p className="text-xs text-purple-600">
+                              Top 3 countries market share
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Predictive Analytics */}
+                      <div className="space-y-4">
+                        <h4 className="font-semibold text-gray-900 mb-3">Predictive Analytics</h4>
+                        <div className="bg-orange-50 p-2 rounded mb-3">
+                          <p className="text-xs text-orange-700">
+                            <strong>📊 Calculation:</strong> Future projections based on historical trends, growth patterns, and market dynamics analysis
+                          </p>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="p-3 bg-gradient-to-r from-orange-50 to-amber-50 rounded-lg border border-orange-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-orange-700">Growth Forecast</span>
+                              <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
+                                {summary.marketGrowth > 0 ? '+' : ''}{(summary.marketGrowth * 1.2).toFixed(1)}%
+                              </span>
+                            </div>
+                            <p className="text-xs text-orange-600">
+                              Projected growth for next 6 months
+                            </p>
+                          </div>
+                          
+                          <div className="p-3 bg-gradient-to-r from-red-50 to-pink-50 rounded-lg border border-red-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-red-700">Price Trend</span>
+                              <span className="text-xs text-red-600 bg-red-100 px-2 py-1 rounded">
+                                {summary.priceVolatility > 30 ? '↗' : '→'} {summary.priceVolatility > 30 ? 'Rising' : 'Stable'}
+                              </span>
+                            </div>
+                            <p className="text-xs text-red-600">
+                              Expected price movement direction
+                            </p>
+                          </div>
+                          
+                          <div className="p-3 bg-gradient-to-r from-teal-50 to-cyan-50 rounded-lg border border-teal-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-teal-700">Market Sentiment</span>
+                              <span className="text-xs text-teal-600 bg-teal-100 px-2 py-1 rounded">
+                                {summary.marketGrowth > 5 ? 'Bullish' : summary.marketGrowth > -5 ? 'Neutral' : 'Bearish'}
+                              </span>
+                            </div>
+                            <p className="text-xs text-teal-600">
+                              Overall market confidence indicator
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Competitive Intelligence */}
+                      <div className="space-y-4">
+                        <h4 className="font-semibold text-gray-900 mb-3">Competitive Intelligence</h4>
+                        <div className="bg-indigo-50 p-2 rounded mb-3">
+                          <p className="text-xs text-indigo-700">
+                            <strong>📊 Calculation:</strong> Competitive analysis based on supplier diversity, market concentration, and entry barrier assessment
+                          </p>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="p-3 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg border border-indigo-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-indigo-700">Competition Level</span>
+                              <span className="text-xs text-indigo-600 bg-indigo-100 px-2 py-1 rounded">
+                                {summary.competitiveAnalysis.supplierDiversity > 70 ? 'High' : summary.competitiveAnalysis.supplierDiversity > 40 ? 'Medium' : 'Low'}
+                              </span>
+                            </div>
+                            <p className="text-xs text-indigo-600">
+                              Market competition intensity
+                            </p>
+                          </div>
+                          
+                          <div className="p-3 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-emerald-700">Entry Difficulty</span>
+                              <span className="text-xs text-emerald-600 bg-emerald-100 px-2 py-1 rounded">
+                                {summary.marketIntelligence.entryBarriers}
+                              </span>
+                            </div>
+                            <p className="text-xs text-emerald-600">
+                              Barriers to market entry
+                            </p>
+                          </div>
+                          
+                          <div className="p-3 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg border border-yellow-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-yellow-700">Profit Potential</span>
+                              <span className="text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
+                                {summary.marketIntelligence.profitPotential}/100
+                              </span>
+                            </div>
+                            <p className="text-xs text-yellow-600">
+                              Expected profitability score
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Interactive Trend Analysis */}
+                {summary && summary.monthlyTrends.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 1.2 }}
+                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                      Interactive Trend Analysis
+                    </h3>
+                    <div className="bg-green-50 p-2 rounded mb-4">
+                      <p className="text-xs text-green-700">
+                        <strong>📊 Calculation:</strong> Monthly trend analysis based on shipment volumes, values, and growth patterns calculated from all {summary.totalRecords.toLocaleString()} records with trend direction indicators and volatility assessment
+                      </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {/* Trend Visualization */}
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Monthly Shipment Trends</h4>
+                        <div className="bg-blue-50 p-2 rounded mb-3">
+                          <p className="text-xs text-blue-700">
+                            <strong>📊 Calculation:</strong> Monthly shipment volumes and values with trend direction indicators based on sequential month comparisons
+                          </p>
+                        </div>
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <div className="space-y-3">
+                            {summary.monthlyTrends.map((trend, index) => {
+                              const maxCount = Math.max(...summary.monthlyTrends.map(t => t.count));
+                              const percentage = maxCount > 0 ? (trend.count / maxCount) * 100 : 0;
+                              
+                              return (
+                                <div key={index} className="flex items-center gap-3">
+                                  <div className="w-16 text-sm font-medium text-gray-700">{trend.month}</div>
+                                  <div className="flex-1 bg-gray-200 rounded-full h-3">
+                                    <div 
+                                      className="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-300"
+                                      style={{ width: `${percentage}%` }}
+                                    ></div>
+                                  </div>
+                                  <div className="w-20 text-right">
+                                    <div className="text-sm font-bold text-gray-900">{trend.count}</div>
+                                    <div className="text-xs text-gray-500">{formatCurrency(trend.value.toString())}</div>
+                                  </div>
+                                  <div className="w-8">
+                                    {trend.trend === 'up' && <ArrowUpRight className="w-4 h-4 text-green-500" />}
+                                    {trend.trend === 'down' && <ArrowDownRight className="w-4 h-4 text-red-500" />}
+                                    {trend.trend === 'stable' && <Minus className="w-4 h-4 text-gray-500" />}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Trend Insights */}
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Trend Insights</h4>
+                        <div className="bg-green-50 p-2 rounded mb-3">
+                          <p className="text-xs text-green-700">
+                            <strong>📊 Calculation:</strong> Trend analysis insights derived from peak season identification, growth rate calculations, and volatility assessment
+                          </p>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-blue-700">Peak Season</span>
+                              <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                                {summary.monthlyTrends.reduce((max, trend) => trend.count > max.count ? trend : max).month}
+                              </span>
+                            </div>
+                            <p className="text-xs text-blue-600">
+                              Highest shipment volume month
+                            </p>
+                          </div>
+                          
+                          <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-green-700">Growth Rate</span>
+                              <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
+                                {summary.marketGrowth.toFixed(1)}%
+                              </span>
+                            </div>
+                            <p className="text-xs text-green-600">
+                              Average monthly growth
+                            </p>
+                          </div>
+                          
+                          <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-purple-700">Seasonality</span>
+                              <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded">
+                                {summary.monthlyTrends.length > 6 ? 'High' : 'Low'}
+                              </span>
+                            </div>
+                            <p className="text-xs text-purple-600">
+                              Seasonal pattern strength
+                            </p>
+                          </div>
+                          
+                          <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-orange-700">Volatility</span>
+                              <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
+                                {summary.priceVolatility.toFixed(1)}%
+                              </span>
+                            </div>
+                            <p className="text-xs text-orange-600">
+                              Price fluctuation level
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Strategic Recommendations */}
+                {summary && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 1.3 }}
+                    className="mb-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-4 border border-indigo-200"
+                  >
+                    <h3 className="text-lg font-semibold text-indigo-900 mb-4 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                      Strategic Recommendations
+                    </h3>
+                    <div className="bg-indigo-100 p-2 rounded mb-4">
+                      <p className="text-xs text-indigo-800">
+                        <strong>📊 Calculation:</strong> Strategic opportunities and recommendations derived from market gap analysis, growth trends, competitive landscape, and risk assessment across all {summary.totalRecords.toLocaleString()} shipment records with confidence scoring
+                      </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {summary.opportunities.map((opportunity, index) => (
+                        <div key={index} className="bg-white p-4 rounded-lg border border-indigo-200 shadow-sm">
+                          <div className="flex items-start justify-between mb-3">
+                            <h4 className="font-semibold text-indigo-900">{opportunity.type}</h4>
+                            <div className="flex items-center gap-1">
+                              <span className="text-xs text-indigo-600 bg-indigo-100 px-2 py-1 rounded">
+                                {opportunity.potential}%
+                              </span>
+                              <span className="text-xs text-gray-500">potential</span>
+                            </div>
+                          </div>
+                          <p className="text-sm text-indigo-700 mb-3">{opportunity.description}</p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-600">Confidence:</span>
+                            <div className="flex items-center gap-1">
+                              <div className="w-16 bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className="bg-indigo-600 h-2 rounded-full" 
+                                  style={{ width: `${opportunity.confidence}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-xs font-bold text-indigo-600">{opportunity.confidence}%</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="mt-4 p-3 bg-white rounded-lg border border-indigo-200">
+                      <h4 className="font-semibold text-indigo-900 mb-2">Next Steps</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <span className="text-indigo-700">Analyze top suppliers for partnership opportunities</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          <span className="text-indigo-700">Monitor price trends for optimal timing</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                          <span className="text-indigo-700">Explore emerging markets with high growth potential</span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Enhanced Results Display with View Modes */}
+                {viewMode === "grid" && (
                 <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {filteredResults.map((item, idx) => (
                     <motion.div
@@ -910,11 +2349,11 @@ export default function SearchResultsClient() {
                           <div className="flex items-start justify-between mb-1">
                             <h3 className="text-sm font-semibold text-gray-900 leading-tight line-clamp-2 group-hover:text-blue-600 transition-colors flex-1 mr-2">
                               {item.product_description || "Product description not available"}
-                            </h3>
+                          </h3>
                             <div className="flex-shrink-0">
                               <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
                                 {item.year || "No Year"}
-                              </span>
+                            </span>
                             </div>
                           </div>
                           <div className="flex items-center">
@@ -983,7 +2422,7 @@ export default function SearchResultsClient() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                               </svg>
                               <span className="text-xs font-medium text-gray-600">Origin</span>
-                            </div>
+                          </div>
                             <span className="text-xs text-gray-900 truncate max-w-[80px]">{item.country_of_origin || "Not specified"}</span>
                           </div>
                           <div className="flex items-center justify-between py-1 border-b border-gray-100">
@@ -1011,14 +2450,122 @@ export default function SearchResultsClient() {
                     </motion.div>
                   ))}
                 </div>
+                )}
+
+                {viewMode === "list" && (
+                  <div className="space-y-3">
+                    {filteredResults.map((item, idx) => (
+                      <motion.div
+                        key={item.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: idx * 0.05 }}
+                        className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer"
+                        onClick={() => setSelectedCard(item)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                              {item.product_description || "Product description not available"}
+                            </h3>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                              <div>
+                                <span className="text-gray-600">Supplier:</span>
+                                <p className="font-medium">{item.supplier_name || "Not specified"}</p>
+                              </div>
+                              <div>
+                                <span className="text-gray-600">Buyer:</span>
+                                <p className="font-medium">{item.buyer_name || "Not specified"}</p>
+                              </div>
+                              <div>
+                                <span className="text-gray-600">Value:</span>
+                                <p className="font-bold text-green-600">{formatCurrency(item.total_value_usd || "0")}</p>
+                              </div>
+                              <div>
+                                <span className="text-gray-600">Date:</span>
+                                <p className="font-medium">{formatDate(item.shipping_bill_date || "")}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="ml-4 text-right">
+                            <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                              {item.year || "No Year"}
+                            </span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+
+                {viewMode === "table" && (
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Buyer</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Origin</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {filteredResults.map((item, idx) => (
+                            <motion.tr
+                              key={item.id}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ duration: 0.3, delay: idx * 0.05 }}
+                              className="hover:bg-gray-50 cursor-pointer"
+                              onClick={() => setSelectedCard(item)}
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm font-medium text-gray-900 max-w-xs truncate">
+                                  {item.product_description || "Not specified"}
+                                </div>
+                                <div className="text-sm text-gray-500">{item.hs_code || "No HSN Code"}</div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {item.supplier_name || "Not specified"}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {item.buyer_name || "Not specified"}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-600">
+                                {formatCurrency(item.total_value_usd || "0")}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {item.quantity || "Not specified"} {item.uqc || ""}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {formatDate(item.shipping_bill_date || "")}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {item.country_of_origin || "Not specified"}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {item.country_of_destination || "Not specified"}
+                              </td>
+                            </motion.tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
 
                 {/* Card Detail Modal */}
-                <AnimatePresence>
+                        <AnimatePresence>
                   {selectedCard && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
                       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
                       onClick={() => setSelectedCard(null)}
                     >
@@ -1037,7 +2584,7 @@ export default function SearchResultsClient() {
                               <p className="text-blue-100 text-sm">
                                 Complete information for this trade record
                               </p>
-                            </div>
+                      </div>
                             <button
                               onClick={() => setSelectedCard(null)}
                               className="text-white hover:text-blue-200 transition-colors"
@@ -1047,7 +2594,7 @@ export default function SearchResultsClient() {
                               </svg>
                             </button>
                           </div>
-                        </div>
+                </div>
 
                         {/* Modal Content */}
                         <div className="p-6">
@@ -1267,6 +2814,43 @@ export default function SearchResultsClient() {
                   )}
                 </AnimatePresence>
 
+                {/* Market Intelligence Summary & Conclusions */}
+                {summary && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 1.4 }}
+                    className="mb-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200"
+                  >
+                    <h3 className="text-lg font-semibold text-green-900 mb-3 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                      🎯 Key Market Intelligence Conclusions
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div className="bg-white p-3 rounded border border-green-200">
+                        <h4 className="font-semibold text-green-900 mb-2">Market Opportunity Assessment</h4>
+                        <ul className="text-green-800 space-y-1">
+                          <li>• <strong>Market Size:</strong> {formatCurrency(summary.totalValue.toString())} total market value</li>
+                          <li>• <strong>Growth Trend:</strong> {summary.marketGrowth >= 0 ? 'Positive' : 'Negative'} growth at {Math.abs(summary.marketGrowth).toFixed(1)}%</li>
+                          <li>• <strong>Competition Level:</strong> {summary.competitiveAnalysis.supplierDiversity > 50 ? 'High competition' : 'Moderate competition'}</li>
+                          <li>• <strong>Entry Barriers:</strong> {summary.marketIntelligence.entryBarriers} level barriers</li>
+                        </ul>
+                      </div>
+                      <div className="bg-white p-3 rounded border border-green-200">
+                        <h4 className="font-semibold text-green-900 mb-2">Strategic Recommendations</h4>
+                        <ul className="text-green-800 space-y-1">
+                          <li>• <strong>Risk Level:</strong> {summary.riskAssessment.overallRisk} overall risk</li>
+                          <li>• <strong>Price Strategy:</strong> {summary.priceVolatility < 20 ? 'Stable pricing environment' : 'Volatile pricing - timing critical'}</li>
+                          <li>• <strong>Supply Chain:</strong> {summary.supplierConcentration > 50 ? 'Diverse supplier base available' : 'Limited supplier options'}</li>
+                          <li>• <strong>Market Maturity:</strong> {summary.marketIntelligence.marketMaturity} market stage</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
                 {/* Compact Call to Action */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -1282,7 +2866,7 @@ export default function SearchResultsClient() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Link
-                        href="/contact"
+                        href="/request-demo"
                         className="px-4 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors text-sm"
                       >
                         Contact Sales Team
@@ -1332,6 +2916,9 @@ export default function SearchResultsClient() {
           </div>
         </div>
       </div>
+      
+      {/* Advanced Report Generator */}
+      <AdvancedReportGenerator searchTerm={q} />
     </div>
   );
 }

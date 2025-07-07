@@ -1,255 +1,135 @@
-"use client";
+import { Suspense } from "react"
+import { Metadata } from "next"
+import PlexusBackground from "@/components/PlexusBackground"
+import { ContactForm } from "./ContactForm"
+import { ContactInfo } from "./ContactInfo"
 
-import PlexusBackground from "@/components/PlexusBackground";
-import React, { useState } from "react";
-import { BiRightArrow } from "react-icons/bi";
-import { FaBuilding, FaEnvelope, FaPhone, FaUser } from "react-icons/fa";
-import { FiMessageSquare } from "react-icons/fi";
-import { IoLocationSharp } from "react-icons/io5";
-import { MdAddIcCall } from "react-icons/md";
-import { RiMailAddFill } from "react-icons/ri";
+export const metadata: Metadata = {
+  title: "Contact Us - TransDataNexus",
+  description: "Get in touch with TransDataNexus. We're here to help with your data analytics and business intelligence needs. Contact us today for a consultation.",
+  keywords: ["contact", "TransDataNexus", "data analytics", "business intelligence", "consultation"],
+}
 
-const Contact = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    organization: "",
-    contact: "",
-    message: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
-
-    // Basic validation
-    if (!form.name || !form.email) {
-      setError("Name and Email are required.");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setSuccess("Thank you! Our team will contact you soon.");
-        setForm({
-          name: "",
-          email: "",
-          organization: "",
-          contact: "",
-          message: "",
-        });
-      } else {
-        setError(data.error || "Something went wrong.");
-      }
-    } catch {
-      setError("Something went wrong.");
-    }
-    setLoading(false);
-  };
-
+export default function ContactPage() {
   return (
-    <div className="min-h-screen w-full bg-cover bg-center">
-      <PlexusBackground nodeCount={100} maxDistance={120}>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="relative bg-white/90 backdrop-blur-md rounded-3xl shadow-md max-w-5xl w-full px-6 pt-10 pb-12 my-12">
-            <h1 className="text-4xl text-[#1b6cae] font-extrabold mb-8 text-center">
-              Let&apos;s Get In Touch!
+    <div className="min-h-screen w-full">
+      <PlexusBackground nodeCount={80} maxDistance={100}>
+        <div className="container mx-auto px-4 py-12">
+          {/* Header Section */}
+          <div className="text-center mb-16">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+              Get in{" "}
+              <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
+                Touch
+              </span>
             </h1>
-            {/* Contact Info Card */}
-            <div className="flex flex-col md:flex-row justify-between items-stretch gap-6 gap-y-8 bg-white rounded-2xl shadow-md border border-blue-100 p-8 mb-12">
-              {/* Phone */}
-              <div className="flex flex-col items-start gap-4 flex-1">
-                <span className="inline-flex items-center justify-center border p-3 rounded bg-blue-50">
-                  <MdAddIcCall className="text-[#1b6cae] text-2xl" />
-                </span>
-                <div className="flex flex-col items-start gap-2">
-                  <a
-                    href="tel:+919595078788"
-                    className="font-semibold text-blue-900 hover:underline"
-                  >
-                    +91 95950 78788
-                  </a>
-                  <a
-                    href="tel:+917977394846"
-                    className="font-semibold text-blue-900 hover:underline"
-                  >
-                    +91 79773 94846
-                  </a>
-                </div>
-              </div>
-              {/* Email */}
-              <div className="flex flex-col items-start gap-4 flex-1">
-                <span className="inline-flex items-center justify-center border p-3 rounded bg-blue-50">
-                  <RiMailAddFill className="text-[#1b6cae] text-2xl" />
-                </span>
-                <div className="flex flex-col items-start gap-2">
-                  <a
-                    href="mailto:info@transdatanexus.com"
-                    className="font-semibold text-blue-900 hover:underline"
-                  >
-                    info@transdatanexus.com
-                  </a>
-                  <a
-                    href="mailto:komal@transdatanexus.com"
-                    className="font-semibold text-blue-900 hover:underline"
-                  >
-                    komal@transdatanexus.com
-                  </a>
-                </div>
-              </div>
-              {/* Address */}
-              <div className="flex flex-col items-start gap-4 flex-1">
-                <span className="inline-flex items-center justify-center border p-3 rounded bg-blue-50">
-                  <IoLocationSharp className="text-[#1b6cae] text-2xl" />
-                </span>
-                <a
-                  href="https://maps.app.goo.gl/usBhVAq7UDta2fGF6"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-col items-start gap-2 text-blue-900 font-semibold leading-tight hover:underline"
-                >
-                  <p className="leading-tight ">
-                    Kolivery Village, Mathuradas Colony, Kalina, Vakola,
-                    Santacruz East, Mumbai, Maharashtra 400098
+            <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+              Ready to transform your pharmaceutical trade operations? Our expert team is here to help you 
+              leverage the power of AI-driven market intelligence.
+            </p>
+          </div>
+
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
+            {/* Left Column - Contact Form */}
+            <div className="order-2 lg:order-1">
+              <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 p-8 lg:p-12">
+                <div className="mb-8">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                    Send us a Message
+                  </h2>
+                  <p className="text-gray-600 text-lg">
+                    Tell us about your needs and we'll get back to you within 24 hours.
                   </p>
-                </a>
+                </div>
+                
+                <Suspense fallback={
+                  <div className="flex items-center justify-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    <span className="ml-3 text-gray-600">Loading form...</span>
+                  </div>
+                }>
+                  <ContactForm />
+                </Suspense>
               </div>
             </div>
-            {/* Contact Form */}
-            <div className="flex flex-col justify-center">
-              <h2 className="text-2xl font-semibold text-[#1b6cae] mb-6 text-center">
-                Or fill out the form below
+
+            {/* Right Column - Contact Information & Quick Actions */}
+            <div className="order-1 lg:order-2">
+              <ContactInfo />
+            </div>
+          </div>
+
+          {/* Additional Contact Options */}
+          <div className="mt-20 max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Other Ways to Connect
               </h2>
-              <form
-                className="flex flex-col gap-6 bg-white rounded-2xl shadow-lg border border-blue-100 p-8"
-                onSubmit={handleSubmit}
-              >
-                {/* Row 1 */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-[#1b6cae] block text-sm font-medium mb-1">
-                      Full Name
-                    </label>
-                    <div className="relative">
-                      <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1b6cae]" />
-                      <input
-                        type="text"
-                        name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded focus:ring-2 focus:ring-blue-200 outline-none transition"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-[#1b6cae] block text-sm font-medium mb-1">
-                      Email
-                    </label>
-                    <div className="relative">
-                      <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1b6cae]" />
-                      <input
-                        type="email"
-                        name="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded focus:ring-2 focus:ring-blue-200 outline-none transition"
-                        required
-                      />
-                    </div>
-                  </div>
+              <p className="text-lg text-blue-100">
+                Choose the option that works best for you
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Quick Actions Cards */}
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-8 text-center hover:bg-white/15 transition-all duration-300 group">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m-9-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                 </div>
-                {/* Row 2 */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-[#1b6cae] block text-sm font-medium mb-1">
-                      Organization Name
-                    </label>
-                    <div className="relative">
-                      <FaBuilding className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1b6cae]" />
-                      <input
-                        type="text"
-                        name="organization"
-                        value={form.organization}
-                        onChange={handleChange}
-                        className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded focus:ring-2 focus:ring-blue-200 outline-none transition"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-[#1b6cae] block text-sm font-medium mb-1">
-                      Contact Number
-                    </label>
-                    <div className="relative">
-                      <FaPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1b6cae]" />
-                      <input
-                        type="tel"
-                        name="contact"
-                        value={form.contact}
-                        onChange={handleChange}
-                        className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded focus:ring-2 focus:ring-blue-200 outline-none transition"
-                      />
-                    </div>
-                  </div>
+                <h3 className="text-xl font-bold text-white mb-3">Request Demo</h3>
+                <p className="text-blue-100 mb-6">
+                  See our platform in action with a personalized 30-minute demo
+                </p>
+                <a 
+                  href="/request-demo"
+                  className="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all duration-300"
+                >
+                  Schedule Demo
+                </a>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-8 text-center hover:bg-white/15 transition-all duration-300 group">
+                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                 </div>
-                {/* Row 3 - Full width Textarea */}
-                <div>
-                  <label className="text-[#1b6cae] block text-sm font-medium mb-1">
-                    Inquiry Purpose
-                  </label>
-                  <div className="relative">
-                    <FiMessageSquare className="absolute left-3 top-3 text-[#1b6cae]" />
-                    <textarea
-                      rows={4}
-                      name="message"
-                      value={form.message}
-                      onChange={handleChange}
-                      className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded focus:ring-2 focus:ring-blue-200 outline-none transition"
-                    ></textarea>
-                  </div>
+                <h3 className="text-xl font-bold text-white mb-3">Start Free Trial</h3>
+                <p className="text-blue-100 mb-6">
+                  Get instant access to our platform with a 7-day free trial
+                </p>
+                <a 
+                  href="/trial"
+                  className="inline-block px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-300"
+                >
+                  Start Trial
+                </a>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-8 text-center hover:bg-white/15 transition-all duration-300 group">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
                 </div>
-                {error && <div className="text-red-600">{error}</div>}
-                {success && <div className="text-green-600">{success}</div>}
-                {/* Submit Button */}
-                <div className="text-right flex justify-end">
-                  <button
-                    type="submit"
-                    className="flex items-center gap-x-3 px-10 py-3 text-base bg-blue-600 text-white rounded-full font-semibold shadow hover:bg-blue-700 transition"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      "Sending..."
-                    ) : (
-                      <>
-                        Submit Form <BiRightArrow />
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
+                <h3 className="text-xl font-bold text-white mb-3">Expert Consultation</h3>
+                <p className="text-blue-100 mb-6">
+                  Get personalized advice from our industry experts
+                </p>
+                <a 
+                  href="/consultation"
+                  className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all duration-300"
+                >
+                  Book Consultation
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </PlexusBackground>
     </div>
-  );
-};
-export default Contact;
+  )
+}
