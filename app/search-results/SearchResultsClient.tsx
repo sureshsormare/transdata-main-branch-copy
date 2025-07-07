@@ -415,8 +415,9 @@ export default function SearchResultsClient() {
     }
   };
 
-  const formatCurrency = (value: string) => {
-    const num = parseFloat(value || "0");
+  const formatCurrency = (value: string | number | null | undefined) => {
+    if (value === null || value === undefined) return "$0";
+    const num = parseFloat(value.toString() || "0");
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -745,8 +746,8 @@ export default function SearchResultsClient() {
                         </Link> exported from{' '}
                         <strong className="text-gray-900">{summary.dateRange}</strong> across <strong className="text-blue-600">{countryStats.topExportCountries.length} supplier countries</strong> to{' '}
                         <strong className="text-blue-600">{countryStats.topImportCountries.length} buyer countries</strong> with a total export value of{' '}
-                        <strong className="text-green-600">{formatCurrency(summary.totalValue.toString())}</strong>. The market demonstrates robust activity with an average transaction value of{' '}
-                        <strong className="text-green-600">{formatCurrency(summary.avgValue.toString())}</strong> per shipment.
+                        <strong className="text-green-600">{formatCurrency(summary.totalValue)}</strong>. The market demonstrates robust activity with an average transaction value of{' '}
+                        <strong className="text-green-600">{formatCurrency(summary.avgValue)}</strong> per shipment.
                       </p>
                       <div className="bg-blue-50 border-l-4 border-blue-400 p-3 mt-3 rounded-r">
                         <p className="text-sm text-blue-800">
@@ -789,10 +790,10 @@ export default function SearchResultsClient() {
                       </div>
                       
                       <p>
-                        Price analysis reveals an average unit price of <strong className="text-orange-600">{formatCurrency(summary.avgPrice.toString())}</strong> with{' '}
+                        Price analysis reveals an average unit price of <strong className="text-orange-600">{formatCurrency(summary.avgPrice)}</strong> with{' '}
                         <strong className="text-orange-600">{summary.priceVolatility.toFixed(1)}% price volatility</strong>, ranging from{' '}
-                        <strong className="text-orange-600">{formatCurrency(summary.minPrice.toString())}</strong> to{' '}
-                        <strong className="text-orange-600">{formatCurrency(summary.maxPrice.toString())}</strong>.{' '}
+                        <strong className="text-orange-600">{formatCurrency(summary.minPrice)}</strong> to{' '}
+                        <strong className="text-orange-600">{formatCurrency(summary.maxPrice)}</strong>.{' '}
                         This comprehensive trade intelligence delivers detailed supplier and buyer information, pricing trends, shipment quantities, and trade routes essential for informed business decisions.
                         </p>
                         <div className="bg-orange-50 border-l-4 border-orange-400 p-3 mt-3 rounded-r">
@@ -922,7 +923,7 @@ export default function SearchResultsClient() {
                         <span className="flex-1 truncate">{supplier.name}</span>
                         <div className="text-right">
                           <div className="text-xs text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">{supplier.count}</div>
-                          <div className="text-xs text-gray-500">{formatCurrency(supplier.value.toString())}</div>
+                          <div className="text-xs text-gray-500">{formatCurrency(supplier.value)}</div>
                         </div>
                     </label>
                     ))
@@ -963,7 +964,7 @@ export default function SearchResultsClient() {
                         <span className="flex-1 truncate">{buyer.name}</span>
                         <div className="text-right">
                           <div className="text-xs text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">{buyer.count}</div>
-                          <div className="text-xs text-gray-500">{formatCurrency(buyer.value.toString())}</div>
+                          <div className="text-xs text-gray-500">{formatCurrency(buyer.value)}</div>
                         </div>
                     </label>
                     ))
@@ -1143,7 +1144,7 @@ export default function SearchResultsClient() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-xs font-medium text-gray-600">Total Value</p>
-                        <p className="text-lg font-semibold text-gray-900">{formatCurrency(aggregates.totalValueUSD.toString())}</p>
+                        <p className="text-lg font-semibold text-gray-900">{formatCurrency(aggregates.totalValueUSD)}</p>
                       </div>
                       <div className="p-2 bg-yellow-100 rounded-md">
                         <svg className="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1242,7 +1243,7 @@ export default function SearchResultsClient() {
                       </div>
                       <div className="bg-green-50 p-3 rounded-lg border border-green-200">
                         <p className="text-xs font-medium text-green-700">Avg Unit Price</p>
-                        <p className="text-lg font-bold text-green-600">{formatCurrency(summary.avgPrice.toString())}</p>
+                        <p className="text-lg font-bold text-green-600">{formatCurrency(summary.avgPrice)}</p>
                         <p className="text-xs text-green-600 mt-1">
                           Across {summary.totalRecords.toLocaleString()} shipments
                         </p>
@@ -1297,7 +1298,7 @@ export default function SearchResultsClient() {
                                   <p className="text-sm font-medium text-gray-900">{supplier.name}</p>
                                   <p className="text-xs text-gray-600">{supplier.count} shipments</p>
                                 </div>
-                                <p className="text-sm font-bold text-green-600">{formatCurrency(supplier.value.toString())}</p>
+                                <p className="text-sm font-bold text-green-600">{formatCurrency(supplier.value)}</p>
                               </div>
                             ))}
                           </div>
@@ -1317,7 +1318,7 @@ export default function SearchResultsClient() {
                                   <p className="text-sm font-medium text-gray-900">{buyer.name}</p>
                                   <p className="text-xs text-gray-600">{buyer.count} shipments</p>
                                 </div>
-                                <p className="text-sm font-bold text-blue-600">{formatCurrency(buyer.value.toString())}</p>
+                                <p className="text-sm font-bold text-blue-600">{formatCurrency(buyer.value)}</p>
                               </div>
                             ))}
                           </div>
@@ -1330,7 +1331,7 @@ export default function SearchResultsClient() {
                           <h4 className="font-semibold text-gray-900 mb-2">Market Share by Country</h4>
                           <div className="bg-green-50 p-2 rounded mb-2">
                             <p className="text-xs text-green-700">
-                              <strong>📊 Calculation:</strong> Percentage of total market value ({formatCurrency(summary.totalValue.toString())}) by destination country
+                              <strong>📊 Calculation:</strong> Percentage of total market value ({formatCurrency(summary.totalValue)}) by destination country
                             </p>
                           </div>
                           <div className="space-y-2">
@@ -1447,22 +1448,22 @@ export default function SearchResultsClient() {
                         <div className="grid grid-cols-2 gap-4">
                           <div className="p-3 bg-green-50 rounded border border-green-200">
                             <p className="text-xs font-medium text-green-700">Average Price</p>
-                            <p className="text-lg font-bold text-green-600">{formatCurrency(summary.avgPrice.toString())}</p>
+                            <p className="text-lg font-bold text-green-600">{formatCurrency(summary.avgPrice)}</p>
                             <p className="text-xs text-green-600 mt-1">Mean unit price</p>
                           </div>
                           <div className="p-3 bg-blue-50 rounded border border-blue-200">
                             <p className="text-xs font-medium text-blue-700">Minimum Price</p>
-                            <p className="text-lg font-bold text-blue-600">{formatCurrency(summary.minPrice.toString())}</p>
+                            <p className="text-lg font-bold text-blue-600">{formatCurrency(summary.minPrice)}</p>
                             <p className="text-xs text-blue-600 mt-1">Lowest unit price</p>
                           </div>
                           <div className="p-3 bg-purple-50 rounded border border-purple-200">
                             <p className="text-xs font-medium text-purple-700">Maximum Price</p>
-                            <p className="text-lg font-bold text-purple-600">{formatCurrency(summary.maxPrice.toString())}</p>
+                            <p className="text-lg font-bold text-purple-600">{formatCurrency(summary.maxPrice)}</p>
                             <p className="text-xs text-purple-600 mt-1">Highest unit price</p>
                           </div>
                           <div className="p-3 bg-orange-50 rounded border border-orange-200">
                             <p className="text-xs font-medium text-orange-700">Price Range</p>
-                            <p className="text-lg font-bold text-orange-600">{formatCurrency((summary.maxPrice - summary.minPrice).toString())}</p>
+                            <p className="text-lg font-bold text-orange-600">{formatCurrency(summary.maxPrice - summary.minPrice)}</p>
                             <p className="text-xs text-orange-600 mt-1">Price spread</p>
                           </div>
                         </div>
@@ -1495,7 +1496,7 @@ export default function SearchResultsClient() {
                           </div>
                           <div className="space-y-1">
                             <p className="text-xs text-gray-600">Shipments: <span className="font-bold text-gray-900">{trend.count}</span></p>
-                            <p className="text-xs text-gray-600">Value: <span className="font-bold text-green-600">{formatCurrency(trend.value.toString())}</span></p>
+                            <p className="text-xs text-gray-600">Value: <span className="font-bold text-green-600">{formatCurrency(trend.value)}</span></p>
                           </div>
                         </div>
                       ))}
@@ -1541,7 +1542,7 @@ export default function SearchResultsClient() {
                               </div>
                               <div className="flex items-center justify-between text-xs text-gray-600">
                                 <span>{route.count} shipments</span>
-                                <span className="font-bold text-green-600">{formatCurrency(route.value.toString())}</span>
+                                <span className="font-bold text-green-600">{formatCurrency(route.value)}</span>
                               </div>
                             </div>
                           ))}
@@ -1569,7 +1570,7 @@ export default function SearchResultsClient() {
                               </div>
                               <div className="flex items-center justify-between text-xs text-gray-600">
                                 <span>{port.count} shipments</span>
-                                <span className="font-bold text-green-600">{formatCurrency(port.value.toString())}</span>
+                                <span className="font-bold text-green-600">{formatCurrency(port.value)}</span>
                               </div>
                             </div>
                           ))}
@@ -1606,7 +1607,7 @@ export default function SearchResultsClient() {
                         <div className="space-y-3">
                           <div className="p-3 bg-blue-50 rounded border border-blue-200">
                             <p className="text-xs font-medium text-blue-700">Market Size</p>
-                            <p className="text-lg font-bold text-blue-600">{formatCurrency(summary.marketIntelligence.marketSize.toString())}</p>
+                            <p className="text-lg font-bold text-blue-600">{formatCurrency(summary.marketIntelligence.marketSize)}</p>
                             <p className="text-xs text-blue-600 mt-1">Total market value</p>
                           </div>
                           <div className="p-3 bg-green-50 rounded border border-green-200">
@@ -1738,7 +1739,7 @@ export default function SearchResultsClient() {
                                 <p className="text-xs text-gray-600">{category.count} shipments</p>
                               </div>
                               <div className="text-right">
-                                <p className="text-sm font-bold text-green-600">{formatCurrency(category.value.toString())}</p>
+                                <p className="text-sm font-bold text-green-600">{formatCurrency(category.value)}</p>
                                 <p className="text-xs text-gray-600">{category.percentage.toFixed(1)}%</p>
                               </div>
                             </div>
@@ -1762,7 +1763,7 @@ export default function SearchResultsClient() {
                                 <p className="text-xs text-gray-600">{mode.count} shipments</p>
                               </div>
                               <div className="text-right">
-                                <p className="text-sm font-bold text-blue-600">{formatCurrency(mode.value.toString())}</p>
+                                <p className="text-sm font-bold text-blue-600">{formatCurrency(mode.value)}</p>
                                 <p className="text-xs text-gray-600">{mode.percentage.toFixed(1)}%</p>
                               </div>
                             </div>
@@ -2175,7 +2176,7 @@ export default function SearchResultsClient() {
                                   </div>
                                   <div className="w-20 text-right">
                                     <div className="text-sm font-bold text-gray-900">{trend.count}</div>
-                                    <div className="text-xs text-gray-500">{formatCurrency(trend.value.toString())}</div>
+                                    <div className="text-xs text-gray-500">{formatCurrency(trend.value)}</div>
                                   </div>
                                   <div className="w-8">
                                     {trend.trend === 'up' && <ArrowUpRight className="w-4 h-4 text-green-500" />}
@@ -2832,7 +2833,7 @@ export default function SearchResultsClient() {
                       <div className="bg-white p-3 rounded border border-green-200">
                         <h4 className="font-semibold text-green-900 mb-2">Market Opportunity Assessment</h4>
                         <ul className="text-green-800 space-y-1">
-                          <li>• <strong>Market Size:</strong> {formatCurrency(summary.totalValue.toString())} total market value</li>
+                          <li>• <strong>Market Size:</strong> {formatCurrency(summary.totalValue)} total market value</li>
                           <li>• <strong>Growth Trend:</strong> {summary.marketGrowth >= 0 ? 'Positive' : 'Negative'} growth at {Math.abs(summary.marketGrowth).toFixed(1)}%</li>
                           <li>• <strong>Competition Level:</strong> {summary.competitiveAnalysis.supplierDiversity > 50 ? 'High competition' : 'Moderate competition'}</li>
                           <li>• <strong>Entry Barriers:</strong> {summary.marketIntelligence.entryBarriers} level barriers</li>
