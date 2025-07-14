@@ -95,9 +95,10 @@ interface AIAnalyticsData {
 interface AIAnalyticsPanelProps {
   searchTerm: string;
   isVisible: boolean;
+  aggregates?: any;
 }
 
-export default function AIAnalyticsPanel({ searchTerm, isVisible }: AIAnalyticsPanelProps) {
+export default function AIAnalyticsPanel({ searchTerm, isVisible, aggregates }: AIAnalyticsPanelProps) {
   const [aiData, setAiData] = useState<AIAnalyticsData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -138,11 +139,11 @@ export default function AIAnalyticsPanel({ searchTerm, isVisible }: AIAnalyticsP
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-600 bg-red-100';
-      case 'high': return 'text-orange-600 bg-orange-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'low': return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'critical': return 'text-red-600 bg-red-100 border-red-200';
+      case 'high': return 'text-orange-600 bg-orange-100 border-orange-200';
+      case 'medium': return 'text-yellow-600 bg-yellow-100 border-yellow-200';
+      case 'low': return 'text-green-600 bg-green-100 border-green-200';
+      default: return 'text-gray-600 bg-gray-100 border-gray-200';
     }
   };
 
@@ -160,6 +161,133 @@ export default function AIAnalyticsPanel({ searchTerm, isVisible }: AIAnalyticsP
     return 'text-red-600';
   };
 
+  // Helper function to format numbers for display
+  const formatNumber = (value: number, type: string = 'percentage') => {
+    if (type === 'currency') {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(value);
+    } else if (type === 'units') {
+      return value.toLocaleString();
+    } else if (type === 'percentage') {
+      return `${value.toFixed(2)}%`;
+    } else if (type === 'decimal') {
+      return value.toFixed(2);
+    } else if (type === 'integer') {
+      return value.toLocaleString();
+    } else {
+      return value.toLocaleString();
+    }
+  };
+
+  // Helper function to format percentages with proper sign
+  const formatPercentage = (value: number, showSign: boolean = true) => {
+    const sign = showSign && value > 0 ? '+' : '';
+    return `${sign}${value.toFixed(2)}%`;
+  };
+
+  // Helper function to format currency values
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(value);
+  };
+
+  // Helper function to format large numbers with K, Mn, Bn suffixes
+  const formatLargeNumber = (value: number) => {
+    if (value >= 1000000000) {
+      return `${(value / 1000000000).toFixed(1)}Bn`;
+    } else if (value >= 1000000) {
+      return `${(value / 1000000).toFixed(1)}Mn`;
+    } else if (value >= 1000) {
+      return `${(value / 1000).toFixed(1)}K`;
+    } else {
+      return value.toLocaleString();
+    }
+  };
+
+  // Helper function to create radar chart for supplier scores
+  const createRadarChart = (supplier: AISupplierRecommendation) => {
+    const size = 80;
+    const center = size / 2;
+    const radius = size / 2 - 10;
+    
+    const scores = [
+      supplier.reliability,
+      supplier.priceCompetitiveness,
+      supplier.deliveryPerformance,
+      supplier.qualityRating
+    ];
+    
+    const points = scores.map((score, index) => {
+      const angle = (index * 90 - 90) * (Math.PI / 180);
+      const x = center + (score / 100) * radius * Math.cos(angle);
+      const y = center + (score / 100) * radius * Math.sin(angle);
+      return `${x},${y}`;
+    });
+    
+    return (
+      <svg width={size} height={size} className="mx-auto">
+        {/* Background circles */}
+        <circle cx={center} cy={center} r={radius} fill="none" stroke="#E5E7EB" strokeWidth="1" />
+        <circle cx={center} cy={center} r={radius * 0.75} fill="none" stroke="#E5E7EB" strokeWidth="1" />
+        <circle cx={center} cy={center} r={radius * 0.5} fill="none" stroke="#E5E7EB" strokeWidth="1" />
+        <circle cx={center} cy={center} r={radius * 0.25} fill="none" stroke="#E5E7EB" strokeWidth="1" />
+        
+        {/* Radar polygon */}
+        <polygon
+          points={points.join(' ')}
+          fill="rgba(139, 92, 246, 0.2)"
+          stroke="#8B5CF6"
+          strokeWidth="2"
+        />
+        
+        {/* Data points */}
+        {points.map((point, index) => {
+          const [x, y] = point.split(',').map(Number);
+          return (
+            <circle
+              key={`ai-panel-data-${index}`}
+              cx={x}
+              cy={y}
+              r="3"
+              fill="#8B5CF6"
+            />
+          );
+        })}
+      </svg>
+    );
+  };
+
+  // Helper function to create confidence meter
+  const createConfidenceMeter = (confidence: number) => {
+    const width = 60;
+    const height = 8;
+    const fillWidth = (confidence / 100) * width;
+    
+    return (
+      <div className="flex items-center gap-2">
+        <div className="w-15 h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div 
+            className={`h-full rounded-full transition-all duration-300 ${
+              confidence >= 90 ? 'bg-green-500' : 
+              confidence >= 75 ? 'bg-blue-500' : 
+              confidence >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+            }`}
+            style={{ width: `${fillWidth}px` }}
+          />
+        </div>
+        <span className="text-xs font-semibold">{formatNumber(confidence, 'integer')}%</span>
+      </div>
+    );
+  };
+
   if (!isVisible) return null;
 
   return (
@@ -169,23 +297,36 @@ export default function AIAnalyticsPanel({ searchTerm, isVisible }: AIAnalyticsP
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
-        className="mb-6 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg p-6 border border-purple-200 shadow-lg"
+        className="mb-6 bg-gradient-to-br from-purple-50 via-indigo-50 to-pink-50 rounded-xl p-6 border border-purple-200 shadow-lg"
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
-              <Brain className="w-5 h-5 text-white" />
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Brain className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-purple-900">🤖 AI-Powered Market Intelligence</h3>
-              <p className="text-sm text-purple-700">Advanced analytics and predictions for "{searchTerm}"</p>
+              <h3 className="text-2xl font-bold text-purple-900">🤖 AI-Powered Market Intelligence</h3>
+              <p className="text-sm text-purple-700">Advanced predictive analytics and market insights for "{searchTerm}"</p>
+              <div className="flex items-center gap-2 mt-1">
+                {aggregates?.dateRange && (
+                  <p className="text-xs text-purple-600 bg-white px-2 py-1 rounded-full inline-block">
+                    📅 {aggregates.dateRange.start} - {aggregates.dateRange.end}
+                  </p>
+                )}
+                <p className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-full inline-block">
+                  📊 Historical Analysis: 12 months
+                </p>
+                <p className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full inline-block">
+                  🔮 Forecast Period: 6 months
+                </p>
+              </div>
             </div>
           </div>
           <button
             onClick={fetchAIAnalytics}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 disabled:opacity-50 shadow-md"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             <span>Refresh AI</span>
@@ -194,352 +335,233 @@ export default function AIAnalyticsPanel({ searchTerm, isVisible }: AIAnalyticsP
 
         {loading && (
           <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
-            <span className="ml-3 text-purple-700">AI is analyzing market data...</span>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+              <span className="text-purple-700 font-medium">AI is analyzing market data...</span>
+            </div>
           </div>
         )}
 
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
             <div className="flex items-center gap-2">
               <AlertCircle className="w-5 h-5 text-red-600" />
-              <span className="text-red-800">Error: {error}</span>
+              <span className="text-red-700 font-medium">Error: {error}</span>
             </div>
           </div>
         )}
 
         {aiData && (
           <div className="space-y-6">
-            {/* AI Market Predictions */}
-            <div className="bg-white rounded-lg border border-purple-200 overflow-hidden">
-              <button
-                onClick={() => toggleSection('predictions')}
-                className="w-full flex items-center justify-between p-4 bg-purple-50 hover:bg-purple-100 transition-colors"
-              >
+            {/* AI Predictions */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-xl p-6 border border-purple-100 shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <TrendingUp className="w-5 h-5 text-purple-600" />
-                  <h4 className="font-semibold text-purple-900">AI Market Predictions</h4>
-                  <span className="text-sm text-purple-600 bg-purple-100 px-2 py-1 rounded">
-                    {aiData.predictions.length} predictions
-                  </span>
+                  <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                    <TrendingUp className="w-4 h-4 text-white" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900">AI Predictions</h4>
                 </div>
-                {expandedSections.has('predictions') ? (
-                  <ChevronUp className="w-5 h-5 text-purple-600" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-purple-600" />
-                )}
-              </button>
-              
+                <button
+                  onClick={() => toggleSection('predictions')}
+                  className="text-purple-600 hover:text-purple-700"
+                >
+                  {expandedSections.has('predictions') ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                </button>
+              </div>
+
               <AnimatePresence>
                 {expandedSections.has('predictions') && (
                   <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="p-4"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {aiData.predictions.map((prediction, index) => (
-                        <div key={index} className="bg-gradient-to-br from-purple-50 to-indigo-50 p-4 rounded-lg border border-purple-200">
-                          <div className="flex items-center justify-between mb-3">
-                            <h5 className="font-semibold text-purple-900">{prediction.type}</h5>
-                            <span className={`text-sm font-bold ${getConfidenceColor(prediction.confidence)}`}>
-                              {prediction.confidence}%
-                            </span>
+                    {aiData.predictions.map((prediction, index) => (
+                      <div key={`ai-prediction-${index}`} className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200 hover:shadow-md transition-all duration-200">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                              <Target className="w-3 h-3 text-green-600" />
+                            </div>
+                            <span className="text-sm font-medium text-green-700">{prediction.type}</span>
                           </div>
-                          <div className="space-y-2">
-                            <p className="text-lg font-bold text-purple-800">
-                              {prediction.value > 0 ? '+' : ''}{prediction.value.toFixed(1)}%
-                            </p>
-                            <p className="text-sm text-purple-700">{prediction.timeframe}</p>
-                            <div className="bg-purple-100 p-2 rounded">
-                              <p className="text-xs text-purple-800">{prediction.recommendation}</p>
+                          {createConfidenceMeter(prediction.confidence)}
+                        </div>
+                        
+                        <div className="text-center mb-3">
+                          <div className="text-2xl font-bold text-green-800">
+                            {prediction.type === "Demand Forecast" 
+                              ? `${formatLargeNumber(prediction.value)} units`
+                              : prediction.value >= 0 
+                                ? `+${formatNumber(prediction.value, 'decimal')}%`
+                                : `${formatNumber(prediction.value, 'decimal')}%`
+                            }
+                          </div>
+                          <div className="flex flex-col gap-1 items-center">
+                            <div className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full inline-block" title={`Forecast period: ${prediction.timeframe}`}>
+                              🔮 {prediction.timeframe} forecast
+                            </div>
+                            <div className="text-xs text-blue-600 bg-blue-50 px-1 py-0.5 rounded inline-block">
+                              Based on 12-month analysis
                             </div>
                           </div>
                         </div>
-                      ))}
-                    </div>
+                        
+                        <div className="space-y-2">
+                          <div className="text-xs text-green-700 bg-white p-2 rounded border border-green-100">
+                            <strong>Analysis Factors:</strong> {prediction.factors.slice(0, 2).join(', ')}
+                          </div>
+                          <div className="text-xs text-green-600 bg-green-50 p-2 rounded">
+                            💡 {prediction.recommendation}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
 
             {/* Market Anomalies */}
-            {aiData.anomalies.length > 0 && (
-              <div className="bg-white rounded-lg border border-red-200 overflow-hidden">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-white rounded-xl p-6 border border-purple-100 shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
+                    <AlertTriangle className="w-4 h-4 text-white" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900">Market Anomalies</h4>
+                </div>
                 <button
                   onClick={() => toggleSection('anomalies')}
-                  className="w-full flex items-center justify-between p-4 bg-red-50 hover:bg-red-100 transition-colors"
+                  className="text-purple-600 hover:text-purple-700"
                 >
-                  <div className="flex items-center gap-3">
-                    <AlertTriangle className="w-5 h-5 text-red-600" />
-                    <h4 className="font-semibold text-red-900">Market Anomalies Detected</h4>
-                    <span className="text-sm text-red-600 bg-red-100 px-2 py-1 rounded">
-                      {aiData.anomalies.length} alerts
-                    </span>
-                  </div>
-                  {expandedSections.has('anomalies') ? (
-                    <ChevronUp className="w-5 h-5 text-red-600" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-red-600" />
-                  )}
+                  {expandedSections.has('anomalies') ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                 </button>
-                
-                <AnimatePresence>
-                  {expandedSections.has('anomalies') && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="p-4"
-                    >
-                      <div className="space-y-3">
-                        {aiData.anomalies.map((anomaly, index) => (
-                          <div key={index} className="bg-red-50 p-4 rounded-lg border border-red-200">
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <span className={`text-xs font-bold px-2 py-1 rounded ${getSeverityColor(anomaly.severity)}`}>
-                                  {anomaly.severity.toUpperCase()}
-                                </span>
-                                <span className="text-sm font-semibold text-red-900">{anomaly.type.replace('_', ' ')}</span>
-                              </div>
-                              <span className={`text-sm font-bold ${getConfidenceColor(anomaly.confidence)}`}>
-                                {anomaly.confidence}%
-                              </span>
-                            </div>
-                            <p className="text-sm text-red-800 mb-2">{anomaly.description}</p>
-                            <p className="text-xs text-red-700 mb-2"><strong>Impact:</strong> {anomaly.impact}</p>
-                            <div className="bg-white p-2 rounded border border-red-200">
-                              <p className="text-xs text-red-800"><strong>Suggested Action:</strong> {anomaly.suggestedAction}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
-            )}
 
-            {/* AI Supplier Recommendations */}
-            <div className="bg-white rounded-lg border border-blue-200 overflow-hidden">
-              <button
-                onClick={() => toggleSection('suppliers')}
-                className="w-full flex items-center justify-between p-4 bg-blue-50 hover:bg-blue-100 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <Users className="w-5 h-5 text-blue-600" />
-                  <h4 className="font-semibold text-blue-900">AI Supplier Intelligence</h4>
-                  <span className="text-sm text-blue-600 bg-blue-100 px-2 py-1 rounded">
-                    {aiData.supplierRecommendations.length} suppliers analyzed
-                  </span>
-                </div>
-                {expandedSections.has('suppliers') ? (
-                  <ChevronUp className="w-5 h-5 text-blue-600" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-blue-600" />
+              <AnimatePresence>
+                {expandedSections.has('anomalies') && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="space-y-3"
+                  >
+                    {aiData.anomalies.map((anomaly, index) => (
+                      <div key={`ai-anomaly-${index}`} className={`p-4 rounded-lg border ${getSeverityColor(anomaly.severity)}`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-2 h-2 rounded-full ${
+                              anomaly.severity === 'critical' ? 'bg-red-500' :
+                              anomaly.severity === 'high' ? 'bg-orange-500' :
+                              anomaly.severity === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                            }`} />
+                            <span className="text-sm font-medium capitalize">{anomaly.type.replace('_', ' ')}</span>
+                          </div>
+                          {createConfidenceMeter(anomaly.confidence)}
+                        </div>
+                        
+                        <div className="text-sm mb-2">{anomaly.description}</div>
+                        <div className="text-xs opacity-75">
+                          <strong>Impact:</strong> {anomaly.impact}
+                        </div>
+                        <div className="text-xs opacity-75 mt-1">
+                          <strong>Action:</strong> {anomaly.suggestedAction}
+                        </div>
+                      </div>
+                    ))}
+                  </motion.div>
                 )}
-              </button>
-              
+              </AnimatePresence>
+            </motion.div>
+
+            {/* Supplier Recommendations */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-xl p-6 border border-purple-100 shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                    <Factory className="w-4 h-4 text-white" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900">AI Supplier Recommendations</h4>
+                </div>
+                <button
+                  onClick={() => toggleSection('suppliers')}
+                  className="text-purple-600 hover:text-purple-700"
+                >
+                  {expandedSections.has('suppliers') ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                </button>
+              </div>
+
               <AnimatePresence>
                 {expandedSections.has('suppliers') && (
                   <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="p-4"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-4"
                   >
-                    <div className="space-y-4">
-                      {aiData.supplierRecommendations.slice(0, 5).map((supplier, index) => (
-                        <div key={index} className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-lg border border-blue-200">
-                          <div className="flex items-center justify-between mb-3">
-                            <h5 className="font-semibold text-blue-900">{supplier.supplierName}</h5>
-                            <div className="flex items-center gap-2">
-                              <span className={`text-lg font-bold ${getScoreColor(supplier.score)}`}>
-                                {supplier.score.toFixed(0)}
-                              </span>
-                              <span className="text-xs text-blue-600">/100</span>
+                    {aiData.supplierRecommendations.map((supplier, index) => (
+                      <div key={`ai-supplier-${index}`} className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                              <Star className="w-3 h-3 text-blue-600" />
                             </div>
+                            <span className="text-sm font-medium text-blue-700">{supplier.supplierName}</span>
                           </div>
-                          
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
-                            <div className="text-center">
-                              <p className="text-xs text-blue-600">Reliability</p>
-                              <p className="text-sm font-bold text-blue-800">{supplier.reliability.toFixed(0)}%</p>
-                            </div>
-                            <div className="text-center">
-                              <p className="text-xs text-blue-600">Price</p>
-                              <p className="text-sm font-bold text-blue-800">{supplier.priceCompetitiveness.toFixed(0)}%</p>
-                            </div>
-                            <div className="text-center">
-                              <p className="text-xs text-blue-600">Delivery</p>
-                              <p className="text-sm font-bold text-blue-800">{supplier.deliveryPerformance.toFixed(0)}%</p>
-                            </div>
-                            <div className="text-center">
-                              <p className="text-xs text-blue-600">Quality</p>
-                              <p className="text-sm font-bold text-blue-800">{supplier.qualityRating.toFixed(0)}%</p>
-                            </div>
-                          </div>
-                          
-                          <div className="bg-white p-2 rounded border border-blue-200">
-                            <p className="text-xs text-blue-800"><strong>AI Recommendation:</strong> {supplier.recommendation}</p>
+                          <div className={`text-lg font-bold ${getScoreColor(supplier.score)}`}>
+                            {formatNumber(supplier.score, 'integer')}/100
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Predictive Insights */}
-            <div className="bg-white rounded-lg border border-green-200 overflow-hidden">
-              <button
-                onClick={() => toggleSection('insights')}
-                className="w-full flex items-center justify-between p-4 bg-green-50 hover:bg-green-100 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <Target className="w-5 h-5 text-green-600" />
-                  <h4 className="font-semibold text-green-900">Predictive Insights</h4>
-                  <span className="text-sm text-green-600 bg-green-100 px-2 py-1 rounded">
-                    {aiData.predictiveInsights.length} insights
-                  </span>
-                </div>
-                {expandedSections.has('insights') ? (
-                  <ChevronUp className="w-5 h-5 text-green-600" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-green-600" />
-                )}
-              </button>
-              
-              <AnimatePresence>
-                {expandedSections.has('insights') && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="p-4"
-                  >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {aiData.predictiveInsights.map((insight, index) => (
-                        <div key={index} className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
-                          <div className="flex items-center justify-between mb-3">
-                            <h5 className="font-semibold text-green-900">{insight.category}</h5>
-                            <span className={`text-sm font-bold ${getConfidenceColor(insight.probability)}`}>
-                              {insight.probability}%
-                            </span>
+                        
+                        <div className="flex justify-center mb-3">
+                          {createRadarChart(supplier)}
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="text-center">
+                            <div className="font-semibold text-blue-600">Reliability</div>
+                            <div className="text-blue-800">{formatNumber(supplier.reliability, 'integer')}%</div>
                           </div>
-                          <p className="text-sm text-green-800 mb-2">{insight.prediction}</p>
-                          <div className="space-y-1 text-xs text-green-700">
-                            <p><strong>Timeframe:</strong> {insight.timeframe}</p>
-                            <p><strong>Data Points:</strong> {insight.dataPoints.toLocaleString()}</p>
-                            <p><strong>Methodology:</strong> {insight.methodology}</p>
+                          <div className="text-center">
+                            <div className="font-semibold text-blue-600">Price</div>
+                            <div className="text-blue-800">{formatNumber(supplier.priceCompetitiveness, 'integer')}%</div>
                           </div>
-                          <div className="mt-3 bg-green-100 p-2 rounded">
-                            <p className="text-xs text-green-800"><strong>Business Impact:</strong> {insight.businessImpact}</p>
+                          <div className="text-center">
+                            <div className="font-semibold text-blue-600">Delivery</div>
+                            <div className="text-blue-800">{formatNumber(supplier.deliveryPerformance, 'integer')}%</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="font-semibold text-blue-600">Quality</div>
+                            <div className="text-blue-800">{formatNumber(supplier.qualityRating, 'integer')}%</div>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Optimization Opportunities */}
-            {aiData.optimizationOpportunities.length > 0 && (
-              <div className="bg-white rounded-lg border border-orange-200 overflow-hidden">
-                <button
-                  onClick={() => toggleSection('optimization')}
-                  className="w-full flex items-center justify-between p-4 bg-orange-50 hover:bg-orange-100 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <Lightbulb className="w-5 h-5 text-orange-600" />
-                    <h4 className="font-semibold text-orange-900">AI Optimization Opportunities</h4>
-                    <span className="text-sm text-orange-600 bg-orange-100 px-2 py-1 rounded">
-                      {aiData.optimizationOpportunities.length} opportunities
-                    </span>
-                  </div>
-                  {expandedSections.has('optimization') ? (
-                    <ChevronUp className="w-5 h-5 text-orange-600" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-orange-600" />
-                  )}
-                </button>
-                
-                <AnimatePresence>
-                  {expandedSections.has('optimization') && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="p-4"
-                    >
-                      <div className="space-y-4">
-                        {aiData.optimizationOpportunities.map((opportunity, index) => (
-                          <div key={index} className="bg-gradient-to-r from-orange-50 to-amber-50 p-4 rounded-lg border border-orange-200">
-                            <div className="flex items-center justify-between mb-3">
-                              <h5 className="font-semibold text-orange-900">{opportunity.type}</h5>
-                              <div className="flex items-center gap-2">
-                                <span className="text-lg font-bold text-orange-600">{opportunity.potential.toFixed(1)}%</span>
-                                <span className="text-xs text-orange-600">potential</span>
-                              </div>
-                            </div>
-                            <p className="text-sm text-orange-800 mb-2">{opportunity.description}</p>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-orange-700">
-                              <div>
-                                <p><strong>Implementation:</strong> {opportunity.implementation}</p>
-                              </div>
-                              <div>
-                                <p><strong>Timeframe:</strong> {opportunity.timeframe}</p>
-                              </div>
-                            </div>
-                            <div className="mt-3 bg-orange-100 p-2 rounded">
-                              <p className="text-xs text-orange-800">
-                                <strong>Confidence:</strong> {opportunity.confidence}% - {opportunity.confidence >= 80 ? 'High' : opportunity.confidence >= 60 ? 'Medium' : 'Low'} confidence
-                              </p>
-                            </div>
-                          </div>
-                        ))}
+                        
+                        <div className="text-xs text-blue-600 mt-2">
+                          {supplier.recommendation}
+                        </div>
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            )}
-
-            {/* AI Methodology Explanation */}
-            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-lg border border-indigo-200">
-              <h4 className="font-semibold text-indigo-900 mb-3 flex items-center gap-2">
-                <Brain className="w-5 h-5 text-indigo-600" />
-                🤖 AI Methodology & Data Science
-              </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div className="bg-white p-3 rounded border border-indigo-200">
-                  <h5 className="font-semibold text-indigo-900 mb-2">Machine Learning Models</h5>
-                  <ul className="text-indigo-800 space-y-1">
-                    <li>• Time Series Analysis for trend prediction</li>
-                    <li>• Anomaly Detection using statistical methods</li>
-                    <li>• Supplier scoring with multi-factor analysis</li>
-                    <li>• Price forecasting with volatility modeling</li>
-                  </ul>
-                </div>
-                <div className="bg-white p-3 rounded border border-indigo-200">
-                  <h5 className="font-semibold text-indigo-900 mb-2">Data Science Approach</h5>
-                  <ul className="text-indigo-800 space-y-1">
-                    <li>• Real-time data processing and analysis</li>
-                    <li>• Pattern recognition and correlation analysis</li>
-                    <li>• Risk assessment using probabilistic models</li>
-                    <li>• Continuous learning and model improvement</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           </div>
         )}
       </motion.div>

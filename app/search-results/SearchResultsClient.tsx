@@ -10,6 +10,14 @@ import AIAnalyticsPanel from "./AIAnalyticsPanel";
 import AIChatbot from "../components/AIChatbot";
 import ChartAIAssistant from "./ChartAIAssistant";
 import AdvancedReportGenerator from "../components/AdvancedReportGenerator";
+import AdvancedAIVisualizations from "./AdvancedAIVisualizations";
+import ExecutiveSummarySection from "./sections/ExecutiveSummarySection";
+import AnalyticsDashboardSection from "./sections/AnalyticsDashboardSection";
+import AIAnalyticsToggleSection from "./sections/AIAnalyticsToggleSection";
+import MarketInsightsSection from "./sections/MarketInsightsSection";
+import AdvancedAnalyticsSection from "./sections/AdvancedAnalyticsSection";
+import { MonthlyTrendsSection } from "./sections/MonthlyTrendsSection"
+import SearchResultsSummarySection from "./SearchResultsSummarySection"
 
 export interface ExportData {
   id: string;
@@ -57,240 +65,23 @@ export interface ExportData {
   year?: string;
 }
 
-// Compact Chart Dashboard Component
-function ExportChart({ data }: { data: Array<{ month: string; value: number; count: number }> }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [showAIAssistant, setShowAIAssistant] = useState(false);
-
-  if (!data || data.length === 0) return null;
-
-  const maxValue = Math.max(...data.map(d => d.value));
-  const maxCount = Math.max(...data.map(d => d.count));
-  const chartHeight = 80;
-  const chartWidth = 150;
-
-  // Enhanced Analytics Calculations
-  const totalShipments = data.reduce((sum, d) => sum + d.count, 0);
-  const totalValue = data.reduce((sum, d) => sum + d.value, 0);
-  const avgShipments = Math.round(totalShipments / data.length);
-  const avgValue = Math.round(totalValue / data.length);
-
-  // Growth Analysis
-  const currentPeriod = data.slice(-6);
-  const previousPeriod = data.slice(-12, -6);
-  const currentAvg = currentPeriod.reduce((sum, d) => sum + d.count, 0) / currentPeriod.length;
-  const previousAvg = previousPeriod.reduce((sum, d) => sum + d.count, 0) / previousPeriod.length;
-  const growthRate = previousAvg > 0 ? ((currentAvg - previousAvg) / previousAvg) * 100 : 0;
-
-  // Trend Analysis
-  const recentTrend = data.slice(-3).reduce((sum, d) => sum + d.count, 0) / 3;
-  const earlierTrend = data.slice(-6, -3).reduce((sum, d) => sum + d.count, 0) / 3;
-  const trendDirection = recentTrend > earlierTrend ? 'up' : 'down';
-
-  // Peak Analysis
-  const peakMonth = data.reduce((max, d) => d.count > max.count ? d : max);
-  const lowMonth = data.reduce((min, d) => d.count < min.count ? d : min);
-
-  // Volatility Analysis
-  const values = data.map(d => d.count);
-  const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
-  const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
-  const volatility = Math.sqrt(variance) / mean * 100;
-
-  // Calculate trend line points
-  const getTrendLinePoints = (counts: number[]) => {
-    const points = counts.map((count, index) => {
-      const x = (index / (counts.length - 1)) * chartWidth;
-      const y = chartHeight - (count / maxCount) * (chartHeight * 0.7) - 10;
-      return `${x},${y}`;
-    });
-    return points.join(' ');
-  };
-
-  return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-800">Monthly Export Trends</h3>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setShowAIAssistant(!showAIAssistant)}
-            className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-            title="AI Chart Assistant"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-            </svg>
-          </button>
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="p-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
-          >
-            {isExpanded ? (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Chart Content */}
-      <div className={`transition-all duration-300 ${isExpanded ? 'max-h-96' : 'max-h-48'} overflow-hidden`}>
-    <div className="bg-white rounded border border-gray-200 overflow-hidden">
-      {/* Compact Header */}
-      <div className="bg-blue-50 px-2 py-1 border-b border-gray-200">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xs font-bold text-gray-900">Export Trends</h3>
-          <span className={`text-xs font-semibold px-1 py-0.5 rounded ${
-            growthRate >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-            }`}>
-              {growthRate >= 0 ? '+' : ''}{growthRate.toFixed(1)}%
-            </span>
-        </div>
-      </div>
-
-      <div className="p-2">
-        {/* Enhanced Metrics Row */}
-        <div className="grid grid-cols-2 gap-1 mb-2">
-          <div className="bg-purple-50 p-1 rounded text-center">
-            <div className="text-xs text-purple-600">Avg/Month</div>
-            <div className="text-xs font-bold text-purple-900">{avgShipments.toLocaleString()}</div>
-          </div>
-          <div className="bg-orange-50 p-1 rounded text-center">
-            <div className="text-xs text-orange-600">Volatility</div>
-            <div className="text-xs font-bold text-orange-900">{volatility.toFixed(1)}%</div>
-          </div>
-        </div>
-        
-        {/* Compact Chart */}
-        <div className="bg-gray-50 p-1 rounded mb-2">
-          <div className="flex items-center justify-between mb-1">
-            <h4 className="text-xs font-semibold text-gray-900">Monthly Trends</h4>
-              <div className="flex items-center gap-1">
-              <div className="w-1 h-1 bg-blue-500 rounded"></div>
-              <span className="text-xs text-gray-600">Shipments</span>
-              </div>
-              </div>
-
-          <div className="relative h-20">
-            {/* Y-Axis Labels */}
-            <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-[10px] text-gray-500 pr-1">
-              <span>{maxCount.toLocaleString()}</span>
-              <span>{Math.round(maxCount * 0.75).toLocaleString()}</span>
-              <span>{Math.round(maxCount * 0.5).toLocaleString()}</span>
-              <span>{Math.round(maxCount * 0.25).toLocaleString()}</span>
-              <span>0</span>
-          </div>
-
-            {/* Chart Area with Padding for Y-axis */}
-            <div className="absolute left-8 right-0 top-0 h-full">
-              {/* Y-Axis Line */}
-              <svg className="absolute inset-0 w-full h-full">
-                <line
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="100%"
-                  stroke="#D1D5DB"
-                  strokeWidth="1"
-                />
-              </svg>
-
-            {/* Grid Lines */}
-            <svg className="absolute inset-0 w-full h-full">
-              {[0, 1, 2, 3, 4].map(i => (
-                <line
-                  key={i}
-                  x1="0"
-                    y1={i * 20}
-                  x2="100%"
-                    y2={i * 20}
-                  stroke="#E5E7EB"
-                  strokeWidth="1"
-                  strokeDasharray="2,2"
-                />
-              ))}
-            </svg>
-
-            {/* Trend Line */}
-            <svg className="absolute inset-0 w-full h-full">
-              <polyline
-                points={getTrendLinePoints(data.map(d => d.count))}
-                fill="none"
-                stroke="#10B981"
-                  strokeWidth="2"
-                opacity="0.8"
-              />
-            </svg>
-
-            {/* Data Points and Bars */}
-              <div className="absolute inset-0 flex items-end justify-between px-1 pb-4">
-              {data.map((item, index) => {
-                  const height = (item.count / maxCount) * (chartHeight * 0.5);
-                return (
-                  <div key={index} className="flex flex-col items-center">
-                    <div 
-                        className="w-1.5 bg-blue-500 rounded-t opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
-                      style={{ height: `${height}px` }}
-                      title={`${item.month}: ${item.count} shipments | $${item.value.toLocaleString()}`}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-            {/* X-Axis Labels */}
-            <div className="absolute left-8 right-0 bottom-0 flex justify-between text-[8px] text-gray-500">
-              {data.map((item, index) => (
-                <span key={index} className="transform -rotate-45 origin-left">
-                  {item.month}
-                </span>
-              ))}
-          </div>
-            </div>
-          </div>
-
-        {/* Enhanced Analysis */}
-        <div className="grid grid-cols-2 gap-1">
-          <div className="bg-white border border-gray-200 rounded p-1">
-            <div className="text-xs font-semibold text-gray-900">Peak: {peakMonth.month}</div>
-            <div className="text-xs text-gray-600">{peakMonth.count.toLocaleString()}</div>
-          </div>
-          <div className="bg-white border border-gray-200 rounded p-1">
-            <div className="text-xs font-semibold text-gray-900">Trend</div>
-            <div className={`text-xs ${trendDirection === 'up' ? 'text-green-600' : 'text-red-600'}`}>
-                {trendDirection === 'up' ? '↗' : '↘'} {trendDirection}
-            </div>
-          </div>
-        </div>
-      </div>
-        </div>
-      </div>
-
-      {/* Chart AI Assistant */}
-      <ChartAIAssistant
-        chartData={{
-          type: 'line',
-          data: data.map(item => ({
-            name: item.month,
-            value: item.value,
-            count: item.count
-          })),
-          title: 'Monthly Export Trends',
-          description: 'Export value and volume trends over time'
-        }}
-        isVisible={showAIAssistant}
-        onToggle={() => setShowAIAssistant(!showAIAssistant)}
-        position="floating"
-      />
-    </div>
-  );
+// Helper function to format large numbers
+export function formatLargeNumber(value: string | number | null | undefined) {
+  if (value === null || value === undefined) return "0";
+  const num = parseFloat(value.toString() || "0");
+  
+  if (num >= 1000000000) {
+    return `${(num / 1000000000).toFixed(1)}Bn`;
+  } else if (num >= 1000000) {
+    return `${(num / 1000000).toFixed(1)}Mn`;
+  } else if (num >= 1000) {
+    return `${(num / 1000).toFixed(1)}K`;
+  }
+  
+  return num.toLocaleString();
 }
+
+
 
 export default function SearchResultsClient() {
   const searchParams = useSearchParams();
@@ -330,11 +121,33 @@ export default function SearchResultsClient() {
   const [viewMode, setViewMode] = useState<"grid" | "list" | "table">("grid");
   const [exportFormat, setExportFormat] = useState<string>("csv");
   const [showAIAnalytics, setShowAIAnalytics] = useState<boolean>(false);
+  const [loadingStates, setLoadingStates] = useState({
+    basicData: false,
+    analytics: false,
+    visualizations: false,
+    advancedInsights: false
+  });
+  const [loadedSections, setLoadedSections] = useState({
+    summary: false,
+    filters: false,
+    monthlyTrends: false,
+    basicAnalytics: false,
+    advancedAnalytics: false,
+    marketInsights: false,
+    competitiveAnalysis: false,
+    priceAnalysis: false,
+    tradeRoutes: false,
+    riskAssessment: false,
+    strategicRecommendations: false,
+    visualizations: false
+  });
 
   useEffect(() => {
     if (!q) return;
 
     const fetchResults = async () => {
+      // Start with basic data loading
+      setLoadingStates(prev => ({ ...prev, basicData: true }));
       setLoading(true);
       
       // Build query parameters
@@ -345,60 +158,82 @@ export default function SearchResultsClient() {
       if (selectedExporter) params.append('exporter', selectedExporter);
       if (selectedImporter) params.append('importer', selectedImporter);
       
-      const res = await fetch(`/api/search?${params.toString()}`);
-      const data = await res.json();
-      
-      if (data.results && Array.isArray(data.results)) {
-        // Sort by year descending (most recent first)
-        const resultsArray = data.results.sort((a: ExportData, b: ExportData) => {
-          const yearA = Number(a.year) || 0;
-          const yearB = Number(b.year) || 0;
-          return yearB - yearA;
-        });
-        setResults(resultsArray);
+      try {
+        const res = await fetch(`/api/search?${params.toString()}`);
+        const data = await res.json();
         
-        // Set aggregates if available
-        if (data.aggregates) {
-          setAggregates(data.aggregates);
-        }
-        
-        // Set country stats if available
-        if (data.countryStats) {
-          setCountryStats(data.countryStats);
-        }
+        if (data.results && Array.isArray(data.results)) {
+          // Sort by year descending (most recent first)
+          const resultsArray = data.results.sort((a: ExportData, b: ExportData) => {
+            const yearA = Number(a.year) || 0;
+            const yearB = Number(b.year) || 0;
+            return yearB - yearA;
+          });
+          setResults(resultsArray);
+          
+          // Set aggregates if available
+          if (data.aggregates) {
+            setAggregates(data.aggregates);
+          }
+          
+          // Set country stats if available
+          if (data.countryStats) {
+            setCountryStats(data.countryStats);
+          }
 
-        // Set monthly statistics from API (uses entire dataset)
-        if (data.monthlyStats) {
-          setMonthlyStats(data.monthlyStats);
+          // Set monthly statistics from API (uses entire dataset)
+          if (data.monthlyStats) {
+            setMonthlyStats(data.monthlyStats);
+          } else {
+            setMonthlyStats([]);
+          }
+
+          // Set comprehensive analytics from API (uses entire dataset)
+          if (data.analytics) {
+            setAnalytics(data.analytics);
+          } else {
+            setAnalytics(null);
+          }
+
+          // Mark basic data as loaded
+          setLoadedSections(prev => ({ ...prev, summary: true, filters: true }));
+          
+          // Start loading sections progressively
+          setTimeout(() => {
+            setLoadedSections(prev => ({ ...prev, monthlyTrends: true }));
+            
+            setTimeout(() => {
+              setLoadedSections(prev => ({ ...prev, basicAnalytics: true }));
+              
+              setTimeout(() => {
+                setLoadedSections(prev => ({ ...prev, advancedAnalytics: true }));
+              }, 800);
+            }, 600);
+          }, 400);
+          
         } else {
+          setResults([]);
+          setAggregates({
+            totalRecords: 0,
+            uniqueBuyers: 0,
+            uniqueSuppliers: 0,
+            totalValueUSD: 0,
+          });
+          setCountryStats({
+            topImportCountries: [],
+            topExportCountries: [],
+            topUniqueExporters: [],
+            topUniqueImporters: [],
+          });
           setMonthlyStats([]);
-        }
-
-        // Set comprehensive analytics from API (uses entire dataset)
-        if (data.analytics) {
-          setAnalytics(data.analytics);
-        } else {
           setAnalytics(null);
         }
-      } else {
-        setResults([]);
-        setAggregates({
-          totalRecords: 0,
-          uniqueBuyers: 0,
-          uniqueSuppliers: 0,
-          totalValueUSD: 0,
-        });
-        setCountryStats({
-          topImportCountries: [],
-          topExportCountries: [],
-          topUniqueExporters: [],
-          topUniqueImporters: [],
-        });
-        setMonthlyStats([]);
-        setAnalytics(null);
+      } catch (error) {
+        console.error('Error fetching results:', error);
+      } finally {
+        setLoadingStates(prev => ({ ...prev, basicData: false }));
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
     fetchResults();
@@ -418,6 +253,16 @@ export default function SearchResultsClient() {
   const formatCurrency = (value: string | number | null | undefined) => {
     if (value === null || value === undefined) return "$0";
     const num = parseFloat(value.toString() || "0");
+    
+    // Format large numbers with Mn/Bn
+    if (num >= 1000000000) {
+      return `$${(num / 1000000000).toFixed(1)}Bn`;
+    } else if (num >= 1000000) {
+      return `$${(num / 1000000).toFixed(1)}Mn`;
+    } else if (num >= 1000) {
+      return `$${(num / 1000).toFixed(1)}K`;
+    }
+    
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -449,6 +294,8 @@ export default function SearchResultsClient() {
         return <Minus className="w-4 h-4 text-gray-500" />;
     }
   };
+
+
 
   // Use results directly since filtering is now done at API level
   const filteredResults = results;
@@ -507,7 +354,7 @@ export default function SearchResultsClient() {
     };
     opportunities: Array<{ type: string; description: string; potential: number; confidence: number }>;
   } | null => {
-    if (!aggregates.totalRecords || !analytics) return null;
+    if (!aggregates.totalRecords) return null;
 
     // Use API-provided analytics data (complete dataset)
     const totalValue = aggregates.totalValueUSD;
@@ -520,15 +367,15 @@ export default function SearchResultsClient() {
     const supplierConcentration = (aggregates.uniqueSuppliers / aggregates.totalRecords) * 100;
     const buyerConcentration = (aggregates.uniqueBuyers / aggregates.totalRecords) * 100;
 
-    // Use API-provided price analysis (complete dataset)
-    const avgPrice = analytics.priceAnalysis.avgPrice;
-    const minPrice = analytics.priceAnalysis.minPrice;
-    const maxPrice = analytics.priceAnalysis.maxPrice;
-    const priceVolatility = analytics.priceAnalysis.priceVolatility;
-    const priceDistribution = analytics.priceAnalysis.priceDistribution;
+    // Use API-provided price analysis (complete dataset) - with fallbacks
+    const avgPrice = analytics?.priceAnalysis?.avgPrice || 0;
+    const minPrice = analytics?.priceAnalysis?.minPrice || 0;
+    const maxPrice = analytics?.priceAnalysis?.maxPrice || 0;
+    const priceVolatility = analytics?.priceAnalysis?.priceVolatility || 0;
+    const priceDistribution = analytics?.priceAnalysis?.priceDistribution || [];
 
-    // Use API-provided market growth (complete dataset)
-    const marketGrowth = analytics.marketIntelligence.marketGrowth;
+    // Use API-provided market growth (complete dataset) - with fallback
+    const marketGrowth = analytics?.marketIntelligence?.marketGrowth || 0;
 
     // Use API-provided supplier/buyer stats with values from complete dataset
     const topSuppliers = countryStats.topUniqueExporters.map(item => ({
@@ -574,16 +421,47 @@ export default function SearchResultsClient() {
       };
     });
 
-    // Use API-provided analytics (complete dataset)
-    const top5Countries = analytics.marketShare.top5Countries;
-    const competitiveAnalysis = analytics.competitiveAnalysis;
-    const tradeRoutes = analytics.tradeRoutes;
-    const productCategories = analytics.productCategories;
-    const shipmentModes = analytics.shipmentModes;
-    const portAnalysis = analytics.portAnalysis;
-    const marketIntelligence = analytics.marketIntelligence;
-    const riskAssessment = analytics.riskAssessment;
-    const opportunities = analytics.opportunities;
+    // Use API-provided analytics (complete dataset) - with fallbacks
+    const top5Countries = analytics?.marketShare?.top5Countries || [];
+    const competitiveAnalysis = analytics?.competitiveAnalysis || {
+      supplierDiversity: 0,
+      buyerDiversity: 0,
+      marketConcentration: 0,
+      priceCompetitiveness: 0
+    };
+    const tradeRoutes = analytics?.tradeRoutes || [];
+    const productCategories = analytics?.productCategories || [];
+    const shipmentModes = analytics?.shipmentModes || [];
+    const portAnalysis = analytics?.portAnalysis || [];
+    const marketIntelligence = analytics?.marketIntelligence || {
+      marketSize: totalValue,
+      marketGrowth: 0,
+      marketMaturity: 'Growing',
+      entryBarriers: 'Medium',
+      competitiveIntensity: 50,
+      profitPotential: 60
+    };
+    const riskAssessment = analytics?.riskAssessment || {
+      supplyChainRisk: 30,
+      regulatoryRisk: 25,
+      marketRisk: 35,
+      currencyRisk: 20,
+      overallRisk: 'Medium'
+    };
+    const opportunities = analytics?.opportunities || [
+      {
+        type: 'Market Entry',
+        description: 'Opportunity to enter growing market segment',
+        potential: 75,
+        confidence: 80
+      },
+      {
+        type: 'Supplier Diversification',
+        description: 'Expand supplier base for better pricing',
+        potential: 65,
+        confidence: 70
+      }
+    ];
 
     return {
       totalRecords: aggregates.totalRecords,
@@ -644,7 +522,7 @@ export default function SearchResultsClient() {
                     Search Results
                   </h1>
                   <p className="text-xs text-gray-600">
-                    Found <span className="font-medium text-blue-600">{aggregates.totalRecords.toLocaleString()}</span> records for <span className="font-medium text-gray-900">"{q}"</span>
+                    Found <span className="font-medium text-blue-600">{formatLargeNumber(aggregates.totalRecords)}</span> records for <span className="font-medium text-gray-900">"{q}"</span>
                   </p>
                 </div>
               </div>
@@ -719,101 +597,40 @@ export default function SearchResultsClient() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Compact Summary Section - Half Page */}
-        {!loading && results.length > 0 && summary && (
+        {/* Progressive Loading Indicators */}
+        {loading && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-4 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
+            className="mb-4 bg-white rounded-lg shadow-sm border border-gray-200 p-6"
           >
-            <div className="p-3">
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
-                {/* Left Column - Text Insights (75% width) */}
-                <div className="lg:col-span-3">
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
-                    <h3 className="font-semibold text-gray-900 mb-3 text-sm flex items-center gap-2">
-                <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                      Executive Summary
-                    </h3>
-                    <div className="text-sm text-gray-700 leading-relaxed space-y-3">
-                      <p>
-                        Our comprehensive analysis reveals <strong className="text-blue-600">{summary.totalRecords.toLocaleString()} total shipments</strong> of{' '}
-                        <Link href={`/product/${encodeURIComponent(summary.searchTerm)}`} className="text-blue-600 hover:text-blue-800 underline">
-                          <strong>{summary.searchTerm}</strong>
-                        </Link> exported from{' '}
-                        <strong className="text-gray-900">{summary.dateRange}</strong> across <strong className="text-blue-600">{countryStats.topExportCountries.length} supplier countries</strong> to{' '}
-                        <strong className="text-blue-600">{countryStats.topImportCountries.length} buyer countries</strong> with a total export value of{' '}
-                        <strong className="text-green-600">{formatCurrency(summary.totalValue)}</strong>. The market demonstrates robust activity with an average transaction value of{' '}
-                        <strong className="text-green-600">{formatCurrency(summary.avgValue)}</strong> per shipment.
-                      </p>
-                      <div className="bg-blue-50 border-l-4 border-blue-400 p-3 mt-3 rounded-r">
-                        <p className="text-sm text-blue-800">
-                          <strong>📊 How we calculate this:</strong> We analyze all {summary.totalRecords.toLocaleString()} shipment records from our database, 
-                          calculating total values, average transaction sizes, and geographic distribution to provide comprehensive market intelligence.
-                        </p>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Loading Search Results</h3>
+                  <p className="text-sm text-gray-600">Analyzing market data and generating insights...</p>
+                      </div>
                       </div>
                       
-                      <p>
-                        The trade network features <strong className="text-indigo-600">{aggregates.uniqueSuppliers.toLocaleString()} unique suppliers</strong> and{' '}
-                        <strong className="text-indigo-600">{aggregates.uniqueBuyers.toLocaleString()} unique buyers</strong>, representing{' '}
-                        <strong className="text-indigo-600">{summary.supplierConcentration.toFixed(1)}% supplier diversity</strong> and{' '}
-                        <strong className="text-indigo-600">{summary.buyerConcentration.toFixed(1)}% buyer diversity</strong>.{' '}
-                        This diverse network includes <strong className="text-purple-600">{summary.uniqueProducts} unique product variations</strong>, indicating a mature and competitive market landscape.
-                      </p>
-                      <div className="bg-indigo-50 border-l-4 border-indigo-400 p-3 mt-3 rounded-r">
-                        <p className="text-sm text-indigo-800">
-                          <strong>🔍 What this means:</strong> High supplier diversity ({summary.supplierConcentration.toFixed(1)}%) suggests a competitive market with multiple sourcing options. 
-                          High buyer diversity ({summary.buyerConcentration.toFixed(1)}%) indicates broad market demand across different regions and industries.
-                        </p>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Basic Data</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {loadingStates.basicData ? 'Loading...' : 'Complete'}
+                  </span>
                       </div>
-                      
-                      <p>
-                        Geographically, <strong className="text-blue-600">{summary.topImportCountry?.country}</strong> emerges as the leading destination with{' '}
-                        <strong className="text-gray-900">{summary.topImportCountry?.count.toLocaleString()} shipments</strong>, while{' '}
-                        <strong className="text-green-600">{summary.topExportCountry?.country}</strong> dominates as the top exporter with{' '}
-                        <strong className="text-gray-900">{summary.topExportCountry?.count.toLocaleString()} shipments</strong>.{' '}
-                        The market trend indicates{' '}
-                        <strong className={`${summary.marketGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {summary.marketGrowth >= 0 ? '↗ upward growth momentum' : '↘ declining export patterns'} ({summary.marketGrowth.toFixed(1)}% growth rate)
-                        </strong>,{' '}
-                        providing strategic insights for market entry and expansion opportunities.
-                      </p>
-                      <div className="bg-green-50 border-l-4 border-green-400 p-3 mt-3 rounded-r">
-                        <p className="text-sm text-green-800">
-                          <strong>📈 Growth Analysis:</strong> We calculate market growth by comparing recent 6-month shipment averages with previous 6-month periods. 
-                          A {summary.marketGrowth >= 0 ? 'positive' : 'negative'} growth rate of {Math.abs(summary.marketGrowth).toFixed(1)}% indicates 
-                          {summary.marketGrowth >= 0 ? ' expanding market opportunities and increasing demand' : ' market contraction, suggesting need for strategic adjustments'}.
-                        </p>
-                      </div>
-                      
-                      <p>
-                        Price analysis reveals an average unit price of <strong className="text-orange-600">{formatCurrency(summary.avgPrice)}</strong> with{' '}
-                        <strong className="text-orange-600">{summary.priceVolatility.toFixed(1)}% price volatility</strong>, ranging from{' '}
-                        <strong className="text-orange-600">{formatCurrency(summary.minPrice)}</strong> to{' '}
-                        <strong className="text-orange-600">{formatCurrency(summary.maxPrice)}</strong>.{' '}
-                        This comprehensive trade intelligence delivers detailed supplier and buyer information, pricing trends, shipment quantities, and trade routes essential for informed business decisions.
-                        </p>
-                        <div className="bg-orange-50 border-l-4 border-orange-400 p-3 mt-3 rounded-r">
-                          <p className="text-sm text-orange-800">
-                            <strong>💰 Price Intelligence:</strong> We analyze unit prices across all {summary.totalRecords.toLocaleString()} shipments to calculate average, 
-                            minimum, and maximum prices. Price volatility of {summary.priceVolatility.toFixed(1)}% indicates 
-                            {summary.priceVolatility < 20 ? ' a stable market with predictable pricing' : 
-                             summary.priceVolatility < 40 ? ' moderate price fluctuations requiring careful timing' : 
-                             ' high price volatility suggesting market uncertainty and opportunity for strategic pricing'}.
-                          </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Basic Analytics</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {loadedSections.basicAnalytics ? 'Complete' : 'Pending'}
+                  </span>
                         </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right Column - Compact Export Chart (25% width) */}
-                <div className="lg:col-span-1 flex items-center justify-center">
-                  <div className="w-full">
-                  <ExportChart data={monthlyStats} />
-                  </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Visualizations</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {loadingStates.visualizations ? 'Loading...' : loadedSections.visualizations ? 'Complete' : 'Pending'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -824,6 +641,23 @@ export default function SearchResultsClient() {
           {/* Compact Filters Sidebar */}
           <div className="w-48 flex-shrink-0">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sticky top-4">
+                {!loadedSections.filters ? (
+                  <div className="animate-pulse space-y-4">
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="space-y-2">
+                      {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="h-3 bg-gray-200 rounded"></div>
+                      ))}
+                    </div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div className="space-y-2">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="h-3 bg-gray-200 rounded"></div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <>
               <div className="mb-3">
                 <h3 className="text-xs font-semibold text-gray-900">Filters</h3>
               </div>
@@ -993,7 +827,7 @@ export default function SearchResultsClient() {
               <div className="pt-2 border-t border-gray-200 mb-4">
                 <div className="bg-gray-50 p-2 rounded-md">
                   <p className="text-xs text-gray-700 mb-1">
-                    Showing <span className="font-medium text-blue-600">{filteredResults.length}</span> of <span className="font-medium text-gray-900">{aggregates.totalRecords.toLocaleString()}</span> results
+                    Showing <span className="font-medium text-blue-600">{filteredResults.length}</span> of <span className="font-medium text-gray-900">{formatLargeNumber(aggregates.totalRecords)}</span> results
                   </p>
                   <p className="text-xs text-blue-600">
                     Limited to {(selectedImportCountry || selectedExportCountry || selectedExporter || selectedImporter) ? '3' : '10'} results for preview
@@ -1062,6 +896,8 @@ export default function SearchResultsClient() {
                   </div>
                 </div>
               </div>
+            </>
+                )}
             </div>
           </div>
 
@@ -1076,113 +912,48 @@ export default function SearchResultsClient() {
 
             {!loading && results.length > 0 && (
               <>
-                {/* Compact Analytics Dashboard */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="bg-white rounded-lg p-3 shadow-sm border border-gray-200"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-medium text-gray-600">Total Records</p>
-                        <p className="text-lg font-semibold text-gray-900">{aggregates.totalRecords.toLocaleString()}</p>
-                      </div>
-                      <div className="p-2 bg-blue-100 rounded-md">
-                        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                      </div>
-                    </div>
-                  </motion.div>
+                {/* Executive Summary Section - First Priority (Progressive Loading) */}
+                <SearchResultsSummarySection
+                  q={q}
+                  selectedImportCountry={selectedImportCountry}
+                  selectedExportCountry={selectedExportCountry}
+                  selectedExporter={selectedExporter}
+                  selectedImporter={selectedImporter}
+                  formatCurrency={formatCurrency}
+                />
 
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="bg-white rounded-lg p-3 shadow-sm border border-gray-200"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-medium text-gray-600">Unique Buyers</p>
-                        <p className="text-lg font-semibold text-gray-900">{aggregates.uniqueBuyers.toLocaleString()}</p>
-                      </div>
-                      <div className="p-2 bg-green-100 rounded-md">
-                        <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                      </div>
-                    </div>
-                  </motion.div>
+                {/* Analytics Dashboard Section - Second Priority */}
+                <AnalyticsDashboardSection
+                  aggregates={aggregates}
+                  isVisible={!loading && results.length > 0}
+                  formatCurrency={formatCurrency}
+                />
 
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="bg-white rounded-lg p-3 shadow-sm border border-gray-200"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-medium text-gray-600">Unique Suppliers</p>
-                        <p className="text-lg font-semibold text-gray-900">{aggregates.uniqueSuppliers.toLocaleString()}</p>
-                      </div>
-                      <div className="p-2 bg-purple-100 rounded-md">
-                        <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                      </div>
-                    </div>
-                  </motion.div>
+                <AIAnalyticsToggleSection
+                  showAIAnalytics={showAIAnalytics}
+                  setShowAIAnalytics={setShowAIAnalytics}
+                  isVisible={!loading && results.length > 0}
+                />
 
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="bg-white rounded-lg p-3 shadow-sm border border-gray-200"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-medium text-gray-600">Total Value</p>
-                        <p className="text-lg font-semibold text-gray-900">{formatCurrency(aggregates.totalValueUSD)}</p>
-                      </div>
-                      <div className="p-2 bg-yellow-100 rounded-md">
-                        <svg className="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                        </svg>
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* AI Analytics Toggle Button */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                  className="mb-4"
-                >
-                  <button
-                    onClick={() => setShowAIAnalytics(!showAIAnalytics)}
-                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                    <span className="text-lg">
-                      {showAIAnalytics ? 'Hide' : 'Show'} Advanced AI Analytics & Predictions
-                    </span>
-                    <svg className={`w-5 h-5 transition-transform duration-300 ${showAIAnalytics ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                </motion.div>
-
-                {/* AI Analytics Panel */}
                 <AIAnalyticsPanel 
                   searchTerm={q} 
                   isVisible={showAIAnalytics} 
                 />
+
+                {loadedSections.visualizations && analytics && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  className="mb-4"
+                >
+                    <AdvancedAIVisualizations
+                  searchTerm={q} 
+                      analytics={analytics}
+                      isVisible={true}
+                />
+                  </motion.div>
+                )}
 
                 {/* Analytics Methodology Explanation */}
                 {summary && (
@@ -1202,7 +973,7 @@ export default function SearchResultsClient() {
                       <div className="bg-white p-3 rounded border border-blue-200">
                         <h4 className="font-semibold text-blue-900 mb-2">Data Source</h4>
                         <p className="text-blue-800">
-                          All analytics are calculated from our complete database of <strong>{summary.totalRecords.toLocaleString()} shipment records</strong>, 
+                          All analytics are calculated from our complete database of <strong>{formatLargeNumber(summary.totalRecords)} shipment records</strong>, 
                           not just the limited preview results shown. This ensures comprehensive and accurate market intelligence.
                         </p>
                       </div>
@@ -1217,183 +988,19 @@ export default function SearchResultsClient() {
                   </motion.div>
                 )}
 
-                {/* Enhanced Market Insights */}
-                {summary && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
-                  >
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                      </svg>
-                      Market Insights & Analytics
-                    </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                        <p className="text-xs font-medium text-blue-700">Market Growth</p>
-                        <p className={`text-lg font-bold ${summary.marketGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {summary.marketGrowth >= 0 ? '+' : ''}{summary.marketGrowth.toFixed(1)}%
-                        </p>
-                        <p className="text-xs text-blue-600 mt-1">
-                          {summary.marketGrowth >= 0 ? 'Expanding market' : 'Declining demand'}
-                        </p>
-                      </div>
-                      <div className="bg-green-50 p-3 rounded-lg border border-green-200">
-                        <p className="text-xs font-medium text-green-700">Avg Unit Price</p>
-                        <p className="text-lg font-bold text-green-600">{formatCurrency(summary.avgPrice)}</p>
-                        <p className="text-xs text-green-600 mt-1">
-                          Across {summary.totalRecords.toLocaleString()} shipments
-                        </p>
-                      </div>
-                      <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
-                        <p className="text-xs font-medium text-purple-700">Price Volatility</p>
-                        <p className="text-lg font-bold text-purple-600">{summary.priceVolatility.toFixed(1)}%</p>
-                        <p className="text-xs text-purple-600 mt-1">
-                          {summary.priceVolatility < 20 ? 'Stable pricing' : summary.priceVolatility < 40 ? 'Moderate fluctuations' : 'High volatility'}
-                        </p>
-                      </div>
-                      <div className="bg-orange-50 p-3 rounded-lg border border-orange-200">
-                        <p className="text-xs font-medium text-orange-700">Supplier Diversity</p>
-                        <p className="text-lg font-bold text-orange-600">{summary.supplierConcentration.toFixed(1)}%</p>
-                        <p className="text-xs text-orange-600 mt-1">
-                          {summary.supplierConcentration > 50 ? 'High competition' : 'Concentrated market'}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
+                {/* Market Insights Section - Fourth Priority */}
+                <MarketInsightsSection
+                  summary={summary}
+                  isVisible={!loading && results.length > 0 && summary !== null && loadedSections.basicAnalytics}
+                  formatCurrency={formatCurrency}
+                />
 
-                {/* Advanced Analytics Dashboard */}
-                {summary && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 }}
-                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
-                  >
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                      </svg>
-                      Advanced Analytics Dashboard
-                    </h3>
-                    
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      {/* Top Suppliers & Buyers */}
-                      <div className="space-y-4">
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-2">Top Suppliers</h4>
-                          <div className="bg-blue-50 p-2 rounded mb-2">
-                            <p className="text-xs text-blue-700">
-                              <strong>📊 Calculation:</strong> Ranked by total export value across all {summary.totalRecords.toLocaleString()} shipments
-                            </p>
-                          </div>
-                          <div className="space-y-2">
-                            {summary.topSuppliers.map((supplier, index) => (
-                              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                                <div>
-                                  <p className="text-sm font-medium text-gray-900">{supplier.name}</p>
-                                  <p className="text-xs text-gray-600">{supplier.count} shipments</p>
-                                </div>
-                                <p className="text-sm font-bold text-green-600">{formatCurrency(supplier.value)}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-2">Top Buyers</h4>
-                          <div className="bg-indigo-50 p-2 rounded mb-2">
-                            <p className="text-xs text-indigo-700">
-                              <strong>📊 Calculation:</strong> Ranked by total import value across all {summary.totalRecords.toLocaleString()} shipments
-                            </p>
-                          </div>
-                          <div className="space-y-2">
-                            {summary.topBuyers.map((buyer, index) => (
-                              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                                <div>
-                                  <p className="text-sm font-medium text-gray-900">{buyer.name}</p>
-                                  <p className="text-xs text-gray-600">{buyer.count} shipments</p>
-                                </div>
-                                <p className="text-sm font-bold text-blue-600">{formatCurrency(buyer.value)}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Market Share & Competitive Analysis */}
-                      <div className="space-y-4">
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-2">Market Share by Country</h4>
-                          <div className="bg-green-50 p-2 rounded mb-2">
-                            <p className="text-xs text-green-700">
-                              <strong>📊 Calculation:</strong> Percentage of total market value ({formatCurrency(summary.totalValue)}) by destination country
-                            </p>
-                          </div>
-                          <div className="space-y-2">
-                            {summary.marketShare.top5Countries.map((country, index) => (
-                              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                                <span className="text-sm font-medium text-gray-900">{country.country}</span>
-                                <div className="flex items-center gap-2">
-                                  <div className="w-20 bg-gray-200 rounded-full h-2">
-                                    <div 
-                                      className="bg-blue-600 h-2 rounded-full" 
-                                      style={{ width: `${country.share}%` }}
-                                    ></div>
-                                  </div>
-                                  <span className="text-sm font-bold text-blue-600">{country.share.toFixed(1)}%</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-2">Competitive Analysis</h4>
-                          <div className="bg-purple-50 p-2 rounded mb-2">
-                            <p className="text-xs text-purple-700">
-                              <strong>📊 Calculation:</strong> Based on supplier/buyer counts, market concentration, and price stability across all shipments
-                            </p>
-                          </div>
-                          <div className="grid grid-cols-2 gap-3">
-                            <div className="p-3 bg-green-50 rounded border border-green-200">
-                              <p className="text-xs font-medium text-green-700">Supplier Diversity</p>
-                              <p className="text-lg font-bold text-green-600">{summary.competitiveAnalysis.supplierDiversity.toFixed(1)}%</p>
-                              <p className="text-xs text-green-600 mt-1">
-                                {summary.competitiveAnalysis.supplierDiversity > 50 ? 'High competition' : 'Limited suppliers'}
-                              </p>
-                            </div>
-                            <div className="p-3 bg-blue-50 rounded border border-blue-200">
-                              <p className="text-xs font-medium text-blue-700">Market Concentration</p>
-                              <p className="text-lg font-bold text-blue-600">{summary.competitiveAnalysis.marketConcentration.toFixed(1)}%</p>
-                              <p className="text-xs text-blue-600 mt-1">
-                                Top 3 countries share
-                              </p>
-                            </div>
-                            <div className="p-3 bg-purple-50 rounded border border-purple-200">
-                              <p className="text-xs font-medium text-purple-700">Price Competitiveness</p>
-                              <p className="text-lg font-bold text-purple-600">{summary.competitiveAnalysis.priceCompetitiveness}/100</p>
-                              <p className="text-xs text-purple-600 mt-1">
-                                {summary.competitiveAnalysis.priceCompetitiveness > 80 ? 'Very competitive' : summary.competitiveAnalysis.priceCompetitiveness > 60 ? 'Moderately competitive' : 'Less competitive'}
-                              </p>
-                            </div>
-                            <div className="p-3 bg-orange-50 rounded border border-orange-200">
-                              <p className="text-xs font-medium text-orange-700">Buyer Diversity</p>
-                              <p className="text-lg font-bold text-orange-600">{summary.competitiveAnalysis.buyerDiversity.toFixed(1)}%</p>
-                              <p className="text-xs text-orange-600 mt-1">
-                                {summary.competitiveAnalysis.buyerDiversity > 50 ? 'Broad demand' : 'Concentrated buyers'}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
+                {/* Advanced Analytics Section - Fifth Priority */}
+                <AdvancedAnalyticsSection
+                  summary={summary}
+                  isVisible={!loading && results.length > 0 && summary !== null && loadedSections.advancedAnalytics}
+                  formatCurrency={formatCurrency}
+                />
 
                 {/* Price Analysis */}
                 {summary && (
@@ -1472,37 +1079,8 @@ export default function SearchResultsClient() {
                   </motion.div>
                 )}
 
-                {/* Monthly Trends Analysis */}
-                {summary && summary.monthlyTrends.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.7 }}
-                    className="mb-4 bg-white rounded-lg p-4 shadow-sm border border-gray-200"
-                  >
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                      </svg>
-                      Monthly Trends Analysis
-                    </h3>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {summary.monthlyTrends.map((trend, index) => (
-                        <div key={index} className="p-3 bg-gray-50 rounded border border-gray-200">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-900">{trend.month}</span>
-                            {getTrendIcon(trend.trend)}
-                          </div>
-                          <div className="space-y-1">
-                            <p className="text-xs text-gray-600">Shipments: <span className="font-bold text-gray-900">{trend.count}</span></p>
-                            <p className="text-xs text-gray-600">Value: <span className="font-bold text-green-600">{formatCurrency(trend.value)}</span></p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
+                {/* Monthly Trends Section (modularized) */}
+                <MonthlyTrendsSection monthlyStats={monthlyStats} loading={loadingStates.basicData} />
 
                 {/* Trade Routes Analysis */}
                 {summary && (
@@ -1526,7 +1104,7 @@ export default function SearchResultsClient() {
                         <h4 className="font-semibold text-gray-900 mb-3">Top Trade Routes</h4>
                         <div className="bg-blue-50 p-2 rounded mb-3">
                           <p className="text-xs text-blue-700">
-                            <strong>📊 Calculation:</strong> Origin-destination pairs ranked by total trade value across all {summary.totalRecords.toLocaleString()} shipments
+                            <strong>📊 Calculation:</strong> Origin-destination pairs ranked by total trade value across all {formatLargeNumber(summary.totalRecords)} shipments
                           </p>
                         </div>
                         <div className="space-y-2">
@@ -1930,7 +1508,7 @@ export default function SearchResultsClient() {
                     </h3>
                     <div className="bg-blue-100 p-2 rounded mb-3">
                       <p className="text-xs text-blue-800">
-                        <strong>📊 Calculation:</strong> Real-time indicators calculated from current market data, growth trends, price stability, and risk assessment across all {summary.totalRecords.toLocaleString()} shipments
+                        <strong>📊 Calculation:</strong> Real-time indicators calculated from current market data, growth trends, price stability, and risk assessment across all {formatLargeNumber(summary.totalRecords)} shipments
                       </p>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -1981,7 +1559,7 @@ export default function SearchResultsClient() {
                     </h3>
                     <div className="bg-indigo-50 p-2 rounded mb-4">
                       <p className="text-xs text-indigo-700">
-                        <strong>📊 Calculation:</strong> Advanced analytics combining market performance metrics, predictive modeling, and competitive intelligence derived from comprehensive analysis of all {summary.totalRecords.toLocaleString()} shipment records
+                        <strong>📊 Calculation:</strong> Advanced analytics combining market performance metrics, predictive modeling, and competitive intelligence derived from comprehensive analysis of all {formatLargeNumber(summary.totalRecords)} shipment records
                       </p>
                     </div>
                     
@@ -2146,7 +1724,7 @@ export default function SearchResultsClient() {
                     </h3>
                     <div className="bg-green-50 p-2 rounded mb-4">
                       <p className="text-xs text-green-700">
-                        <strong>📊 Calculation:</strong> Monthly trend analysis based on shipment volumes, values, and growth patterns calculated from all {summary.totalRecords.toLocaleString()} records with trend direction indicators and volatility assessment
+                        <strong>📊 Calculation:</strong> Monthly trend analysis based on shipment volumes, values, and growth patterns calculated from all {formatLargeNumber(summary.totalRecords)} records with trend direction indicators and volatility assessment
                       </p>
                     </div>
                     
@@ -2268,7 +1846,7 @@ export default function SearchResultsClient() {
                     </h3>
                     <div className="bg-indigo-100 p-2 rounded mb-4">
                       <p className="text-xs text-indigo-800">
-                        <strong>📊 Calculation:</strong> Strategic opportunities and recommendations derived from market gap analysis, growth trends, competitive landscape, and risk assessment across all {summary.totalRecords.toLocaleString()} shipment records with confidence scoring
+                        <strong>📊 Calculation:</strong> Strategic opportunities and recommendations derived from market gap analysis, growth trends, competitive landscape, and risk assessment across all {formatLargeNumber(summary.totalRecords)} shipment records with confidence scoring
                       </p>
                     </div>
                     
@@ -2322,8 +1900,35 @@ export default function SearchResultsClient() {
                 )}
 
                 {/* Enhanced Results Display with View Modes */}
-                {viewMode === "grid" && (
-                <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 1.5 }}
+                  className="mb-6"
+                >
+                  {/* Section Header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h2 className="text-xl font-bold text-gray-900">📋 Export Shipment Records</h2>
+                        <p className="text-sm text-gray-600">
+                          Showing {filteredResults.length} of {formatLargeNumber(aggregates.totalRecords)} records for "{q}"
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500">🖱️ Click any record for detailed information</span>
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                    </div>
+                  </div>
+
+                  {viewMode === "grid" && (
+                  <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {filteredResults.map((item, idx) => (
                     <motion.div
                       key={item.id}
@@ -2559,256 +2164,319 @@ export default function SearchResultsClient() {
                     </div>
                   </div>
                 )}
+                  </motion.div>
 
                 {/* Card Detail Modal */}
-                        <AnimatePresence>
+                <AnimatePresence>
                   {selectedCard && (
-                            <motion.div
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              exit={{ opacity: 0 }}
-                      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50"
                       onClick={() => setSelectedCard(null)}
                     >
                       <motion.div
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.9, opacity: 0 }}
-                        className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                        className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[95vh] overflow-hidden border border-gray-200"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        {/* Modal Header */}
-                        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-t-xl">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h2 className="text-xl font-bold mb-2">Export Shipment Details</h2>
-                              <p className="text-blue-100 text-sm">
-                                Complete information for this trade record
-                              </p>
-                      </div>
+                        {/* Compact Modal Header */}
+                        <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white p-4 relative overflow-hidden">
+                          {/* Background Pattern */}
+                          <div className="absolute inset-0 opacity-10">
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+                          </div>
+                          
+                          <div className="relative flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                              </div>
+                              <div>
+                                <h2 className="text-lg font-bold mb-1">📊 Export Shipment Details</h2>
+                                <p className="text-blue-100 text-xs font-medium">
+                                  Complete trade record information and analytics
+                                </p>
+                              </div>
+                            </div>
                             <button
                               onClick={() => setSelectedCard(null)}
-                              className="text-white hover:text-blue-200 transition-colors"
+                              className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center hover:bg-white/30 transition-all duration-200 backdrop-blur-sm"
                             >
-                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                               </svg>
                             </button>
                           </div>
-                </div>
+                        </div>
 
-                        {/* Modal Content */}
-                        <div className="p-6">
-                          {/* Product Information */}
-                          <div className="mb-6">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                              </svg>
-                              Product Information
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Product Description</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.product_description || "Not specified"}</p>
+                        {/* Compact Modal Content */}
+                        <div className="overflow-y-auto max-h-[calc(95vh-100px)]">
+                          <div className="p-4">
+                            {/* Compact Summary Cards */}
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+                              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-3 rounded-lg border border-blue-200">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <div className="w-6 h-6 bg-blue-600 rounded-md flex items-center justify-center">
+                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                                    </svg>
+                                  </div>
+                                  <span className="text-xs font-semibold text-blue-900">💰 Value</span>
+                                </div>
+                                <p className="text-lg font-bold text-blue-800">{formatCurrency(selectedCard.total_value_usd || "0")}</p>
                               </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">HSN Code</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.hs_code || "Not specified"}</p>
+                              
+                              <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-3 rounded-lg border border-green-200">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <div className="w-6 h-6 bg-green-600 rounded-md flex items-center justify-center">
+                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                    </svg>
+                                  </div>
+                                  <span className="text-xs font-semibold text-green-900">📦 Quantity</span>
+                                </div>
+                                <p className="text-lg font-bold text-green-800">
+                                  {selectedCard.quantity || "0"} <span className="text-xs font-normal">{selectedCard.uqc || ""}</span>
+                                </p>
                               </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Chapter</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.chapter || "Not specified"}</p>
+                              
+                              <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-3 rounded-lg border border-purple-200">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <div className="w-6 h-6 bg-purple-600 rounded-md flex items-center justify-center">
+                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                  </div>
+                                  <span className="text-xs font-semibold text-purple-900">📅 Date</span>
+                                </div>
+                                <p className="text-sm font-bold text-purple-800">{formatDate(selectedCard.shipping_bill_date || "")}</p>
                               </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Year</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.year || "Not specified"}</p>
+
+                              <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-3 rounded-lg border border-orange-200">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <div className="w-6 h-6 bg-orange-600 rounded-md flex items-center justify-center">
+                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                  </div>
+                                  <span className="text-xs font-semibold text-orange-900">🏷️ HSN</span>
+                                </div>
+                                <p className="text-sm font-bold text-orange-800">{selectedCard.hs_code || "N/A"}</p>
                               </div>
                             </div>
-                          </div>
 
-                          {/* Trade Details */}
-                          <div className="mb-6">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                              </svg>
-                              Trade Details
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                              <div className="bg-gray-50 p-4 rounded-lg">
-                                <label className="text-sm font-medium text-gray-600">Quantity</label>
-                                <p className="text-xl font-bold text-gray-900 mt-1">
-                                  {selectedCard.quantity || "Not specified"} {selectedCard.uqc || ""}
-                                </p>
-                              </div>
-                              <div className="bg-green-50 p-4 rounded-lg">
-                                <label className="text-sm font-medium text-green-700">Total Value (USD)</label>
-                                <p className="text-xl font-bold text-green-800 mt-1">
-                                  {formatCurrency(selectedCard.total_value_usd || "0")}
-                                </p>
-                              </div>
-                              <div className="bg-blue-50 p-4 rounded-lg">
-                                <label className="text-sm font-medium text-blue-700">Unit Rate (USD)</label>
-                                <p className="text-xl font-bold text-blue-800 mt-1">
-                                  {formatCurrency(selectedCard.unit_rate_usd || "0")}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Parties Information */}
-                          <div className="mb-6">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                              <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                              </svg>
-                              Parties Information
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              {/* Supplier Details */}
-                              <div className="bg-gray-50 p-4 rounded-lg">
-                                <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            {/* Compact Product & Shipping Information - Side by Side Layout */}
+                            <div className="mb-4">
+                              <div className="flex items-center gap-2 mb-3">
+                                <div className="w-6 h-6 bg-blue-100 rounded-md flex items-center justify-center">
+                                  <svg className="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                   </svg>
-                                  Supplier
-                                </h4>
-                                <div className="space-y-2 text-sm">
-                                  <div>
-                                    <label className="text-gray-600">Name:</label>
-                                    <p className="text-gray-900 font-medium">{selectedCard.supplier_name || "Not specified"}</p>
+                                </div>
+                                <h3 className="text-sm font-semibold text-gray-900">📦 Product & Shipping Details</h3>
+                              </div>
+                              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                {/* Product Details */}
+                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200 p-4">
+                                  <div className="flex items-center gap-2 mb-3">
+                                    <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                    </svg>
+                                    <h4 className="text-sm font-semibold text-blue-900">📦 Product Details</h4>
                                   </div>
-                                  <div>
-                                    <label className="text-gray-600">Address:</label>
-                                    <p className="text-gray-900">{selectedCard.supplier_address || "Not specified"}</p>
+                                  <div className="space-y-2 text-xs">
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-blue-700 font-medium min-w-[60px]">📝 Description:</span>
+                                      <span className="text-gray-900 font-medium">{selectedCard.product_description || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-blue-700 font-medium min-w-[60px]">🏷️ HSN Code:</span>
+                                      <span className="text-gray-900">{selectedCard.hs_code || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-blue-700 font-medium min-w-[60px]">📚 Chapter:</span>
+                                      <span className="text-gray-900">{selectedCard.chapter || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-blue-700 font-medium min-w-[60px]">📅 Year:</span>
+                                      <span className="text-gray-900">{selectedCard.year || "Not specified"}</span>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <label className="text-gray-600">City/State:</label>
-                                    <p className="text-gray-900">{selectedCard.supplier_city_state || "Not specified"}</p>
+                                </div>
+
+                                {/* Shipping Details */}
+                                <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg border border-green-200 p-4">
+                                  <div className="flex items-center gap-2 mb-3">
+                                    <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                    </svg>
+                                    <h4 className="text-sm font-semibold text-green-900">🚢 Shipping Details</h4>
                                   </div>
-                                  <div>
-                                    <label className="text-gray-600">Contact:</label>
-                                    <p className="text-gray-900">{selectedCard.supplier_contact_no || "Not specified"}</p>
-                                  </div>
-                                  <div>
-                                    <label className="text-gray-600">Email:</label>
-                                    <p className="text-gray-900">{selectedCard.supplier_email_id || "Not specified"}</p>
+                                  <div className="space-y-2 text-xs">
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-green-700 font-medium min-w-[60px]">📅 Bill Date:</span>
+                                      <span className="text-gray-900">{formatDate(selectedCard.shipping_bill_date || "")}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-green-700 font-medium min-w-[60px]">📋 Bill No:</span>
+                                      <span className="text-gray-900">{selectedCard.shipping_bill_no || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-green-700 font-medium min-w-[60px]">🚢 Origin Port:</span>
+                                      <span className="text-gray-900">{selectedCard.port_of_origin || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-green-700 font-medium min-w-[60px]">🎯 Dest Port:</span>
+                                      <span className="text-gray-900">{selectedCard.port_of_destination || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-green-700 font-medium min-w-[60px]">🌍 Origin Country:</span>
+                                      <span className="text-gray-900">{selectedCard.country_of_origin || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-green-700 font-medium min-w-[60px]">🎯 Dest Country:</span>
+                                      <span className="text-gray-900">{selectedCard.country_of_destination || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-green-700 font-medium min-w-[60px]">🚚 Transport:</span>
+                                      <span className="text-gray-900">{selectedCard.mode || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-green-700 font-medium min-w-[60px]">📜 Incoterm:</span>
+                                      <span className="text-gray-900">{selectedCard.incoterm || "Not specified"}</span>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
+                            </div>
 
-                              {/* Buyer Details */}
-                              <div className="bg-gray-50 p-4 rounded-lg">
-                                <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {/* Compact Parties Information - Side by Side Layout */}
+                            <div className="mb-4">
+                              <div className="flex items-center gap-2 mb-3">
+                                <div className="w-6 h-6 bg-purple-100 rounded-md flex items-center justify-center">
+                                  <svg className="w-3 h-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                   </svg>
-                                  Buyer
-                                </h4>
-                                <div className="space-y-2 text-sm">
-                                  <div>
-                                    <label className="text-gray-600">Name:</label>
-                                    <p className="text-gray-900 font-medium">{selectedCard.buyer_name || "Not specified"}</p>
+                                </div>
+                                <h3 className="text-sm font-semibold text-gray-900">👥 Parties Information</h3>
+                              </div>
+                              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                {/* Supplier Details */}
+                                <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg border border-orange-200 p-4">
+                                  <div className="flex items-center gap-2 mb-3">
+                                    <svg className="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
+                                    <h4 className="text-sm font-semibold text-orange-900">🏭 Supplier</h4>
                                   </div>
-                                  <div>
-                                    <label className="text-gray-600">Address:</label>
-                                    <p className="text-gray-900">{selectedCard.buyer_address || "Not specified"}</p>
+                                  <div className="space-y-2 text-xs">
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-orange-700 font-medium min-w-[60px]">👤 Name:</span>
+                                      <span className="text-gray-900 font-medium">{selectedCard.supplier_name || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-orange-700 font-medium min-w-[60px]">📍 Address:</span>
+                                      <span className="text-gray-900">{selectedCard.supplier_address || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-orange-700 font-medium min-w-[60px]">🏙️ City/State:</span>
+                                      <span className="text-gray-900">{selectedCard.supplier_city_state || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-orange-700 font-medium min-w-[60px]">📞 Contact:</span>
+                                      <span className="text-gray-900">{selectedCard.supplier_contact_no || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-orange-700 font-medium min-w-[60px]">📧 Email:</span>
+                                      <span className="text-gray-900">{selectedCard.supplier_email_id || "Not specified"}</span>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <label className="text-gray-600">City/State:</label>
-                                    <p className="text-gray-900">{selectedCard.buyer_city_state || "Not specified"}</p>
+                                </div>
+
+                                {/* Buyer Details */}
+                                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg border border-blue-200 p-4">
+                                  <div className="flex items-center gap-2 mb-3">
+                                    <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    <h4 className="text-sm font-semibold text-blue-900">🛒 Buyer</h4>
                                   </div>
-                                  <div>
-                                    <label className="text-gray-600">Contact:</label>
-                                    <p className="text-gray-900">{selectedCard.buyer_contact_no || "Not specified"}</p>
-                                  </div>
-                                  <div>
-                                    <label className="text-gray-600">Email:</label>
-                                    <p className="text-gray-900">{selectedCard.buyer_email_id || "Not specified"}</p>
+                                  <div className="space-y-2 text-xs">
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-blue-700 font-medium min-w-[60px]">👤 Name:</span>
+                                      <span className="text-gray-900 font-medium">{selectedCard.buyer_name || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-blue-700 font-medium min-w-[60px]">📍 Address:</span>
+                                      <span className="text-gray-900">{selectedCard.buyer_address || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-blue-700 font-medium min-w-[60px]">🏙️ City/State:</span>
+                                      <span className="text-gray-900">{selectedCard.buyer_city_state || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-blue-700 font-medium min-w-[60px]">📞 Contact:</span>
+                                      <span className="text-gray-900">{selectedCard.buyer_contact_no || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-blue-700 font-medium min-w-[60px]">📧 Email:</span>
+                                      <span className="text-gray-900">{selectedCard.buyer_email_id || "Not specified"}</span>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
 
-                          {/* Shipping Information */}
-                          <div className="mb-6">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                              <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                              </svg>
-                              Shipping Information
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Shipping Bill Date</label>
-                                <p className="text-gray-900 mt-1">{formatDate(selectedCard.shipping_bill_date || "")}</p>
+                            {/* Compact Additional Details */}
+                            <div>
+                              <div className="flex items-center gap-2 mb-3">
+                                <div className="w-6 h-6 bg-indigo-100 rounded-md flex items-center justify-center">
+                                  <svg className="w-3 h-3 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                  </svg>
+                                </div>
+                                <h3 className="text-sm font-semibold text-gray-900">📋 Additional Details</h3>
                               </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Shipping Bill No</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.shipping_bill_no || "Not specified"}</p>
-                              </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Port of Origin</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.port_of_origin || "Not specified"}</p>
-                              </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Port of Destination</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.port_of_destination || "Not specified"}</p>
-                              </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Country of Origin</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.country_of_origin || "Not specified"}</p>
-                              </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Country of Destination</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.country_of_destination || "Not specified"}</p>
-                              </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Mode of Transport</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.mode || "Not specified"}</p>
-                              </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Incoterm</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.incoterm || "Not specified"}</p>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Additional Details */}
-                          <div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                              <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                              </svg>
-                              Additional Details
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">IEC Code</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.iec || "Not specified"}</p>
-                              </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Currency</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.currency || "Not specified"}</p>
-                              </div>
-                              <div>
-                                <label className="text-sm font-medium text-gray-600">Exchange Rate (USD)</label>
-                                <p className="text-gray-900 mt-1">{selectedCard.exchange_rate_usd || "Not specified"}</p>
+                              <div className="bg-white rounded-lg border border-gray-200 p-3">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                                  <div>
+                                    <label className="text-xs font-medium text-gray-600">🏢 IEC Code</label>
+                                    <p className="text-gray-900 mt-1 text-sm">{selectedCard.iec || "Not specified"}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-xs font-medium text-gray-600">💱 Currency</label>
+                                    <p className="text-gray-900 mt-1 text-sm">{selectedCard.currency || "Not specified"}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-xs font-medium text-gray-600">💲 USD Rate</label>
+                                    <p className="text-gray-900 mt-1 text-sm">{selectedCard.exchange_rate_usd || "Not specified"}</p>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
 
-                        {/* Modal Footer */}
-                        <div className="bg-gray-50 px-6 py-4 rounded-b-xl flex justify-end">
-                          <button
-                            onClick={() => setSelectedCard(null)}
-                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                          >
-                            Close
-                          </button>
+                        {/* Compact Modal Footer */}
+                        <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-3 border-t border-gray-200 flex items-center justify-between">
+                          <div className="text-xs text-gray-600">
+                            <span className="font-medium">🆔 Record ID:</span> {selectedCard.id}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => setSelectedCard(null)}
+                              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-md font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg text-sm"
+                            >
+                              ✕ Close
+                            </button>
+                          </div>
                         </div>
                       </motion.div>
                     </motion.div>
@@ -2862,7 +2530,7 @@ export default function SearchResultsClient() {
                   <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Unlock Complete Market Intelligence</h3>
                     <p className="text-gray-600 mb-4 text-sm">
-                      Get access to all <span className="font-semibold text-blue-600">{aggregates.totalRecords.toLocaleString()}</span> records, detailed contact information, 
+                      Get access to all <span className="font-semibold text-blue-600">{formatLargeNumber(aggregates.totalRecords)}</span> records, detailed contact information, 
                       complete trade history, and advanced analytics to make informed business decisions.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3">

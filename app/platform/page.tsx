@@ -171,11 +171,20 @@ export default function PlatformPage() {
   };
 
   const formatCurrency = (value: number) => {
+    // Format large numbers with Mn/Bn
+    if (value >= 1000000000) {
+      return `$${(value / 1000000000).toFixed(1)}Bn`;
+    } else if (value >= 1000000) {
+      return `$${(value / 1000000).toFixed(1)}Mn`;
+    } else if (value >= 1000) {
+      return `$${(value / 1000).toFixed(1)}K`;
+    }
+    
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 1,
-      maximumFractionDigits: 1,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(value);
   };
 
@@ -343,7 +352,7 @@ export default function PlatformPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-400 text-sm">Total Value</p>
-                <p className="text-2xl font-bold text-white">{formatCurrency(data.analyticsData.totalValue)}B</p>
+                <p className="text-2xl font-bold text-white">{formatCurrency(data.analyticsData.totalValue)}</p>
               </div>
               <DollarSign className="w-8 h-8 text-yellow-500" />
             </div>
@@ -503,7 +512,7 @@ export default function PlatformPage() {
                         <div key={index} className="flex items-center justify-between">
                           <span className="text-gray-300">{trend.month}</span>
                           <div className="flex items-center space-x-4">
-                            <span className="text-white font-medium">{formatCurrency(trend.value)}B</span>
+                            <span className="text-white font-medium">{formatCurrency(trend.value)}</span>
                             <span className="text-gray-400">{formatNumber(trend.volume)} shipments</span>
                             {getTrendIcon(trend.trend)}
                           </div>
@@ -526,7 +535,7 @@ export default function PlatformPage() {
                             <p className="text-gray-400 text-sm">{product.category}</p>
                           </div>
                           <div className="text-right">
-                            <p className="text-white font-medium">{formatCurrency(product.value)}B</p>
+                            <p className="text-white font-medium">{formatCurrency(product.value)}</p>
                             <p className="text-green-400 text-sm">+{product.growth.toFixed(1)}%</p>
                           </div>
                         </div>

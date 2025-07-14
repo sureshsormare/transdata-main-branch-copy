@@ -104,6 +104,13 @@ const REPORT_TYPES = {
     icon: Brain,
     sections: 4,
     estimatedPages: '20-35'
+  },
+  'custom': {
+    name: 'Custom Report',
+    description: 'Build your own report with custom sections',
+    icon: Settings,
+    sections: 0,
+    estimatedPages: 'Variable'
   }
 };
 

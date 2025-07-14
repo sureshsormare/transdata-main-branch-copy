@@ -62,8 +62,22 @@ export async function POST(request: NextRequest) {
 
     console.log(`Generating dynamic report for: ${searchTerm}, Type: ${reportType}, Format: ${format}`);
 
+    // Convert customSections from string[] to DynamicReportSection[] if provided
+    const convertedCustomSections = customSections?.map((sectionName, index) => ({
+      id: `custom-${index}`,
+      title: sectionName,
+      type: 'custom' as const,
+      priority: index + 1,
+      isRequired: true,
+      isExpandable: true,
+      dataSource: 'custom',
+      analytics: [],
+      visualizations: [],
+      aiInsights: true
+    }));
+
     // Create dynamic report configuration
-    const config = createDynamicReportConfig(searchTerm, reportType, customSections);
+    const config = createDynamicReportConfig(searchTerm, reportType, convertedCustomSections);
     
     // Apply custom settings
     if (dataFilters) config.dataFilters = { ...config.dataFilters, ...dataFilters };
@@ -244,14 +258,14 @@ async function generateDynamicSections(
     // Add AI insights if enabled
     if (sectionConfig.aiInsights && config.aiSettings.enableInsights) {
       sectionData.aiInsights = analysisResult.insights
-        .filter(insight => insight.confidence >= config.aiSettings.confidenceThreshold)
+        .filter((insight: any) => insight.confidence >= config.aiSettings.confidenceThreshold)
         .slice(0, config.aiSettings.maxInsightsPerSection);
     }
 
     // Update metadata
     sectionData.metadata.dataPoints = analysisResult.metrics.totalValue || 0;
     sectionData.metadata.confidence = sectionData.aiInsights.length > 0 
-      ? sectionData.aiInsights.reduce((sum, insight) => sum + insight.confidence, 0) / sectionData.aiInsights.length 
+      ? sectionData.aiInsights.reduce((sum: number, insight: any) => sum + insight.confidence, 0) / sectionData.aiInsights.length 
       : 0;
 
     sections.push(sectionData);
@@ -273,16 +287,16 @@ async function generateExecutiveSummary(analysisResult: any, config: DynamicRepo
     ],
     marketOverview: `The market for ${config.searchTerm} shows ${metrics.marketGrowth > 10 ? 'strong' : metrics.marketGrowth > 0 ? 'moderate' : 'declining'} growth with ${metrics.totalValue?.toLocaleString() || 'N/A'} USD in total value.`,
     strategicRecommendations: insights
-      .filter(insight => insight.impact === 'high')
+      .filter((insight: any) => insight.impact === 'high')
       .slice(0, 3)
-      .map(insight => insight.recommendations[0]),
+      .map((insight: any) => insight.recommendations[0]),
     riskAssessment: `Market concentration (HHI: ${metrics.hhi?.toFixed(0) || 'N/A'}) indicates ${metrics.hhi > 2500 ? 'high' : metrics.hhi > 1500 ? 'moderate' : 'low'} concentration risk.`
   };
 }
 
 async function generateMarketIntelligence(analysisResult: any, analytics: AdvancedAIAnalytics): Promise<any> {
   const marketMetrics = await analytics.analyzeMarketSize();
-  const insights = analysisResult.insights.filter(insight => insight.type === 'trend' || insight.type === 'opportunity');
+  const insights = analysisResult.insights.filter((insight: any) => insight.type === 'trend' || insight.type === 'opportunity');
 
   return {
     marketSize: marketMetrics.totalValue,

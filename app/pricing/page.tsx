@@ -298,8 +298,8 @@ export default function Pricing() {
               }`}
             >
               {plan.popular && (
-                <div className="absolute top-2 right-2 z-10">
-                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-2 py-1 rounded-full text-xs font-bold">
+                <div className="absolute top-2 right-2 z-50">
+                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
                     Popular
                   </div>
                 </div>

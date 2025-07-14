@@ -16,16 +16,11 @@ export default function Page() {
             height={208}
             className="mb-6 opacity-80"
           />
-          <h2 className="text-xl font-semibold mb-2">No results found</h2>
+          <h2 className="text-xl font-semibold mb-2">Loading search results...</h2>
           <p className="mb-4">
-            Try checking your spelling or searching something else.
+            Please wait while we fetch your results.
           </p>
-          <Link
-            href='/'
-            className='px-5 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition'
-          >
-            Back to Home
-          </Link>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       }
     >

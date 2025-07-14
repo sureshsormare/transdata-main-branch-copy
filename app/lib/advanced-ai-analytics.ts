@@ -404,8 +404,8 @@ export class AdvancedAIAnalytics {
       return acc;
     }, {} as Record<string, number>);
 
-    const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
-    const shares = Object.values(counts).map(count => count / total);
+    const total = (Object.values(counts) as number[]).reduce((sum: number, count: number) => sum + count, 0);
+    const shares = (Object.values(counts) as number[]).map((count: number) => count / total);
     
     return shares.reduce((sum, share) => sum + share * share, 0);
   }
@@ -693,7 +693,7 @@ export class AdvancedAIAnalytics {
     }, {} as Record<string, any>);
 
     return Object.values(countryData)
-      .sort((a, b) => b.value - a.value)
+      .sort((a: any, b: any) => b.value - a.value)
       .slice(0, 10);
   }
 } 

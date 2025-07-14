@@ -19,7 +19,7 @@ export interface DynamicReportSection {
 export interface DynamicReportConfig {
   reportId: string;
   searchTerm: string;
-  reportType: 'comprehensive' | 'market-analysis' | 'competitive-intelligence' | 'trend-forecast' | 'custom';
+  reportType: keyof typeof REPORT_TYPE_CONFIGS | 'custom';
   format: 'pdf' | 'ppt' | 'html';
   sections: DynamicReportSection[];
   dataFilters: {
@@ -390,9 +390,39 @@ export const VISUALIZATION_TEMPLATES = {
 
 export function createDynamicReportConfig(
   searchTerm: string,
-  reportType: keyof typeof REPORT_TYPE_CONFIGS,
+  reportType: keyof typeof REPORT_TYPE_CONFIGS | 'custom',
   customSections?: DynamicReportSection[]
 ): DynamicReportConfig {
+  if (reportType === 'custom') {
+    return {
+      reportId: generateReportId(),
+      searchTerm,
+      reportType,
+      format: 'pdf',
+      sections: customSections || [],
+      dataFilters: {},
+      aiSettings: {
+        enableInsights: true,
+        enablePredictions: true,
+        enableAnomalyDetection: true,
+        enableTrendAnalysis: true,
+        confidenceThreshold: 0.8,
+        maxInsightsPerSection: 10
+      },
+      visualizationSettings: {
+        chartTypes: ['bar', 'line', 'pie', 'scatter', 'area'],
+        colorScheme: 'pharma-blue',
+        includeInteractive: true,
+        maxChartsPerSection: 5
+      },
+      exportSettings: {
+        includeRawData: true,
+        includeMethodology: true,
+        includeSources: true
+      }
+    };
+  }
+  
   const baseConfig = REPORT_TYPE_CONFIGS[reportType];
   
   return {
