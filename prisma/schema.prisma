@@ -6,6 +6,8 @@ datasource db {
   provider  = "mongodb"
   url       = env("MONGODB_URI")
   directUrl = env("DIRECT_DATABASE_URL")
+  // Add connection settings to prevent timeouts
+  relationMode = "prisma"
 }
 
 model contactForm {
@@ -62,6 +64,36 @@ model exp_india {
   unit_value_inr         String?
   uqc                    String?
   year                   String?
+
+  // Primary indexes for search and filter operations
+  @@index([buyer_name])
+  @@index([supplier_name])
+  @@index([hs_code])
+  @@index([product_description])
+  @@index([country_of_destination])
+  @@index([country_of_origin])
+  @@index([shipping_bill_date])
+  // Composite indexes for common filter combinations
+  @@index([buyer_name, supplier_name])
+  @@index([hs_code, product_description])
+  @@index([country_of_destination, country_of_origin])
+  @@index([buyer_name, hs_code])
+  @@index([supplier_name, hs_code])
+  @@index([product_description, shipping_bill_date])
+  // Multi-field indexes for search operations
+  @@index([buyer_name, supplier_name, hs_code])
+  @@index([product_description, hs_code, shipping_bill_date])
+  @@index([country_of_destination, country_of_origin, shipping_bill_date])
+  // Text search indexes for better performance
+  @@index([buyer_name, supplier_name, product_description])
+  @@index([hs_code, product_description, buyer_name])
+  @@index([hs_code, product_description, supplier_name])
+  // Date-based indexes for time-based queries
+  @@index([shipping_bill_date, buyer_name])
+  @@index([shipping_bill_date, supplier_name])
+  @@index([shipping_bill_date, hs_code])
+  // Comprehensive search index
+  @@index([buyer_name, supplier_name, hs_code, product_description, shipping_bill_date, country_of_destination, country_of_origin])
 }
 
 model imp_india {
@@ -112,4 +144,34 @@ model imp_india {
   unit_rate_usd            String?
   unit_rate_usd_again      String?
   uqc                      String?
+
+  // Primary indexes for search and filter operations
+  @@index([buyer_name])
+  @@index([supplier_name])
+  @@index([hs_code])
+  @@index([product_description])
+  @@index([country_of_destination])
+  @@index([country_of_origin])
+  @@index([shipping_bill_date])
+  // Composite indexes for common filter combinations
+  @@index([buyer_name, supplier_name])
+  @@index([hs_code, product_description])
+  @@index([country_of_destination, country_of_origin])
+  @@index([buyer_name, hs_code])
+  @@index([supplier_name, hs_code])
+  @@index([product_description, shipping_bill_date])
+  // Multi-field indexes for search operations
+  @@index([buyer_name, supplier_name, hs_code])
+  @@index([product_description, hs_code, shipping_bill_date])
+  @@index([country_of_destination, country_of_origin, shipping_bill_date])
+  // Text search indexes for better performance
+  @@index([buyer_name, supplier_name, product_description])
+  @@index([hs_code, product_description, buyer_name])
+  @@index([hs_code, product_description, supplier_name])
+  // Date-based indexes for time-based queries
+  @@index([shipping_bill_date, buyer_name])
+  @@index([shipping_bill_date, supplier_name])
+  @@index([shipping_bill_date, hs_code])
+  // Comprehensive search index
+  @@index([buyer_name, supplier_name, hs_code, product_description, shipping_bill_date, country_of_destination, country_of_origin])
 }

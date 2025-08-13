@@ -54,9 +54,14 @@ export function TrialInfo() {
         transition={{ duration: 0.6 }}
         className="text-center mb-8"
       >
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <motion.h2 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent"
+        >
           Experience TransDataNexus Risk-Free
-        </h2>
+        </motion.h2>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
           Join 500+ pharmaceutical companies who have discovered the power of AI-driven trade intelligence. 
           Start your free trial today and see the difference data-driven decisions can make.
@@ -75,13 +80,23 @@ export function TrialInfo() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-            className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200 hover:border-green-300 transition-all duration-300 group"
+            className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200 hover:border-green-300 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 group cursor-pointer hover:scale-105 relative overflow-hidden"
           >
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
+            />
             <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 bg-green-600 text-white rounded-lg group-hover:scale-110 transition-transform duration-300">
+              <motion.div 
+                whileHover={{ rotate: 360, scale: 1.2 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+                className="p-2 bg-green-600 text-white rounded-lg group-hover:shadow-md group-hover:shadow-green-500/30 transition-all duration-300"
+              >
                 {feature.icon}
-              </div>
-              <h3 className="font-semibold text-gray-900">{feature.title}</h3>
+              </motion.div>
+              <h3 className="font-semibold text-gray-900 group-hover:text-green-700 transition-colors duration-300">{feature.title}</h3>
             </div>
             <p className="text-gray-600 text-sm leading-relaxed">
               {feature.description}

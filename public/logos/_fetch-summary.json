@@ -1,0 +1,71 @@
+[
+  {
+    "brand": "Amgen",
+    "status": "ok",
+    "file": "public/logos/amgen.svg"
+  },
+  {
+    "brand": "Johnson & Johnson",
+    "status": "ok",
+    "file": "public/logos/johnson-johnson.svg"
+  },
+  {
+    "brand": "Pfizer",
+    "status": "ok",
+    "file": "public/logos/pfizer.svg"
+  },
+  {
+    "brand": "Bayer",
+    "status": "ok",
+    "file": "public/logos/bayer.svg"
+  },
+  {
+    "brand": "Sanofi",
+    "status": "ok",
+    "file": "public/logos/sanofi.svg"
+  },
+  {
+    "brand": "Eli Lilly",
+    "status": "ok",
+    "file": "public/logos/eli-lilly.svg"
+  },
+  {
+    "brand": "Merck",
+    "status": "ok",
+    "file": "public/logos/merck.svg"
+  },
+  {
+    "brand": "AstraZeneca",
+    "status": "ok",
+    "file": "public/logos/astrazeneca.svg"
+  },
+  {
+    "brand": "Roche",
+    "status": "ok",
+    "file": "public/logos/roche.svg"
+  },
+  {
+    "brand": "Novartis",
+    "status": "ok",
+    "file": "public/logos/novartis.svg"
+  },
+  {
+    "brand": "GSK",
+    "status": "not_found"
+  },
+  {
+    "brand": "AbbVie",
+    "status": "ok",
+    "file": "public/logos/abbvie.svg"
+  },
+  {
+    "brand": "Bristol Myers Squibb",
+    "status": "ok",
+    "file": "public/logos/bristol-myers-squibb.svg"
+  },
+  {
+    "brand": "Takeda",
+    "status": "ok",
+    "file": "public/logos/takeda.svg"
+  }
+]

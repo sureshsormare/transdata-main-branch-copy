@@ -1,273 +1,9 @@
-// pages/blog/index.tsx
-import Link from "next/link";
-import { Search, TrendingUp, Calendar, User, ArrowRight, Filter } from "lucide-react";
+"use client"
 
-const blogs = [
-  {
-    id: 1,
-    title: "Pharma Import Trends: Q1 2025 Insights",
-    summary: "An overview of pharmaceutical imports into India during Q1 2025, including top-origin countries and growth metrics.",
-    date: "June 10, 2025",
-    author: "Dr. Kavita Mehra",
-    category: "Trade Analysis",
-    readTime: "5 min read",
-    featured: true,
-    tags: ["Imports", "Q1 2025", "Market Trends"]
-  },
-  {
-    id: 2,
-    title: "Export Compliance in Pharma: New Regulations",
-    summary: "A summary of updated export documentation requirements and their impact on Indian pharmaceutical companies.",
-    date: "June 5, 2025",
-    author: "Suresh Patil",
-    category: "Trade Compliance",
-    readTime: "7 min read",
-    featured: false,
-    tags: ["Compliance", "Regulations", "Exports"]
-  },
-  {
-    id: 3,
-    title: "API Trade: India's Global Supply Chain Role",
-    summary: "How India's API manufacturing sector is strengthening global pharmaceutical supply chains.",
-    date: "May 28, 2025",
-    author: "Anjali Rao",
-    category: "API Trade",
-    readTime: "6 min read",
-    featured: false,
-    tags: ["API", "Supply Chain", "Global Trade"]
-  },
-  {
-    id: 4,
-    title: "Pharma Supply Chain Digitalization",
-    summary: "How blockchain and AI are revolutionizing pharmaceutical trade transparency and efficiency.",
-    date: "May 20, 2025",
-    author: "Rajesh Kumar",
-    category: "Trade Technology",
-    readTime: "8 min read",
-    featured: false,
-    tags: ["Blockchain", "AI", "Supply Chain"]
-  },
-  {
-    id: 5,
-    title: "API Manufacturing: India's Competitive Edge",
-    summary: "Analysis of India's position in global API manufacturing and future growth opportunities.",
-    date: "May 15, 2025",
-    author: "Dr. Priya Sharma",
-    category: "API Trade",
-    readTime: "6 min read",
-    featured: false,
-    tags: ["API", "Manufacturing", "Global Trade"]
-  },
-  {
-    id: 6,
-    title: "Pharma Trade Finance: New Opportunities",
-    summary: "Innovative financing solutions for pharmaceutical trade and export operations.",
-    date: "May 10, 2025",
-    author: "Meera Patel",
-    category: "Trade Finance",
-    readTime: "5 min read",
-    featured: false,
-    tags: ["Trade Finance", "Exports", "Banking"]
-  },
-  {
-    id: 7,
-    title: "Vaccine Trade: India's Global Leadership",
-    summary: "How India became the world's largest vaccine manufacturer and its impact on global trade.",
-    date: "May 5, 2025",
-    author: "Dr. Amit Singh",
-    category: "Trade Analysis",
-    readTime: "7 min read",
-    featured: false,
-    tags: ["Vaccines", "Trade", "Global Health"]
-  },
-  {
-    id: 8,
-    title: "Pharma FDI Trends: Investment Opportunities",
-    summary: "Analysis of foreign direct investment patterns in India's pharmaceutical trade sector.",
-    date: "April 30, 2025",
-    author: "Rahul Verma",
-    category: "Trade Investment",
-    readTime: "6 min read",
-    featured: false,
-    tags: ["FDI", "Investment", "Trade"]
-  },
-  {
-    id: 9,
-    title: "Trade Documentation: Streamlining Pharma Exports",
-    summary: "Recent changes in export documentation and their impact on pharmaceutical trade efficiency.",
-    date: "April 25, 2025",
-    author: "Dr. Neha Gupta",
-    category: "Trade Compliance",
-    readTime: "8 min read",
-    featured: false,
-    tags: ["Documentation", "Exports", "Compliance"]
-  },
-  {
-    id: 10,
-    title: "Cold Chain Trade: Pharma Distribution Networks",
-    summary: "Innovative solutions for maintaining temperature-controlled pharmaceutical trade across borders.",
-    date: "April 20, 2025",
-    author: "Vikram Malhotra",
-    category: "Trade Logistics",
-    readTime: "6 min read",
-    featured: false,
-    tags: ["Cold Chain", "Logistics", "Distribution"]
-  },
-  {
-    id: 11,
-    title: "Generic Drugs: India's Export Dominance",
-    summary: "How India maintains its position as the world's largest exporter of generic pharmaceuticals.",
-    date: "April 15, 2025",
-    author: "Dr. Sanjay Joshi",
-    category: "Trade Analysis",
-    readTime: "7 min read",
-    featured: false,
-    tags: ["Generics", "Exports", "Market Share"]
-  },
-  {
-    id: 12,
-    title: "Trade Innovation: Pharma Startup Ecosystem",
-    summary: "Emerging pharmaceutical startups and their role in driving trade innovation.",
-    date: "April 10, 2025",
-    author: "Priya Sharma",
-    category: "Trade Innovation",
-    readTime: "5 min read",
-    featured: false,
-    tags: ["Startups", "Innovation", "Trade"]
-  },
-  {
-    id: 13,
-    title: "Quality Standards: GMP in Pharma Trade",
-    summary: "Good Manufacturing Practice standards and their impact on pharmaceutical trade credibility.",
-    date: "April 5, 2025",
-    author: "Dr. Rajesh Kumar",
-    category: "Trade Quality",
-    readTime: "8 min read",
-    featured: false,
-    tags: ["GMP", "Quality", "Trade Standards"]
-  },
-  {
-    id: 14,
-    title: "Pharma Exports to Africa: Growth Opportunities",
-    summary: "Analysis of India's pharmaceutical exports to African markets and future growth potential.",
-    date: "March 30, 2025",
-    author: "Anita Desai",
-    category: "Trade Analysis",
-    readTime: "6 min read",
-    featured: false,
-    tags: ["Africa", "Exports", "Emerging Markets"]
-  },
-  {
-    id: 15,
-    title: "Digital Trade: E-commerce in Pharma",
-    summary: "How digital platforms are transforming pharmaceutical trade and distribution.",
-    date: "March 25, 2025",
-    author: "Dr. Arjun Reddy",
-    category: "Trade Technology",
-    readTime: "7 min read",
-    featured: false,
-    tags: ["E-commerce", "Digital Trade", "Distribution"]
-  },
-  {
-    id: 16,
-    title: "Biosimilars Trade: India's Next Frontier",
-    summary: "The rise of biosimilar manufacturing in India and its impact on global trade.",
-    date: "March 20, 2025",
-    author: "Dr. Kavita Mehra",
-    category: "API Trade",
-    readTime: "8 min read",
-    featured: false,
-    tags: ["Biosimilars", "Trade", "Manufacturing"]
-  },
-  {
-    id: 17,
-    title: "Trade Warehousing: Smart Storage Solutions",
-    summary: "Advanced warehousing technologies and their impact on pharmaceutical trade efficiency.",
-    date: "March 15, 2025",
-    author: "Suresh Patil",
-    category: "Trade Logistics",
-    readTime: "6 min read",
-    featured: false,
-    tags: ["Warehousing", "Logistics", "Technology"]
-  },
-  {
-    id: 18,
-    title: "Trade Agreements: Pharma IP Protection",
-    summary: "Analysis of trade agreements and their implications for pharmaceutical intellectual property.",
-    date: "March 10, 2025",
-    author: "Adv. Meera Patel",
-    category: "Trade Compliance",
-    readTime: "7 min read",
-    featured: false,
-    tags: ["Trade Agreements", "IP", "Compliance"]
-  },
-  {
-    id: 19,
-    title: "Trade Education: Skill Development for Pharma",
-    summary: "Government and industry initiatives to develop skilled workforce for pharmaceutical trade.",
-    date: "March 5, 2025",
-    author: "Dr. Priya Sharma",
-    category: "Trade Education",
-    readTime: "5 min read",
-    featured: false,
-    tags: ["Education", "Skill Development", "Trade"]
-  },
-  {
-    id: 20,
-    title: "Medical Tourism: Pharma Trade Support",
-    summary: "How pharmaceutical manufacturing excellence is supporting India's medical tourism trade.",
-    date: "February 28, 2025",
-    author: "Rahul Verma",
-    category: "Trade Analysis",
-    readTime: "6 min read",
-    featured: false,
-    tags: ["Medical Tourism", "Trade", "Healthcare"]
-  },
-  {
-    id: 21,
-    title: "Trade Analytics: Market Intelligence",
-    summary: "How data analytics is revolutionizing pharmaceutical trade intelligence and decision-making.",
-    date: "February 25, 2025",
-    author: "Rajesh Kumar",
-    category: "Trade Analytics",
-    readTime: "7 min read",
-    featured: false,
-    tags: ["Analytics", "Market Intelligence", "Trade Data"]
-  },
-  {
-    id: 22,
-    title: "Trade Security: Protecting Pharma Supply Chains",
-    summary: "Cybersecurity challenges and solutions for pharmaceutical trade operations.",
-    date: "February 20, 2025",
-    author: "Vikram Malhotra",
-    category: "Trade Security",
-    readTime: "8 min read",
-    featured: false,
-    tags: ["Cybersecurity", "Supply Chain", "Trade Security"]
-  },
-  {
-    id: 23,
-    title: "Trade Partnerships: Global Collaborations",
-    summary: "Strategic partnerships between Indian and international pharmaceutical trade companies.",
-    date: "February 15, 2025",
-    author: "Anjali Rao",
-    category: "Trade Partnerships",
-    readTime: "6 min read",
-    featured: false,
-    tags: ["Partnerships", "Collaborations", "Global Trade"]
-  },
-  {
-    id: 24,
-    title: "Trade Innovation: R&D Investment Trends",
-    summary: "Investment trends in pharmaceutical trade research and development.",
-    date: "February 10, 2025",
-    author: "Dr. Amit Singh",
-    category: "Trade Innovation",
-    readTime: "7 min read",
-    featured: false,
-    tags: ["R&D", "Innovation", "Trade Investment"]
-  }
-];
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Search, TrendingUp, Calendar, ArrowRight } from "lucide-react";
+import { blogs } from "./_data";
 
 function getInitials(name: string) {
   return name
@@ -280,13 +16,58 @@ function getInitials(name: string) {
 export default function BlogPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: 'TransDataNexus Blog – Pharma Trade Insights',
+            description: 'Expert analysis on pharma trade: APIs, vaccines, compliance, finance, cold chain, and more—data-backed insights and practical playbooks.',
+            url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'}/blog`,
+            breadcrumb: {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'}/` },
+                { '@type': 'ListItem', position: 2, name: 'Blog', item: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'}/blog` },
+              ]
+            },
+            hasPart: (Array.isArray(blogs) ? blogs : []).slice(0, 50).map((b) => ({
+              '@type': 'BlogPosting',
+              headline: b.title,
+              datePublished: new Date(b.date).toISOString(),
+              url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'}/blog/${b.slug}`,
+              author: { '@type': 'Person', name: b.author }
+            }))
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 py-20 px-4">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative max-w-6xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Pharma Trade Insights
-          </h1>
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
+          >
+            <motion.span
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Pharma Trade
+            </motion.span>{" "}
+            <motion.span 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-400 bg-clip-text text-transparent"
+            >
+              Insights
+            </motion.span>
+          </motion.h1>
           <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
             Stay ahead with expert analysis, market trends, and regulatory updates from the pharmaceutical trade industry
           </p>
@@ -295,10 +76,11 @@ export default function BlogPage() {
           <div className="max-w-2xl mx-auto relative">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
+                   <input
                 type="text"
                 placeholder="Search articles, topics, or authors..."
-                className="w-full pl-12 pr-4 py-4 bg-white/95 backdrop-blur-sm rounded-2xl border-0 shadow-lg text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                    aria-label="Search articles"
+                    className="w-full pl-12 pr-4 py-4 bg-white/95 backdrop-blur-sm rounded-2xl border-0 shadow-lg text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-blue-300 focus:outline-none"
               />
             </div>
           </div>
@@ -349,7 +131,7 @@ export default function BlogPage() {
                       </div>
                     </div>
                     <Link
-                      href={`/blog/${blog.id}`}
+                      href={`/blog/${blog.slug}`}
                       className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-full font-medium hover:from-blue-700 hover:to-cyan-700 transition-all duration-200 shadow-lg hover:shadow-xl"
                     >
                       Read Article
@@ -421,7 +203,7 @@ export default function BlogPage() {
                   </div>
                   
                   <Link
-                    href={`/blog/${blog.id}`}
+                    href={`/blog/${blog.slug}`}
                     className="inline-flex items-center gap-2 text-blue-600 font-medium hover:text-blue-700 transition-colors group-hover:gap-3"
                   >
                     Read More
@@ -489,3 +271,5 @@ export default function BlogPage() {
     </main>
   );
 }
+
+ 

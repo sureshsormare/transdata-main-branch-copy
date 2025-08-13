@@ -24,7 +24,7 @@ const Header = () => {
 
   const menuItems = [
     { href: "/", label: "Home" },
-    { href: "/platform", label: "Platform" },
+    { href: "/product", label: "Product" },
     { href: "/about", label: "About Us" },
     { href: "/services", label: "Our Services" },
     { href: "/blog", label: "Blog" },
@@ -98,30 +98,38 @@ const Header = () => {
                 variant="ghost"
                 size="sm"
                 className="text-gray-300 hover:text-white hover:bg-white/10 transition-colors duration-200"
+                asChild
               >
-                <Search className="w-4 h-4 mr-2" />
-                Search
+                <Link href="/search-results?q=paracetamol">
+                  <Search className="w-4 h-4 mr-2" />
+                  Search
+                </Link>
               </Button>
               
               <Button
                 variant="ghost"
                 size="sm"
                 className="text-gray-300 hover:text-white hover:bg-white/10 transition-colors duration-200"
+                asChild
               >
-                <User className="w-4 h-4 mr-2" />
-                Sign In
+                <Link href="/contact">
+                  <User className="w-4 h-4 mr-2" />
+                  Sign In
+                </Link>
               </Button>
 
-              <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-6 py-2.5 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center gap-2 shadow-md">
-                <Phone className="w-4 h-4" />
-                Request Demo
+              <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-6 py-2.5 rounded-2xl font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center gap-2 shadow-md" asChild>
+                <Link href="/request-demo">
+                  <Phone className="w-4 h-4" />
+                  Request Demo
+                </Link>
               </Button>
             </div>
 
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden p-2 rounded-lg transition-colors duration-200 hover:bg-white/10"
+              className="lg:hidden p-2 rounded-2xl transition-colors duration-200 hover:bg-white/10"
               aria-label="Toggle menu"
             >
               <Menu className="w-6 h-6 text-gray-300" />
@@ -186,28 +194,34 @@ const Header = () => {
                   <Button
                     variant="outline"
                     className="w-full justify-start border-white/20 text-gray-300 hover:bg-white/10 hover:text-white"
-                    onClick={closeMenu}
+                    asChild
                   >
-                    <Search className="w-4 h-4 mr-3" />
-                    Search Platform
+                    <Link href="/search-results?q=paracetamol" onClick={closeMenu}>
+                      <Search className="w-4 h-4 mr-3" />
+                      Search Platform
+                    </Link>
                   </Button>
                   
                   <Button
                     variant="ghost"
                     className="w-full justify-start text-gray-300 hover:bg-white/10 hover:text-white"
-                    onClick={closeMenu}
+                    asChild
                   >
-                    <User className="w-4 h-4 mr-3" />
-                    Sign In
+                    <Link href="/contact" onClick={closeMenu}>
+                      <User className="w-4 h-4 mr-3" />
+                      Sign In
+                    </Link>
                   </Button>
                 </div>
               </div>
 
               {/* Mobile Menu Footer */}
               <div className="p-6 border-t border-white/10">
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 shadow-md">
-                  <Phone className="w-4 h-4" />
-                  Request Demo
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-3 rounded-2xl font-medium transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 shadow-md" asChild>
+                  <Link href="/request-demo" onClick={closeMenu}>
+                    <Phone className="w-4 h-4" />
+                    Request Demo
+                  </Link>
                 </Button>
                 
                 <div className="mt-4 text-center">

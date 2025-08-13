@@ -40,3 +40,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# build cache and temporary files
+*.tmp
+*.temp
+.DS_Store
+
+# development and test files
+*-test.*
+*-performance.*
+test-*.js
+check-*.js

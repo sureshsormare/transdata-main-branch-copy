@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   Star,
   Users,
@@ -239,9 +240,30 @@ export default function Pricing() {
               <Sparkles className="w-4 h-4" />
               Trusted by 1000+ companies worldwide
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-blue-600 leading-tight">
-              Simple, Transparent Pricing
-            </h1>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-5xl md:text-6xl font-bold leading-tight"
+            >
+              <motion.span
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 0.3 }}
+                className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent"
+              >
+                Simple, Transparent
+              </motion.span>
+              <br />
+              <motion.span 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 bg-clip-text text-transparent"
+              >
+                Pricing
+              </motion.span>
+            </motion.h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Choose the perfect plan for your business. All plans include access to 180+ countries with usage-based pricing.
             </p>
@@ -258,7 +280,7 @@ export default function Pricing() {
 
       {/* Trust Indicators */}
       <div className="container mx-auto px-4 max-w-7xl -mt-10 mb-20">
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 gap-6">
           <Card className="text-center p-6 border-0 shadow-lg bg-white/80 backdrop-blur-sm">
             <div className="flex items-center justify-center gap-2 mb-3">
               {[...Array(5)].map((_, i) => (
@@ -275,14 +297,6 @@ export default function Pricing() {
             </div>
             <p className="font-semibold text-gray-900">24/7 Dedicated Support</p>
             <p className="text-gray-600 text-sm">Personalized assistance whenever you need it</p>
-          </Card>
-
-          <Card className="text-center p-6 border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-            <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3">
-              <Award className="w-6 h-6 text-green-600" />
-            </div>
-            <p className="font-semibold text-gray-900">100x ROI Guarantee</p>
-            <p className="text-gray-600 text-sm">TransDataNexus delivers exceptional value</p>
           </Card>
         </div>
       </div>

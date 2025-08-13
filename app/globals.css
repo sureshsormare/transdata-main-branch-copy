@@ -1,20 +1,68 @@
+/* Enhanced Typography System - Google Fonts must be imported first */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Local font files for available weights */
 @font-face {
-  font-family: 'poppins';
-  src: url('../public/fonts/Poppins/Poppins-Light.ttf');
+  font-family: 'Poppins';
+  src: url('../public/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
+
 @font-face {
-  font-family: 'poppins-b';
-  src: url('../public/fonts/Poppins/Poppins-SemiBold.ttf');
+  font-family: 'Poppins';
+  src: url('../public/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('../public/fonts/Poppins/Poppins-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Data/Metrics Font */
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+  font-display: swap;
 }
 
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  
+  /* Typography Scale */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+  --font-size-5xl: 3rem;      /* 48px */
+  --font-size-6xl: 3.75rem;   /* 60px */
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
 }
 
 body {
@@ -25,4 +73,249 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Typography Utility Classes */
+@layer components {
+  .text-display {
+    @apply text-5xl md:text-6xl font-bold leading-tight tracking-tight;
+  }
+  
+  .text-h1 {
+    @apply text-4xl md:text-5xl font-bold leading-tight tracking-tight;
+  }
+  
+  .text-h2 {
+    @apply text-3xl md:text-4xl font-semibold leading-tight tracking-tight;
+  }
+  
+  .text-h3 {
+    @apply text-2xl md:text-3xl font-semibold leading-tight;
+  }
+  
+  .text-h4 {
+    @apply text-xl md:text-2xl font-semibold leading-tight;
+  }
+  
+  .text-h5 {
+    @apply text-lg md:text-xl font-medium leading-tight;
+  }
+  
+  .text-h6 {
+    @apply text-base md:text-lg font-medium leading-tight;
+  }
+  
+  .text-body-large {
+    @apply text-lg md:text-xl leading-relaxed;
+  }
+  
+  .text-body {
+    @apply text-base md:text-lg leading-relaxed;
+  }
+  
+  .text-body-small {
+    @apply text-sm md:text-base leading-relaxed;
+  }
+  
+  .text-caption {
+    @apply text-xs md:text-sm leading-tight;
+  }
+  
+  .text-metrics {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    @apply font-medium;
+  }
+  
+  /* Loading States */
+  .loading-skeleton {
+    @apply animate-pulse bg-gray-200 rounded;
+  }
+  
+  .loading-shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
+  /* Mobile Responsive Utilities */
+  .container-responsive {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section-responsive {
+    @apply py-8 sm:py-12 lg:py-16 xl:py-20;
+  }
+  
+  .grid-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8;
+  }
+  
+  .card-responsive {
+    @apply p-4 sm:p-6 lg:p-8 rounded-xl shadow-lg border border-gray-200;
+  }
+  
+  .text-responsive {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+  
+  .heading-responsive {
+    @apply text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold;
+  }
+  
+  /* Touch-friendly buttons for mobile */
+  .btn-touch {
+    @apply min-h-[44px] px-4 py-3 text-base font-medium;
+  }
+  
+  /* Improved focus states for accessibility */
+  .focus-visible {
+    @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+  }
+  
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Better mobile tap targets */
+  button, a {
+    @apply touch-manipulation;
+  }
+  
+  /* Prevent zoom on input focus (iOS) */
+  input, textarea, select {
+    font-size: 16px;
+  }
+}
+
+/* Loading Animation Components */
+@layer components {
+  .loading-spinner {
+    @apply inline-block w-6 h-6 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin;
+  }
+  
+  .loading-dots {
+    @apply flex space-x-1;
+  }
+  
+  .loading-dots > div {
+    @apply w-2 h-2 bg-gray-400 rounded-full animate-bounce;
+  }
+  
+  .loading-dots > div:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  
+  .loading-dots > div:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  
+  .loading-pulse {
+    @apply animate-pulse bg-gray-200 rounded;
+  }
+  
+  .loading-wave {
+    @apply animate-pulse bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-size-200;
+  }
+}
+
+/* Responsive breakpoints enhancement */
+@layer utilities {
+  .xs\:text-xs { @apply text-xs; }
+  .xs\:text-sm { @apply text-sm; }
+  .xs\:text-base { @apply text-base; }
+  .xs\:text-lg { @apply text-lg; }
+  .xs\:text-xl { @apply text-xl; }
+  .xs\:text-2xl { @apply text-2xl; }
+  
+  .xs\:px-2 { @apply px-2; }
+  .xs\:px-4 { @apply px-4; }
+  .xs\:px-6 { @apply px-6; }
+  .xs\:px-8 { @apply px-8; }
+  
+  .xs\:py-2 { @apply py-2; }
+  .xs\:py-4 { @apply py-4; }
+  .xs\:py-6 { @apply py-6; }
+  .xs\:py-8 { @apply py-8; }
+}
+
+  /* Scrolling animation for client logos */
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  .animate-scroll {
+    animation: scroll 20s linear infinite;
+    will-change: transform;
+  }
+  
+  /* Pause animation on hover */
+  .animate-scroll:hover {
+    animation-play-state: paused;
+  }
+
+  /* 3x marquee for perfectly seamless circulation without visible reset */
+  @keyframes scroll3x {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-33.333%);
+    }
+  }
+
+  .animate-scroll-3x {
+    animation: scroll3x 30s linear infinite;
+    will-change: transform;
+  }
+
+  /* Variable-distance marquee (JS sets --marquee-distance and --marquee-duration) */
+  @keyframes marquee-x {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(var(--marquee-distance, 0px) * -1)); }
+  }
+  .marquee {
+    overflow: hidden;
+    position: relative;
+  }
+  .marquee-track {
+    display: flex;
+    animation: marquee-x var(--marquee-duration, 30s) linear infinite;
+    will-change: transform;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  
+  /* Print styles */
+  @media print {
+    .no-print {
+    display: none !important;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  
+  p, blockquote {
+    orphans: 3;
+    widows: 3;
+  }
 }

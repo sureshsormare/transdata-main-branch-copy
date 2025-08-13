@@ -1,0 +1,14 @@
+[
+  {
+    "brand": "Novartis",
+    "status": "not_found"
+  },
+  {
+    "brand": "AstraZeneca",
+    "status": "not_found"
+  },
+  {
+    "brand": "GSK",
+    "status": "not_found"
+  }
+]

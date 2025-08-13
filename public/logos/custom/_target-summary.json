@@ -1,0 +1,108 @@
+[
+  {
+    "name": "Johnson & Johnson",
+    "status": "ok",
+    "title": "File:Johnson and Johnson Logo.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/johnson-johnson.svg"
+  },
+  {
+    "name": "Pfizer",
+    "status": "ok",
+    "title": "File:Pfizer (2021).svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/pfizer.svg"
+  },
+  {
+    "name": "Bayer",
+    "status": "ok",
+    "title": "File:Bayer Logo.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/bayer.svg"
+  },
+  {
+    "name": "Sanofi",
+    "status": "ok",
+    "title": "File:Sanofi-2022.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/sanofi.svg"
+  },
+  {
+    "name": "Merck",
+    "status": "ok",
+    "title": "File:Merck & Co.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/merck.svg"
+  },
+  {
+    "name": "Novartis",
+    "status": "ok",
+    "title": "File:Chiron Corporation Logo.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/novartis.svg"
+  },
+  {
+    "name": "AstraZeneca",
+    "status": "not_found"
+  },
+  {
+    "name": "GSK",
+    "status": "not_found"
+  },
+  {
+    "name": "Novo Nordisk",
+    "status": "ok",
+    "title": "File:Novo Nordisk Foundation logo.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/novo-nordisk.svg"
+  },
+  {
+    "name": "Boehringer Ingelheim",
+    "status": "ok",
+    "title": "File:Boehringer Ingelheim Logo.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/boehringer-ingelheim.svg"
+  },
+  {
+    "name": "Gilead Sciences",
+    "status": "not_found"
+  },
+  {
+    "name": "Moderna",
+    "status": "ok",
+    "title": "File:Stat News logo.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/moderna.svg"
+  },
+  {
+    "name": "Regeneron",
+    "status": "ok",
+    "title": "File:Regeneron logo (2).svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/regeneron.svg"
+  },
+  {
+    "name": "Biogen",
+    "status": "ok",
+    "title": "File:Biogen Idec logo.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/biogen.svg"
+  },
+  {
+    "name": "Vertex Pharmaceuticals",
+    "status": "ok",
+    "title": "File:Vertex logo.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/vertex-pharmaceuticals.svg"
+  },
+  {
+    "name": "Teva",
+    "status": "ok",
+    "title": "File:Logo Teva Pharmaceutical Industries.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/teva.svg"
+  },
+  {
+    "name": "Astellas Pharma",
+    "status": "ok",
+    "title": "File:Astellas logo.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/astellas-pharma.svg"
+  },
+  {
+    "name": "Daiichi Sankyo",
+    "status": "ok",
+    "title": "File:Daiichi-sankyo logo.svg",
+    "file": "/Users/sureshsormare/Trnasdaatanexus code/transdata-main-branch-copy copy/public/logos/custom/daiichi-sankyo.svg"
+  },
+  {
+    "name": "CSL Behring",
+    "status": "not_found"
+  }
+]

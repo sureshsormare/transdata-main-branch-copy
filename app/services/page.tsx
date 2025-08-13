@@ -85,10 +85,24 @@ export default function Services() {
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100/80 backdrop-blur-sm border border-blue-200/50 mb-6">
               <span className="text-sm font-medium text-blue-700">Our Services</span>
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent leading-tight">
-              Comprehensive
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent"
+              >
+                Comprehensive
+              </motion.span>
               <br />
-              <span className="text-blue-600">Pharma Intelligence</span>
+              <motion.span 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 0.6 }}
+                className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent"
+              >
+                Pharma Intelligence
+              </motion.span>
             </h1>
             <p className="text-xl lg:text-2xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
               Empowering your business with comprehensive pharma trade data and
@@ -116,12 +130,23 @@ export default function Services() {
               viewport={{ once: true }}
               className="group"
             >
-              <Card className="transition-all duration-300 hover:shadow-xl border-0 bg-white/80 backdrop-blur-sm h-full group-hover:scale-[1.02]">
-                <CardHeader className="pb-6">
-                  <div className={`w-16 h-16 bg-gradient-to-br ${service.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+              <Card className="transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/20 border-0 bg-white/80 backdrop-blur-sm h-full group-hover:scale-[1.03] group-hover:bg-white/95 relative overflow-hidden">
+                <motion.div 
+                  initial={{ opacity: 0, x: -100 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
+                />
+                <CardHeader className="pb-6 relative">
+                  <motion.div 
+                    initial={{ rotate: 0 }}
+                    whileHover={{ rotate: 360, scale: 1.1 }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                    className={`w-16 h-16 bg-gradient-to-br ${service.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:shadow-lg group-hover:shadow-blue-500/30 transition-all duration-300`}
+                  >
                     <service.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <CardTitle className="text-2xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
+                  </motion.div>
+                  <CardTitle className="text-2xl font-bold transition-all duration-300 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:via-purple-600 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent text-slate-900">
                     {service.title}
                   </CardTitle>
                 </CardHeader>

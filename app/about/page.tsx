@@ -91,10 +91,24 @@ export default function About() {
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100/80 backdrop-blur-sm border border-blue-200/50 mb-6">
               <span className="text-sm font-medium text-blue-700">About TransDataNexus</span>
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent leading-tight">
-              Empowering Global
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent"
+              >
+                Empowering Global
+              </motion.span>
               <br />
-              <span className="text-blue-600">Pharma Intelligence</span>
+              <motion.span 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 0.6 }}
+                className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent"
+              >
+                Pharma Intelligence
+              </motion.span>
             </h1>
             <p className="text-xl lg:text-2xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
               Comprehensive intelligence on global pharmaceutical trade, 
