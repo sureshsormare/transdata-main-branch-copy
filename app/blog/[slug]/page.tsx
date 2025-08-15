@@ -11,7 +11,7 @@ import {
   tariffImpactData,
   complianceCosts,
   exportRegions,
-  type Blog,
+
   type BlogSection,
   type TableData,
   type ImageData,

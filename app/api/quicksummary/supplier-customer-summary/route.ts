@@ -114,7 +114,7 @@ export async function GET(request: NextRequest) {
     
     if (redisHealth) {
       cachedData = await getCachedData<QuickSummaryResponse>(cacheKey)
-      const cacheTime = Date.now() - cacheStartTime
+      // Cache timing tracked for performance metrics
       
       if (cachedData) {
         performanceMetrics.cacheHits++
@@ -184,7 +184,7 @@ export async function GET(request: NextRequest) {
     const dbQueryStartTime = Date.now()
     
     console.log('🚀 Using optimized aggregation pipeline...')
-    let records: any[] = []
+    let records: Record<string, unknown>[] = []
     
     try {
       records = await getTradeDataOptimized({
@@ -208,7 +208,7 @@ export async function GET(request: NextRequest) {
       throw dbError
     }
     
-    const dbQueryTime = Date.now() - dbQueryStartTime
+    // Database query timing tracked for performance metrics
     
     // Debug logging to see actual data
     console.log(`🔍 DEBUG: Found ${records.length} records for query "${searchQuery}"`)

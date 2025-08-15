@@ -26,7 +26,7 @@ interface LatestParacetamolResponse {
   debugInfo?: {
     dateFormats: string[]
     sampleDates: string[]
-    dateAnalysis: any
+    dateAnalysis: Record<string, unknown>
   }
 }
 

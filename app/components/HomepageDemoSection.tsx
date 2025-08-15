@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from 'framer-motion'
-import { BarChart3, Brain, TrendingUp } from 'lucide-react'
+import { BarChart3, TrendingUp } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import AnimatedSankeyDemo from './charts/AnimatedSankeyDemo'
 import AnimatedAnalyticsDemo from './charts/AnimatedAnalyticsDemo'
