@@ -8,8 +8,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const siteIndexLastMod = blogIndexLastMod
 
   return [
-    { url: `${base}/`, changefreq: 'weekly', priority: 1.0, lastModified: siteIndexLastMod },
-    { url: `${base}/blog`, changefreq: 'daily', priority: 0.6, lastModified: blogIndexLastMod },
+    { url: `${base}/`, changeFrequency: 'weekly', priority: 1.0, lastModified: siteIndexLastMod },
+    { url: `${base}/blog`, changeFrequency: 'daily', priority: 0.6, lastModified: blogIndexLastMod },
     ...blogs.map(p => ({ url: `${base}/blog/${p.slug}`, lastModified: new Date(p.date) })),
   ]
 }

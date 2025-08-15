@@ -268,8 +268,7 @@ export async function optimizedSupplierCustomerAggregation(params: {
     ]
     
     const aggregatedResults = await prisma.exp_india.aggregateRaw({
-      pipeline,
-      allowDiskUse: true
+      pipeline
     })
     
     console.timeEnd(`📊 Optimized aggregation for "${searchQuery}"`)

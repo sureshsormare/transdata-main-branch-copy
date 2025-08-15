@@ -383,7 +383,6 @@ export default function HomeClient() {
                 // 180px min + padding; choose 220px average per card.
                 // distance = totalWidth/3 = (N*220*3)/3 = N*220 px
                 // Use CSS var that scales with number of logos.
-                // @ts-expect-error: CSS custom properties require any type for dynamic property names
                 ['--marquee-distance' as string]: `${clientLogos.length * 220}px`,
                 ['--marquee-duration' as string]: '28s'
               }}

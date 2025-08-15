@@ -6,7 +6,7 @@ import { Card } from './card';
 // Loading Spinner Component
 export function LoadingSpinner({ size = 'md', color = 'blue' }: { 
   size?: 'sm' | 'md' | 'lg'; 
-  color?: 'blue' | 'green' | 'purple' | 'gray';
+  color?: 'blue' | 'green' | 'purple' | 'gray' | 'white';
 }) {
   const sizeClasses = {
     sm: 'w-4 h-4',
@@ -18,7 +18,8 @@ export function LoadingSpinner({ size = 'md', color = 'blue' }: {
     blue: 'border-blue-600',
     green: 'border-green-600',
     purple: 'border-purple-600',
-    gray: 'border-gray-600'
+    gray: 'border-gray-600',
+    white: 'border-white'
   };
 
   return (
