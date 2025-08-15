@@ -287,11 +287,21 @@ export default function UnifiedSankeyDiagram({
       tooltipContent = `${node.name} is a key importer for **${countryName}**, handling imports worth **${formatCurrency(marketValue)}** which represents **${percentageOfCountry.toFixed(1)}%** of ${countryName}'s imports and **${marketShare.toFixed(1)}%** of all importer business.`
     }
     
-    setTooltipData({
-      heading: tooltipHeading,
-      content: tooltipContent,
-      x: event.clientX,
-      y: event.clientY
+    // Convert node hover to standard tooltip format
+    const tooltipSupplier = node.category === 'supplier' ? node.name : 
+                           node.category === 'customer' ? 'Multiple Suppliers' :
+                           node.category === 'country' ? node.name :
+                           'Multiple Countries'
+    
+    const tooltipCustomer = node.category === 'customer' ? node.name :
+                           node.category === 'importer' ? node.name :
+                           node.category === 'supplier' ? 'Multiple Customers' :
+                           'Multiple Importers'
+    
+    setTooltipData({ 
+      supplier: tooltipSupplier, 
+      customer: tooltipCustomer, 
+      value: marketValue 
     })
   }
 
@@ -512,7 +522,7 @@ export default function UnifiedSankeyDiagram({
       y1: link.y1 + targetShift
     }
     
-    return sankeyLinkHorizontal()(modifiedLink)
+    return sankeyLinkHorizontal()(modifiedLink) || undefined
   }
 
   return (

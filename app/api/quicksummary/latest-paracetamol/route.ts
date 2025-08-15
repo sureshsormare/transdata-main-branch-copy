@@ -3,17 +3,17 @@ import { prisma, checkDatabaseConnection } from '@/lib/prisma'
 
 interface ParacetamolRecord {
   id: string
-  supplier_name: string
-  buyer_name: string
-  product_description: string
-  shipping_bill_date: string
-  total_value_usd: string
-  quantity: string
-  hs_code: string
-  country_of_destination: string
-  port_of_destination: string
-  invoice_no: string
-  shipping_bill_no: string
+  supplier_name: string | null
+  buyer_name: string | null
+  product_description: string | null
+  shipping_bill_date: string | null
+  total_value_usd: string | null
+  quantity: string | null
+  hs_code: string | null
+  country_of_destination: string | null
+  port_of_destination: string | null
+  invoice_no: string | null
+  shipping_bill_no: string | null
 }
 
 interface LatestParacetamolResponse {
@@ -42,8 +42,7 @@ async function analyzeDateFormats() {
     const sampleRecords = await prisma.exp_india.findMany({
       where: {
         shipping_bill_date: {
-          not: null,
-          not: ''
+          not: null
         }
       },
       select: {
@@ -140,8 +139,7 @@ async function findMay2025Records(limit: number) {
           },
           {
             shipping_bill_date: {
-              not: null,
-              not: ''
+              not: null
             }
           },
           {
@@ -190,8 +188,7 @@ async function findMay2025Records(limit: number) {
             },
             {
               shipping_bill_date: {
-                not: null,
-                not: ''
+                not: null
               }
             }
           ]
